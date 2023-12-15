@@ -1,0 +1,148 @@
+<nav>
+  <ul
+    class="navbar-nav text-decoration-none list-group list-group-flush me-auto mb-2 mb-lg-0 d-none d-lg-block"
+  >
+    <li class="my-2">
+      <a
+        routerLink="home"
+        class="d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none"
+      >
+        <mat-icon>construction</mat-icon>
+      </a>
+    </li>
+    <div class="accordion accordion-flush" id="accordionFlushExample">
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button
+            class="accordion-button collapsed"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#flush-collapseOne"
+            aria-expanded="false"
+            aria-controls="flush-collapseOne"
+          >
+            Proveedores
+          </button>
+        </h2>
+        <div
+          id="flush-collapseOne"
+          class="accordion-collapse collapse"
+          data-bs-parent="#accordionFlushExample"
+        >
+          <div class="accordion-body">
+            <ul class="list-group-flush p-0">
+              <li class="list-group-item">
+                <a
+                  routerLink="providers-list"
+                  class="nav-link d-flex align-items-center"
+                  id="home"
+                  aria-current="page"
+                >
+                  <mat-icon>visibility</mat-icon>Ver
+                </a>
+              </li>
+              <li class="list-group-item">
+                <a
+                  routerLink="providers-add"
+                  class="nav-link d-flex align-items-center"
+                  id="home"
+                  aria-current="page"
+                >
+                  <mat-icon>add</mat-icon> Agregar
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button
+            class="accordion-button collapsed"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#flush-collapseTwo"
+            aria-expanded="false"
+            aria-controls="flush-collapseTwo"
+          >
+            Productos
+          </button>
+        </h2>
+        <div
+          id="flush-collapseTwo"
+          class="accordion-collapse collapse"
+          data-bs-parent="#accordionFlushExample"
+        >
+          <div class="accordion-body">
+            <ul class="list-group-flush p-0">
+              <li class="list-group-item">
+                <a
+                  routerLink="products-list"
+                  class="nav-link d-flex align-items-center"
+                  id="home"
+                  aria-current="page"
+                >
+                  <mat-icon>visibility</mat-icon>Ver
+                </a>
+              </li>
+              <li class="list-group-item">
+                <a
+                  routerLink="products-add"
+                  class="nav-link d-flex align-items-center"
+                  id="home"
+                  aria-current="page"
+                >
+                  <mat-icon>add</mat-icon> Agregar
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button
+            class="accordion-button collapsed"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#flush-collapseThree"
+            aria-expanded="false"
+            aria-controls="flush-collapseThree"
+          >
+            Ordenes de compra
+          </button>
+        </h2>
+        <div
+          id="flush-collapseThree"
+          class="accordion-collapse collapse"
+          data-bs-parent="#accordionFlushExample"
+        >
+          <div class="accordion-body">
+            <ul class="list-group-flush p-0">
+              <li class="list-group-item">
+                <a
+                  routerLink="orders-list"
+                  class="nav-link d-flex align-items-center"
+                  id="home"
+                  aria-current="page"
+                >
+                  <mat-icon>visibility</mat-icon>Ver
+                </a>
+              </li>
+              <li class="list-group-item">
+                <a
+                  routerLink="orders-add"
+                  class="nav-link d-flex align-items-center"
+                  id="home"
+                  aria-current="page"
+                >
+                  <mat-icon>add</mat-icon> Agregar
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ul>
+</nav>
