@@ -18,6 +18,7 @@ import { OrdersListComponent } from './components/orders-view/orders-list/orders
 import { OrdersAddComponent } from './components/orders-view/orders-add/orders-add.component';
 import { HomeComponent } from './components/home/home.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [AppComponent, SidebarComponent, ProvidersAddComponent, ProductsAddComponent, ProductsListComponent, ProvidersListComponent, OrdersListComponent, OrdersAddComponent, HomeComponent, NavbarComponent],
@@ -28,6 +29,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     NgbPaginationModule,
     NgbAlertModule,
     MatIconModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent],

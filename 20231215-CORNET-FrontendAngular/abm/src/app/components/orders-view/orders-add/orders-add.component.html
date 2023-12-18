@@ -1,33 +1,60 @@
-<form class="row g-3">
-  <div class="col-md-6">
+<div class="row g-3">
+  <div class="col-md-2">
+    <label for="codigo" class="form-label">Nro. de Orden</label>
+    <input
+      type="text"
+      id="codigo"
+      class="form-control"
+      [(ngModel)]="order.id"
+    />
+  </div>
+  <div class="col-md-5">
     <label for="provider-id" class="form-label">Código de Proveedor</label>
-    <select id="provider-id" class="form-select">
-      <option selected>Elegir</option>
-      <option>...</option>
+    <select id="provider-id" class="form-select" [(ngModel)]="order.provider">
+      <option *ngFor="let provider of providers">{{ provider.name }}</option>
     </select>
   </div>
-  <div class="col-md-6">
+  <div class="col-md-5">
     <label for="provider-id" class="form-label">Código de Producto</label>
-    <select id="provider-id" class="form-select">
-      <option selected>Elegir</option>
-      <option>...</option>
+    <select id="provider-id" class="form-select" [(ngModel)]="order.product">
+      <option *ngFor="let product of products">{{ product.name }}</option>
     </select>
   </div>
   <div class="col-md-12">
     <label for="codigo" class="form-label">Cantidad</label>
-    <input type="text" id="codigo" class="form-control" />
+    <input
+      type="text"
+      id="codigo"
+      class="form-control"
+      [(ngModel)]="order.amount"
+    />
   </div>
   <div class="col-md-6">
     <label for="codigo" class="form-label">Fecha de Emision</label>
-    <input type="date" id="codigo" class="form-control" />
+    <input
+      type="date"
+      id="codigo"
+      class="form-control"
+      [(ngModel)]="order.emDate"
+    />
   </div>
   <div class="col-md-6">
     <label for="codigo" class="form-label">Fecha de Entrega</label>
-    <input type="date" id="codigo" class="form-control" />
+    <input
+      type="date"
+      id="codigo"
+      class="form-control"
+      [(ngModel)]="order.reDate"
+    />
   </div>
   <div class="col-12">
     <label for="codigo" class="form-label">Dirección</label>
-    <input type="texto" id="codigo" class="form-control" />
+    <input
+      type="texto"
+      id="codigo"
+      class="form-control"
+      [(ngModel)]="order.address"
+    />
   </div>
   <div class="row d-flex justify-content-evenly align-items-center mt-3">
     <input
@@ -35,12 +62,14 @@
       value="Limpiar"
       id="clear-provider"
       class="btn w-25 btn-outline-danger"
+      (click)="clearForm()"
     />
     <input
       type="submit"
       value="Agregar"
       id="add-provider"
       class="btn w-25 btn-outline-success"
+      (click)="postOrders()"
     />
   </div>
-</form>
+</div>

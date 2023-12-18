@@ -11,6 +11,13 @@
         <th scope="col">Editar/Eliminar</th>
       </tr>
     </thead>
-    <tbody></tbody>
+    <tbody *ngFor="let product of productsData">
+      <th scope="col"> {{product.provider}} </th>
+      <th scope="col"> {{product.id}} </th>
+      <th scope="col"> {{product.category}} </th>
+      <th scope="col"> {{product.name}} </th>
+      <th scope="col"> {{product.description}} </th>
+      <th scope="col"> {{product.price}} </th>
+    </tbody>
   </table>
 </div>

@@ -9,12 +9,30 @@ import { ProvidersListComponent } from './components/providers-view/providers-li
 import { HomeComponent } from './components/home/home.component';
 
 const routes: Routes = [
-  { path: 'providers-add', component: ProvidersAddComponent },
-  { path: 'providers-list', component: ProvidersListComponent },
-  { path: 'products-add', component: ProductsAddComponent },
-  { path: 'products-list', component: ProductsListComponent },
-  { path: 'orders-list', component: OrdersListComponent },
-  { path: 'orders-add', component: OrdersAddComponent },
+  {
+    path: 'providers',
+    children: [
+      { path: 'add', component: ProvidersAddComponent },
+      { path: 'list', component: ProvidersListComponent },
+      { path: '**', component: HomeComponent },
+    ],
+  },
+  {
+    path: 'products',
+    children: [
+      { path: 'add', component: ProductsAddComponent },
+      { path: 'list', component: ProductsListComponent },
+      { path: '**', component: HomeComponent },
+    ],
+  },
+  {
+    path: 'orders',
+    children: [
+      { path: 'list', component: OrdersListComponent },
+      { path: 'add', component: OrdersAddComponent },
+      { path: '**', component: HomeComponent },
+    ],
+  },
   { path: '**', component: HomeComponent },
   { path: 'home', component: HomeComponent },
 ];

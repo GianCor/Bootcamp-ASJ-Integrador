@@ -7,12 +7,23 @@
         <th scope="col">Fecha entrega</th>
         <th scope="col">Direccion</th>
         <th scope="col">Proveedor</th>
-        <th scope="col">Productos</th>
+        <th scope="col">Producto</th>
         <th scope="col">Cantidad</th>
         <th scope="col">Total</th>
         <th scope="col">Editar/Eliminar</th>
       </tr>
     </thead>
-    <tbody></tbody>
+    <tbody>
+      <tr *ngFor="let order of orders">
+        <th>{{order.id}}</th>
+        <th>{{order.emDate}}</th>
+        <th>{{order.reDate}}</th>
+        <th>{{order.address}}</th>
+        <th>{{order.provider}}</th>
+        <th>{{order.product}}</th>
+        <th>{{order.amount}}</th>
+        <th>{{order.total}}</th>
+      </tr>
+    </tbody>
   </table>  
 </div>
