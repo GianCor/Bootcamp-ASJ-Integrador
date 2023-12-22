@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { products } from '../data/products';
+import { Product } from '../models/productModel';
 
-let data = products;
+let data:Product[] = products;
 
 @Injectable({
   providedIn: 'root',
@@ -13,11 +14,7 @@ export class ProductsService {
     return data;
   }
 
-  getDataProviders(){
-    return
-  }
-
-  postData(arr: any[]) {
+  postData(arr: Product[]) {
     data = arr;
   }
   

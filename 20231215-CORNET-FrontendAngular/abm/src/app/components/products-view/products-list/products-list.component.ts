@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Product } from 'src/app/models/productModel';
 import { ProductsService } from 'src/app/services/products.service';
 
 @Component({
@@ -7,7 +8,7 @@ import { ProductsService } from 'src/app/services/products.service';
   styleUrls: ['./products-list.component.css']
 })
 export class ProductsListComponent {
-  productsData: any[] = [];
+  productsData: Product[] = [];
 
   constructor(private productsService: ProductsService) { }
 

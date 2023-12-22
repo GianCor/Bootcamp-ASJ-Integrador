@@ -1,5 +1,5 @@
 <div class="table-responsive">
-  <table class="table table-striped mb-5" id="ordenes-body">
+  <table class="table table-hover table-striped table-bordered d mb-5" id="ordenes-body">
     <thead>
       <tr>
         <th scope="col">Nro. orden</th>
@@ -14,15 +14,21 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let order of orders">
-        <th>{{order.id}}</th>
-        <th>{{order.emDate}}</th>
-        <th>{{order.reDate}}</th>
-        <th>{{order.address}}</th>
-        <th>{{order.provider}}</th>
-        <th>{{order.product}}</th>
-        <th>{{order.amount}}</th>
-        <th>{{order.total}}</th>
+      <tr *ngFor="let order of ordersData">
+        <td scope="col">{{order.id}}</td>
+        <td scope="col">{{order.emDate | date : 'short'}}</td>
+        <td scope="col">{{order.reDate | date : 'short'}}</td>
+        <td scope="col">{{order.address}}</td>
+        <td scope="col">{{order.provider}}</td>
+        <td scope="col">{{order.product}}</td>
+        <td scope="col">{{order.amount}}</td>
+        <td scope="col">{{order.total}}</td>
+        <td scope="col">
+          <div class="d-flex btn-group btn-group-sm ">
+            <button class="btn btn-outline-warning ">Editar</button>
+            <button class="btn btn-outline-danger">Eliminar</button>
+          </div>
+        </td>
       </tr>
     </tbody>
   </table>  

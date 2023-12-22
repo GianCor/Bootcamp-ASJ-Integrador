@@ -1,4 +1,5 @@
 import { Component} from '@angular/core';
+import { Provider } from 'src/app/models/providerModel';
 import { ProvidersService } from 'src/app/services/providers.service';
 
 @Component({
@@ -9,18 +10,22 @@ import { ProvidersService } from 'src/app/services/providers.service';
 export class ProvidersAddComponent {
   providersData: any[] = [];
   showError = false; 
-  provider: any = {
-    id: '',
+  provider: Provider = {
+    id: 0,
     name: '',
     field: '',
-    phone: '',
+    phone: 0,
     state: '',
     city: '',
     iva: '',
     address: '',
-    cuit: '',
+    cuit: 0,
     email: '',
-  };
+    contactName: '', // Nombre del contacto
+    contactLastName: '', // Apellido del contacto
+    website: '' // Sitio web
+};
+
 
   constructor(private providersService: ProvidersService) {}
 
@@ -41,7 +46,6 @@ export class ProvidersAddComponent {
       this.isNumeric(this.provider.phone)
     ) {
       this.providersData.push(this.provider);
-      this.clearForm();
       this.showError = false;
     } else {
       console.log('La validación de los campos ha fallado.');
@@ -58,23 +62,8 @@ export class ProvidersAddComponent {
     return !found;
   }
 
-  isUniqueCUIT(cuit: string): boolean {
+  isUniqueCUIT(cuit: number): boolean {
     const found = this.providersData.some(provider => provider.cuit === cuit);
     return !found;
-  }
-
-  clearForm() {
-    this.provider = {
-      id: '',
-      name: '',
-      field: '',
-      phone: '',
-      state: '',
-      city: '',
-      iva: '',
-      address: '',
-      cuit: '',
-      email: '',
-    };
   }
 }

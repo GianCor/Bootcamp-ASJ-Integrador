@@ -4,11 +4,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import {
-  NgbPaginationModule,
-  NgbAlertModule,
-} from '@ng-bootstrap/ng-bootstrap';
-import {MatIconModule} from '@angular/material/icon';
+import { NgbPaginationModule, NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
+import { MatIconModule } from '@angular/material/icon';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { ProvidersAddComponent } from './components/providers-view/providers-add/providers-add.component';
 import { ProductsAddComponent } from './components/products-view/products-add/products-add.component';
@@ -21,7 +18,18 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { FormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [AppComponent, SidebarComponent, ProvidersAddComponent, ProductsAddComponent, ProductsListComponent, ProvidersListComponent, OrdersListComponent, OrdersAddComponent, HomeComponent, NavbarComponent],
+  declarations: [
+    AppComponent,
+    SidebarComponent,
+    ProvidersAddComponent,
+    ProductsAddComponent,
+    ProductsListComponent,
+    ProvidersListComponent,
+    OrdersListComponent,
+    OrdersAddComponent,
+    HomeComponent,
+    NavbarComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -29,7 +37,7 @@ import { FormsModule } from '@angular/forms';
     NgbPaginationModule,
     NgbAlertModule,
     MatIconModule,
-    FormsModule
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

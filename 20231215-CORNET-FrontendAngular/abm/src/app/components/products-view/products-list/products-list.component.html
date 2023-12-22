@@ -1,5 +1,8 @@
 <div class="table-responsive">
-  <table class="table table-striped mb-5" id="productos-body">
+  <table
+    class="table table-hover table-striped table-bordered mb-5"
+    id="productos-body"
+  >
     <thead>
       <tr>
         <th scope="col">Proveedor</th>
@@ -11,13 +14,21 @@
         <th scope="col">Editar/Eliminar</th>
       </tr>
     </thead>
-    <tbody *ngFor="let product of productsData">
-      <th scope="col"> {{product.provider}} </th>
-      <th scope="col"> {{product.id}} </th>
-      <th scope="col"> {{product.category}} </th>
-      <th scope="col"> {{product.name}} </th>
-      <th scope="col"> {{product.description}} </th>
-      <th scope="col"> {{product.price}} </th>
+    <tbody>
+      <tr *ngFor="let product of productsData">
+        <td scope="col">{{ product.provider }}</td>
+        <td scope="col">{{ product.id }}</td>
+        <td scope="col">{{ product.category }}</td>
+        <td scope="col">{{ product.name }}</td>
+        <td scope="col">{{ product.description }}</td>
+        <td scope="col">{{ product.price }}</td>
+        <td scope="col">
+          <div class="d-flex btn-group btn-group-sm ">
+            <button class="btn btn-outline-warning ">Editar</button>
+            <button class="btn btn-outline-danger">Eliminar</button>
+          </div>
+        </td>
+      </tr>
     </tbody>
   </table>
 </div>

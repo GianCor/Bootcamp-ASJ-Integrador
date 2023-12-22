@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Provider } from 'src/app/models/providerModel';
 import { ProvidersService } from 'src/app/services/providers.service';
 
 @Component({
@@ -7,7 +8,7 @@ import { ProvidersService } from 'src/app/services/providers.service';
   styleUrls: ['./providers-list.component.css']
 })
 export class ProvidersListComponent implements OnInit {
-  providersData: any[] = [];
+  providersData: Provider[] = [];
 
   constructor(private providersService: ProvidersService) { }
 

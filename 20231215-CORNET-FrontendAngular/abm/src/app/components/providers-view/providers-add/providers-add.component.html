@@ -1,55 +1,67 @@
-<div class="row g-3">
+<form #providerForm="ngForm" (ngSubmit)="pushProvidersData()" class="row g-3">
   <div *ngIf="showError" class="alert alert-danger" role="alert">
     La validación de los campos ha fallado. Por favor, verifica los datos ingresados.
   </div>
-    <div class="col-md-6">
-      <label for="codigo" class="form-label">Código</label>
-      <input type="text" [(ngModel)]="provider.id" id="codigo" class="form-control" required>
-    </div>
-    <div class="col-md-6">
-      <label for="codigo" class="form-label">Razón Social</label>
-      <input type="text" [(ngModel)]="provider.name" id="codigo" class="form-control" required>
-    </div>
-    <div class="col-12">
-      <label for="codigo" class="form-label">Rubro</label>
-      <input type="text" [(ngModel)]="provider.field" id="codigo" class="form-control" required>
-    </div>
-    <div class="col-12">
-      <label for="codigo" class="form-label">Email</label>
-      <input type="email" [(ngModel)]="provider.email" id="codigo" class="form-control" required>
-    </div>
-    <div class="col-md-2">
-      <label for="codigo" class="form-label">Teléfono</label>
-      <input type="text" [(ngModel)]="provider.phone" id="codigo" class="form-control" required>
-    </div>
-    <div class="col-md-3">
-      <label for="inputState" class="form-label">Provincia</label>
-      <select id="inputState" [(ngModel)]="provider.state" class="form-select" required>
-        <option selected>Buenos Aires</option>
-        <option>...</option>
-      </select>
-    </div>
-    <div class="col-md-3">
-      <label for="inputState" class="form-label">Ciudad</label>
-      <select id="inputState" [(ngModel)]="provider.city" class="form-select" required>
-        <option selected>CABA</option>
-        <option>...</option>
-      </select>
-    </div>
-    <div class="col-md-4">
-      <label for="codigo" class="form-label">Dirección</label>
-      <input type="text" [(ngModel)]="provider.address" id="codigo" class="form-control" required>
-    </div>
-    <div class="col-md-6">
-        <label for="codigo" class="form-label">CUIT</label>
-        <input type="text" [(ngModel)]="provider.cuit" id="codigo" class="form-control" required>
-    </div>
-    <div class="col-md-6">
-      <label for="codigo" class="form-label">Condición I.V.A.</label>
-      <input type="text" [(ngModel)]="provider.iva" id="codigo" class="form-control" required>
+  <div class="col-md-6">
+    <label for="codigo" class="form-label">Código</label>
+    <input type="text" [(ngModel)]="provider.id" id="codigo" class="form-control" name="providerId" required>
   </div>
-    <div class="row d-flex justify-content-evenly align-items-center mt-3 ">
-      <input type="button" value="Limpiar" (click)="clearForm()" id="clear-provider" class="btn w-25 btn-outline-danger">
-      <input type="button" (click)="pushProvidersData()" value="Agregar" id="add-provider" class="btn w-25 btn-outline-success">
+  <div class="col-md-6">
+    <label for="razon-social" class="form-label">Razón Social</label>
+    <input type="text" [(ngModel)]="provider.name" id="razon-social" class="form-control" name="providerName" required>
   </div>
-</div>
+  <div class="col-md-6">
+    <label for="rubro" class="form-label">Rubro</label>
+    <input type="text" [(ngModel)]="provider.field" id="rubro" class="form-control" name="providerField" required>
+  </div>
+  <div class="col-md-6">
+    <label for="email" class="form-label">Email</label>
+    <input type="email" [(ngModel)]="provider.email" id="email" class="form-control" name="providerEmail" required>
+  </div>
+  <div class="col-md-2">
+    <label for="telefono" class="form-label">Teléfono</label>
+    <input type="text" [(ngModel)]="provider.phone" id="telefono" class="form-control" name="providerPhone" required>
+  </div>
+  <div class="col-md-3">
+    <label for="provincia" class="form-label">Provincia</label>
+    <select id="provincia" [(ngModel)]="provider.state" class="form-select" name="providerState" required>
+      <option selected>Buenos Aires</option>
+      <!-- Opciones para la provincia -->
+    </select>
+  </div>
+  <div class="col-md-3">
+    <label for="ciudad" class="form-label">Ciudad</label>
+    <select id="ciudad" [(ngModel)]="provider.city" class="form-select" name="providerCity" required>
+      <option selected>CABA</option>
+      <!-- Opciones para la ciudad -->
+    </select>
+  </div>
+  <div class="col-md-4">
+    <label for="direccion" class="form-label">Dirección</label>
+    <input type="text" [(ngModel)]="provider.address" id="direccion" class="form-control" name="providerAddress" required>
+  </div>
+  <div class="col-md-6">
+    <label for="cuit" class="form-label">CUIT</label>
+    <input type="text" [(ngModel)]="provider.cuit" id="cuit" class="form-control" name="providerCuit" required>
+  </div>
+  <div class="col-md-6">
+    <label for="condicion-iva" class="form-label">Condición I.V.A.</label>
+    <input type="text" [(ngModel)]="provider.iva" id="condicion-iva" class="form-control" name="providerIva" required>
+  </div>
+  <div class="col-md-6">
+    <label for="nombre-contacto" class="form-label">Nombre del Contacto</label>
+    <input type="text" [(ngModel)]="provider.contactName" id="nombre-contacto" class="form-control" name="providerContactName" required>
+  </div>
+  <div class="col-md-6">
+    <label for="apellido-contacto" class="form-label">Apellido del Contacto</label>
+    <input type="text" [(ngModel)]="provider.contactLastName" id="apellido-contacto" class="form-control" name="providerContactLastName" required>
+  </div>
+  <div class="col-md-12">
+    <label for="sitio-web" class="form-label">Sitio Web</label>
+    <input type="text" [(ngModel)]="provider.website" id="sitio-web" class="form-control" name="providerWebsite">
+  </div>
+  <div class="row d-flex justify-content-evenly align-items-center mt-3">
+    <input type="button" value="Limpiar" (click)="providerForm.resetForm()" id="clear-provider" class="btn w-25 btn-outline-danger">
+    <input type="submit" value="Agregar" id="add-provider" class="btn w-25 btn-outline-success">
+  </div>
+</form>

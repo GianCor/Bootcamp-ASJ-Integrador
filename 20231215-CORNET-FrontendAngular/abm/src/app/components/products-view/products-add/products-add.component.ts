@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ProvidersService } from '../../../services/providers.service';
-import { ProductsService } from  '../../../services/products.service';
+import { ProductsService } from '../../../services/products.service';
+import { Provider } from 'src/app/models/providerModel';
+import { Product } from 'src/app/models/productModel';
 
 @Component({
   selector: 'app-products-add',
@@ -8,20 +10,21 @@ import { ProductsService } from  '../../../services/products.service';
   styleUrls: ['./products-add.component.css']
 })
 export class ProductsAddComponent implements OnInit {
-  providers: any[] = [];
-  products: any[] = [];
-  product={
-    id:'',
-    provider:'',
-    category:'',
-    name:'',
-    description:'',
-    price:'',
-  }
+  providers: Provider[] = [];
+  products: Product[] = [];
+  product: Product = { // Inicializar la variable 'product'
+    id: 0,
+    provider: '',
+    category: '',
+    name: '',
+    description: '',
+    price: 0
+  };
+
 
   constructor(
     private providersService: ProvidersService,
-    private productsService: ProductsService
+    private productsService: ProductsService,
   ) {}
 
   ngOnInit() {
@@ -31,6 +34,7 @@ export class ProductsAddComponent implements OnInit {
 
   getProviders() {
     this.providers = this.providersService.getData();
+    console.log(this.providers);
   }
 
   getProducts() {
@@ -39,18 +43,6 @@ export class ProductsAddComponent implements OnInit {
 
   pushProducts() {
     this.products.push(this.product);
-    this.productsService.postData(this.products)
-    this.clearForm();
-  }
-  
-  clearForm() {
-    this.product = {
-      id:'',
-      provider:'',
-      category:'',
-      name:'',
-      description:'',
-      price:'',
-    };
+    this.productsService.postData(this.products);
   }
 }

@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable} from '@angular/core';
 import { providers } from '../data/providers';
+import { Provider } from '../models/providerModel';
 
-let data = providers;
+let data:Provider[] = providers;
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,7 @@ export class ProvidersService {
   getData(){
     return data;
   }
-  postData(arr:[]){
+  postData(arr:Provider[]){
     data = arr
   }
 }

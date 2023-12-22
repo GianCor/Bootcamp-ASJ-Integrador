@@ -1,29 +1,29 @@
-<div class="row g-3">
+<form #productForm="ngForm" (ngSubmit)="pushProducts()" class="row g-3">
   <div class="col-md-6">
     <label for="provider-id" class="form-label">Código de Proveedor</label>
-    <select id="provider-id" class="form-select" [(ngModel)]="product.provider">
+    <select id="provider-id" class="form-select" [(ngModel)]="product.provider" name="providerId">
       <option *ngFor="let provider of providers" [value]="provider.id">{{ provider.name }}</option>
     </select>
   </div>
   <div class="col-md-6">
-    <label for="codigo" class="form-label">Código de Producto / S.K.U.</label>
-    <input type="text" id="codigo" class="form-control" [(ngModel)]="product.id"/>
+    <label for="codigo-producto" class="form-label">Código de Producto / S.K.U.</label>
+    <input type="text" id="codigo-producto" class="form-control" [(ngModel)]="product.id" name="productId" required/>
   </div>
   <div class="col-12">
-    <label for="codigo" class="form-label">Categoría</label>
-    <input type="texto" id="codigo" class="form-control" [(ngModel)]="product.category"/>
+    <label for="categoria" class="form-label">Categoría</label>
+    <input type="text" id="categoria" class="form-control" [(ngModel)]="product.category" name="category" required/>
   </div>
   <div class="col-12">
-    <label for="codigo" class="form-label">Nombre del Producto</label>
-    <input type="texto" id="codigo" class="form-control" [(ngModel)]="product.name"/>
+    <label for="nombre-producto" class="form-label">Nombre del Producto</label>
+    <input type="text" id="nombre-producto" class="form-control" [(ngModel)]="product.name" name="productName" required/>
   </div>
   <div class="col-md-12">
-    <label for="codigo" class="form-label">Descripción</label>
-    <input type="text" id="codigo" class="form-control" [(ngModel)]="product.description"/>
+    <label for="descripcion" class="form-label">Descripción</label>
+    <input type="text" id="descripcion" class="form-control" [(ngModel)]="product.description" name="description"/>
   </div>
   <div class="col-md-4">
-    <label for="codigo" class="form-label">Precio</label>
-    <input type="text" id="codigo" class="form-control" [(ngModel)]="product.price"/>
+    <label for="precio" class="form-label">Precio</label>
+    <input type="text" id="precio" class="form-control" [(ngModel)]="product.price" name="price" required/>
   </div>
   <div class="row d-flex justify-content-evenly align-items-center mt-3">
     <input
@@ -31,14 +31,13 @@
       value="Limpiar"
       id="clear-provider"
       class="btn w-25 btn-outline-danger"
-      (click)="clearForm()"
+      (click)="productForm.resetForm()"
     />
     <input
-      type="button"
+      type="submit"
       value="Agregar"
       id="add-provider"
       class="btn w-25 btn-outline-success"
-      (click)="pushProducts()"
     />
   </div>
-</div>
+</form>

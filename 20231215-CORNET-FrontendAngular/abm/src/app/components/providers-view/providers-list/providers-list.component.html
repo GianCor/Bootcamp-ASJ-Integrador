@@ -1,32 +1,43 @@
 <div class="table-responsive">
-  <table class="table table-striped mb-5" id="proveedores-body">
+  <table class="table table-hover table-striped table-bordered mb-5" id="proveedores-body">
     <thead>
       <tr>
         <th scope="col">Código</th>
         <th scope="col">Razón Social</th>
-        <th scope="col">Rubro</th>
-        <th scope="col">Email</th>
-        <th scope="col">Telefono</th>
+        <th scope="col">Sitio Web / Contacto</th>
         <th scope="col">Provincia</th>
         <th scope="col">Ciudad</th>
-        <th scope="col">Direccion</th>
+        <th scope="col">Dirección</th>
         <th scope="col">Cuit</th>
         <th scope="col">IVA</th>
-        <th scope="col">Editar/Eliminar</th>
+        <th scope="col">Acciones</th>
       </tr>
     </thead>
-    <tbody *ngFor="let provider of providersData">
-      <tr>
-        <th scope="col"> {{provider.id}} </th>
-        <th scope="col"> {{provider.name}} </th>
-        <th scope="col"> {{provider.field}} </th>
-        <th scope="col"> {{provider.email}} </th>
-        <th scope="col"> {{provider.phone}} </th>
-        <th scope="col"> {{provider.state}} </th>
-        <th scope="col"> {{provider.city}} </th>
-        <th scope="col"> {{provider.adress}} </th>
-        <th scope="col"> {{provider.cuit}} </th>
-        <th scope="col"> {{provider.iva}} </th>
+    <tbody>
+      <tr *ngFor="let provider of providersData">
+        <td scope="col">{{ provider.id }}</td>
+        <td scope="col">{{ provider.name }}</td>
+        <td scope="col">
+          <!-- Sitio web -->
+          {{ provider.website }} <br>
+          <!-- Email -->
+          {{ provider.email }} <br>
+          <!-- Teléfono -->
+          {{ provider.phone }} <br>
+          <!-- Nombre y Apellido del contacto -->
+          {{ provider.contactName }} {{ provider.contactLastName }}
+        </td>
+        <td scope="col">{{ provider.state }}</td>
+        <td scope="col">{{ provider.city }}</td>
+        <td scope="col">{{ provider.address }}</td>
+        <td scope="col">{{ provider.cuit }}</td>
+        <td scope="col">{{ provider.iva }}</td>
+        <td scope="col">
+          <div class="d-flex btn-group btn-group-sm ">
+            <button class="btn btn-outline-warning ">Editar</button>
+            <button class="btn btn-outline-danger">Eliminar</button>
+          </div>
+        </td>
       </tr>
     </tbody>
   </table>
