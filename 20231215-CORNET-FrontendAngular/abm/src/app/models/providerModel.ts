@@ -1,15 +1,18 @@
 export interface Provider {
-  id: number;
+  id: string;
   name: string;
   field: string;
-  phone: number;
+  phone: string;
+  country: string;
   state: string;
   city: string;
   iva: string;
   address: string;
-  cuit: number;
+  cuit: string;
+  cp:string;
   email: string;
-  contactName: string; // Nombre del contacto
-  contactLastName: string; // Apellido del contacto
-  website: string; // Sitio web
+  contactName: string;
+  contactLastName: string; 
+  website?: string;
+  url?: string;
 }

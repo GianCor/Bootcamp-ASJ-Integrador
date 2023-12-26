@@ -15,15 +15,15 @@ export class OrdersAddComponent {
   providers: Provider[] = [];
   products: Product[] = [];
   orders: Order[] = [];
-  order: Order = { // Inicializar el objeto 'order'
-    id: 0, // Puedes inicializar con valores vacíos o nulos según corresponda
+  order: Order = { 
+    id: '',
     provider: '',
-    product: '',
-    amount: 0,
+    product: [],
+    amount: '',
     emDate: new Date,
     reDate: new Date,
     address: '',
-    total: 0
+    total: ''
   };
   constructor(
     private providersService: ProvidersService,

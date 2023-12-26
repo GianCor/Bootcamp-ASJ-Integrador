@@ -7,6 +7,7 @@ import { OrdersListComponent } from './components/orders-view/orders-list/orders
 import { OrdersAddComponent } from './components/orders-view/orders-add/orders-add.component';
 import { ProvidersListComponent } from './components/providers-view/providers-list/providers-list.component';
 import { HomeComponent } from './components/home/home.component';
+import { ProvidersEditComponent } from './components/providers-view/providers-edit/providers-edit.component';
 
 const routes: Routes = [
   {
@@ -14,6 +15,7 @@ const routes: Routes = [
     children: [
       { path: 'add', component: ProvidersAddComponent },
       { path: 'list', component: ProvidersListComponent },
+      { path: 'edit/:id', component: ProvidersEditComponent},
       { path: '**', component: HomeComponent },
     ],
   },

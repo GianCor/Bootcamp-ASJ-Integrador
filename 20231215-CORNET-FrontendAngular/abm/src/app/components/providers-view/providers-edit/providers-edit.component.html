@@ -1,0 +1,205 @@
+<form #providerForm="ngForm" (ngSubmit)="pushProvidersData(providerForm)" class="row g-3">  
+    <div class="col-md-12">
+      <label for="razon-social" class="form-label">Razón Social *</label>
+      <input
+        #id="ngModel"
+        type="text"
+        [(ngModel)]="provider.name"
+        id="razon-social"
+        class="form-control"
+        name="name"
+        #name="ngModel"
+        required
+      />
+    </div>
+  
+    <div class="col-md-6">
+      <label for="rubro" class="form-label">Rubro *</label>
+      <input
+        type="text"
+        [(ngModel)]="provider.field"
+        id="rubro"
+        class="form-control"
+        name="field"
+        #field="ngModel"
+        required
+      />
+    </div>
+    <div class="col-md-6">
+      <label for="email" class="form-label">Email *</label>
+      <input
+        type="email"
+        [(ngModel)]="provider.email"
+        id="email"
+        class="form-control"
+        name="email"
+        #email="ngModel"
+        required
+      />
+    </div>
+    <div class="col-md-2">
+      <label for="telefono" class="form-label">Teléfono *</label>
+      <input
+        type="text"
+        [(ngModel)]="provider.phone"
+        id="telefono"
+        class="form-control"
+        name="phone"
+        #phone="ngModel"
+        required
+      />
+    </div>
+    <div class="col-md-3">
+      <label for="country" class="form-label">Pais *</label>
+      <select
+        id="country"
+        [(ngModel)]="provider.country"
+        class="form-select"
+        name="country"
+        (change)="changeSelectedCountry()"
+        #country="ngModel"
+        required
+      >
+        <option *ngFor="let country of countries">{{ country.name }}</option>
+      </select>
+    </div>
+    <div class="col-md-3">
+      <label for="state" class="form-label">Provincia *</label>
+      <select
+        id="state"
+        [(ngModel)]="provider.state"
+        class="form-select"
+        name="state"
+        (change)="changeSelectedState()"
+        #state="ngModel"
+        required
+      >
+        <option *ngFor="let state of states">{{ state.name }}</option>
+      </select>
+    </div>
+    <div class="col-md-3">
+      <label for="city" class="form-label">Ciudad *</label>
+      <select
+        id="city"
+        [(ngModel)]="provider.city"
+        class="form-select"
+        name="city"
+        #city="ngModel"
+        required
+      >
+        <option *ngFor="let city of cities">{{ city.name }}</option>
+      </select>
+    </div>
+    <div class="col-md-2">
+      <label for="cp" class="form-label">Código Postal *</label>
+      <input
+        type="text"
+        [(ngModel)]="provider.cp"
+        id="cp"
+        class="form-control"
+        name="cp"
+        #cp="ngModel"
+        required
+      />
+    </div>
+    <div class="col-md-4">
+      <label for="direccion" class="form-label">Dirección *</label>
+      <input
+        type="text"
+        [(ngModel)]="provider.address"
+        id="direccion"
+        class="form-control"
+        name="address"
+        #address="ngModel"
+        required
+      />
+    </div>
+    <div class="col-md-6">
+      <label for="cuit" class="form-label">CUIT *</label>
+      <input
+        type="text"
+        [(ngModel)]="provider.cuit"
+        id="cuit"
+        class="form-control"
+        name="cuit"
+        #cuit="ngModel"
+        required
+      />
+    </div>
+    <div class="col-md-6">
+      <label for="iva" class="form-label">Condición I.V.A. *</label>
+      <select
+        name="iva"
+        [(ngModel)]="provider.iva"
+        id="iva"
+        class="form-select"
+        #iva="ngModel"
+      >
+        <option *ngFor="let condicion of IVAData">
+          {{ condicion.id }}: {{ condicion.condicion }}
+        </option>
+      </select>
+    </div>
+    <div class="col-md-6">
+      <label for="nombre-contacto" class="form-label">Nombre del Contacto *</label>
+      <input
+        type="text"
+        [(ngModel)]="provider.contactName"
+        id="nombre-contacto"
+        class="form-control"
+        name="contactName"
+        #contactName="ngModel"
+        required
+      />
+    </div>
+    <div class="col-md-6">
+      <label for="apellido-contacto" class="form-label"
+        >Apellido del Contacto *</label
+      >
+      <input
+        type="text"
+        [(ngModel)]="provider.contactLastName"
+        id="apellido-contacto"
+        class="form-control"
+        name="contactLastName"
+        #contactLastName="ngModel"
+        required
+      />
+    </div>
+    <div class="col-md-6">
+      <label for="sitio-web" class="form-label">Sitio Web</label>
+      <input
+        type="text"
+        [(ngModel)]="provider.website"
+        id="sitio-web"
+        class="form-control"
+        name="website"
+        #website="ngModel"
+      />
+    </div>
+    <div class="col-md-12">
+      <label for="url" class="form-label">URL Logo</label>
+      <input
+        type="text"
+        [(ngModel)]="provider.url"
+        id="url"
+        class="form-control"
+        name="url"
+        #url="ngModel"
+      />
+    </div>
+    <div class="row d-flex justify-content-evenly align-items-center mt-3">
+      <input
+        type="button"
+        value="Limpiar"
+        (click)="providerForm.resetForm()"
+        id="clear-provider"
+        class="btn w-25 btn-outline-danger"
+      />
+      <input
+        type="submit"
+        value="Agregar"
+        id="add-provider"
+        class="btn w-25 btn-outline-success"
+      />
+    </div>

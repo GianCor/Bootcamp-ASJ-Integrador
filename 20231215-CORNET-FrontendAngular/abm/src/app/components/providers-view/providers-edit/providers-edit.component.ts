@@ -4,13 +4,14 @@ import { condicionFrenteAlIva } from 'src/app/models/condicionFrenteIvaModel';
 import { Provider } from 'src/app/models/providerModel';
 import { GeorefService } from 'src/app/services/georef.service';
 import { ProvidersService } from 'src/app/services/providers.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-providers-add',
-  templateUrl: './providers-add.component.html',
-  styleUrls: ['./providers-add.component.css'],
+  selector: 'app-providers-edit',
+  templateUrl: './providers-edit.component.html',
+  styleUrls: ['./providers-edit.component.css']
 })
-export class ProvidersAddComponent {
+export class ProvidersEditComponent {
   providersData: Provider[] = [];
   IVAData: condicionFrenteAlIva[] = [];
   showError: boolean = false;
@@ -42,10 +43,15 @@ export class ProvidersAddComponent {
 
   constructor(
     private providersService: ProvidersService,
-    private georef: GeorefService
+    private georef: GeorefService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
+    this.route.params.subscribe(params => {
+      const providerId = params['id'];
+      this.provider = this.providersService.getProviderById(providerId);
+  })
     this.getProvidersData();
     this.getIVAData();
     this.georef.getCountries().subscribe((data) => {

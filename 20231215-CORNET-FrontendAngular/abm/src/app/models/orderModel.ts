@@ -1,10 +1,12 @@
+import { Product } from "./productModel";
+
 export interface Order {
-    id: number;
+    id: string;
     provider: string;
-    product: string;
-    amount: number;
+    product: Product[];
+    amount: string;
     emDate: Date;
     reDate: Date;
     address: string;
-    total: number;
+    total: string;
   }

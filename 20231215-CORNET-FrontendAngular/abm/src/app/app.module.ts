@@ -16,6 +16,8 @@ import { OrdersAddComponent } from './components/orders-view/orders-add/orders-a
 import { HomeComponent } from './components/home/home.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { ProvidersEditComponent } from './components/providers-view/providers-edit/providers-edit.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +31,7 @@ import { FormsModule } from '@angular/forms';
     OrdersAddComponent,
     HomeComponent,
     NavbarComponent,
+    ProvidersEditComponent,
   ],
   imports: [
     BrowserModule,
@@ -38,6 +41,7 @@ import { FormsModule } from '@angular/forms';
     NgbAlertModule,
     MatIconModule,
     FormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent],
