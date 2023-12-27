@@ -92,14 +92,13 @@
     </select>
   </div>
   <div class="col-md-3">
-    <label for="city" class="form-label">Ciudad *</label>
+    <label for="city" class="form-label">Ciudad</label>
     <select
       id="city"
       [(ngModel)]="provider.city"
       class="form-select"
       name="city"
       #city="ngModel"
-      required
     >
       <option *ngFor="let city of cities">{{ city.name }}</option>
     </select>
@@ -223,7 +222,7 @@
     >
   </div>
   <div
-    *ngIf="id.errors?.['required'] || name.errors?.['required'] || field.errors?.['required'] || email.errors?.['required'] || phone.errors?.['required'] || country.errors?.['required'] || state.errors?.['required'] || city.errors?.['required'] || cp.errors?.['required'] || address.errors?.['required'] || cuit.errors?.['required'] || iva.errors?.['required'] || contactName.errors?.['required'] || contactLastName.errors?.['required']"
+    *ngIf="id.errors?.['required'] || name.errors?.['required'] || field.errors?.['required'] || email.errors?.['required'] || phone.errors?.['required'] || country.errors?.['required'] || state.errors?.['required'] || cp.errors?.['required'] || address.errors?.['required'] || cuit.errors?.['required'] || iva.errors?.['required'] || contactName.errors?.['required'] || contactLastName.errors?.['required']"
     class="col-auto"
   >
     <span class="form-text text-danger">Todos los campos marcados con un * son obligatorios</span>

@@ -8,6 +8,7 @@ import { OrdersAddComponent } from './components/orders-view/orders-add/orders-a
 import { ProvidersListComponent } from './components/providers-view/providers-list/providers-list.component';
 import { HomeComponent } from './components/home/home.component';
 import { ProvidersEditComponent } from './components/providers-view/providers-edit/providers-edit.component';
+import { ProductsEditComponent } from './components/products-view/products-edit/products-edit.component';
 
 const routes: Routes = [
   {
@@ -24,6 +25,7 @@ const routes: Routes = [
     children: [
       { path: 'add', component: ProductsAddComponent },
       { path: 'list', component: ProductsListComponent },
+      { path: 'edit/:id', component: ProductsEditComponent},
       { path: '**', component: HomeComponent },
     ],
   },

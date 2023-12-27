@@ -5,27 +5,29 @@
   >
     <thead>
       <tr>
-        <th scope="col">Proveedor</th>
-        <th scope="col">SKU</th>
-        <th scope="col">Categoria</th>
         <th scope="col">Nombre Producto</th>
+        <th scope="col">SKU</th>
+        <th scope="col">Código de Proveedor</th>
+        <th scope="col">Razón social del Proveedor</th>
+        <th scope="col">Categoria</th>
         <th scope="col">Descripcion</th>
         <th scope="col">Precio</th>
         <th scope="col">Editar/Eliminar</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let product of productsData">
-        <td scope="col">{{ product.provider }}</td>
-        <td scope="col">{{ product.id }}</td>
-        <td scope="col">{{ product.category }}</td>
+      <tr *ngFor="let product of productsData | sortBy:'name'">
         <td scope="col">{{ product.name }}</td>
+        <td scope="col">{{ product.id }}</td>
+        <td scope="col">{{ product.provider }}</td>
+        <td scope="col">{{ product.providerName }}</td>
+        <td scope="col">{{ product.category }}</td>
         <td scope="col">{{ product.description }}</td>
         <td scope="col">{{ product.price }}</td>
         <td scope="col">
           <div class="d-flex btn-group btn-group-sm ">
-            <button class="btn btn-outline-warning ">Editar</button>
-            <button class="btn btn-outline-danger">Eliminar</button>
+            <button class="btn btn-outline-warning" (click)="editProduct(product)">Editar</button>
+            <button class="btn btn-outline-danger" (click)="deleteProduct(product)">Eliminar</button>
           </div>
         </td>
       </tr>

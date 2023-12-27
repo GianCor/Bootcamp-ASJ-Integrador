@@ -12,7 +12,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let provider of providersData">
-        <td scope="col"><img *ngIf="provider.providerUrl !=''" src="{{provider.url}}" alt=""></td>
+        <td scope="col"><img *ngIf="provider.providerUrl !=''" class="provider-logo" src="{{provider.url}}" alt="Logo no cargado o encontrado"></td>
         <td scope="col">{{ provider.id }}</td>
         <td scope="col">{{ provider.name }}</td>
         <td scope="col">
@@ -47,16 +47,20 @@
       <div class="modal-body row">
         <div class="col-12 col-md-6 mb-4">
           <h4>Datos Fiscales de proveedor: {{this.selectedProvider.name}} / {{this.selectedProvider.id}}</h4>
-          <table class="table">
+          <table class="table table-hover table-striped ">
             <thead>
-              <th>Condición frente al IVA</th>
-              <th>Cuit</th>
-              <th>Rubro</th>
+              <tr>
+                <th>Condición frente al IVA</th>
+                <th>Cuit</th>
+                <th>Rubro</th>
+              </tr>
             </thead>
             <tbody>
-              <td>{{this.selectedProvider.iva}}</td>
-              <td>{{this.selectedProvider.cuit}}</td>
-              <td>{{this.selectedProvider.field}}</td>
+              <tr>
+                <td>{{this.selectedProvider.iva}}</td>
+                <td>{{this.selectedProvider.cuit}}</td>
+                <td>{{this.selectedProvider.field}}</td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -64,16 +68,43 @@
           <h4>Ubicación</h4>
           <table class="table table-hover table-striped">
             <thead>
-              <th>País</th>
-              <th>Estado/Provincia</th>
-              <th>Ciudad</th>
-              <th>Código Postal</th>
+              <tr>
+                <th>País</th>
+                <th>Estado/Provincia</th>
+                <th>Ciudad</th>
+                <th>Código Postal</th>
+              </tr>
             </thead>
             <tbody>
-              <td>{{this.selectedProvider.country}}</td>
-              <td>{{this.selectedProvider.state}}</td>
-              <td>{{this.selectedProvider.city}}</td>
-              <td>{{this.selectedProvider.cp}}</td>
+              <tr>
+                <td>{{this.selectedProvider.country}}</td>
+                <td>{{this.selectedProvider.state}}</td>
+                <td>{{this.selectedProvider.city}}</td>
+                <td>{{this.selectedProvider.cp}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-12">
+          <h4>Productos Asociados</h4>
+          <table class="table table-hover table-striped">
+            <thead>
+              <tr>
+                <th>SKU/Codigo de producto</th>
+                <th>Nombre</th>
+                <th>Descripcion</th>
+                <th>Categoría</th>
+                <th>Precio</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let product of this.selectedProvider.products | sortBy:'name'">
+                <td>{{product.id}}</td>
+                <td>{{product.name}}</td>
+                <td>{{product.description}}</td>
+                <td>{{product.category}}</td>
+                <td>{{product.price}}</td>
+              </tr>
             </tbody>
           </table>
         </div>

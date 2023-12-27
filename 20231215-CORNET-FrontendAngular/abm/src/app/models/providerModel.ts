@@ -1,3 +1,5 @@
+import { Product } from "./productModel";
+
 export interface Provider {
   id: string;
   name: string;
@@ -15,4 +17,5 @@ export interface Provider {
   contactLastName: string; 
   website?: string;
   url?: string;
+  products?: Product[];
 }

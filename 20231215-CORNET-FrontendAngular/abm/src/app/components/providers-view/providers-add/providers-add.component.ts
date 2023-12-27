@@ -50,37 +50,23 @@ export class ProvidersAddComponent {
     this.getIVAData();
     this.georef.getCountries().subscribe((data) => {
       this.countries = data;
+      console.log(this.countries)
     });
   }
 
   changeSelectedCountry() {
-    const selectedCountry = this.countries.find(
+    const index = this.countries.findIndex(
       (country) => country.name === this.provider.country
-    );
-    if (selectedCountry) {
-      this.georef.getStatesByCountry(selectedCountry.iso2).subscribe((data) => {
-        console.log(data);
-        this.states = data;
-        this.cities = [];
-      });
-    }
+    )
+    this.states = this.countries[index].states
   }
 
   changeSelectedState() {
-    const selectedCountry = this.countries.find(
+    const countryIndex = this.countries.findIndex(
       (country) => country.name === this.provider.country
-    );
-    const selectedState = this.states.find(
-      (state) => state.name === this.provider.state
-    );
-    if (selectedCountry && selectedState) {
-      this.georef
-        .getCitiesByCountryAndState(selectedCountry.iso2, selectedState.iso2)
-        .subscribe((data) => {
-          console.log(data);
-          this.cities = data;
-        });
-    }
+    )
+    const stateIndex = this.states.findIndex(state => state.name === this.provider.state);
+    this.cities = this.countries[countryIndex].states[stateIndex].cities
   }
 
   getProvidersData() {

@@ -12,8 +12,10 @@ import { Product } from 'src/app/models/productModel';
   styleUrls: ['./orders-add.component.css']
 })
 export class OrdersAddComponent {
-  providers: Provider[] = [];
-  products: Product[] = [];
+  providers: any[] = [];
+  selectedProvider: any;
+  selectedProducts: any[]=[];
+  selectedProviderProducts: any[] = [];
   orders: Order[] = [];
   order: Order = { 
     id: '',
@@ -27,13 +29,12 @@ export class OrdersAddComponent {
   };
   constructor(
     private providersService: ProvidersService,
-    private productsService: ProductsService,
     private ordersService: OrdersService
   ) {}
 
   ngOnInit() {
     this.getProviders();
-    this.getProducts();
+
     this.getOrders();
   }
 
@@ -41,8 +42,13 @@ export class OrdersAddComponent {
     this.providers = this.providersService.getData();
   }
 
-  getProducts() {
-    this.products = this.productsService.getData();
+  onProviderChange() {
+    const selected = this.providers.find(provider => provider.id === this.selectedProvider);
+    if (selected) {
+      this.selectedProviderProducts = selected.products;
+    } else {
+      this.selectedProviderProducts = [];
+    }
   }
 
   getOrders() {
@@ -50,6 +56,21 @@ export class OrdersAddComponent {
   }
 
   postOrders(){
-    this.ordersService.postData(this.order)
+
+  }
+
+  addProductToOrders(){
+    this.order.product = this.selectedProviderProducts
+  }
+
+  calculateTotal(products: any[]){
+    let total = 0;
+    for(let i = 0; i<products.length; i++){
+      total += products[i].amount * products[i].price
+    }
+  }
+
+  postAmountOfProducts(){
+    console.log("llamando a la segunda funcion")
   }
 }

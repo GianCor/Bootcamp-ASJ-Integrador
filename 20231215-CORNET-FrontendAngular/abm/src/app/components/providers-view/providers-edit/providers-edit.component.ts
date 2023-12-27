@@ -9,7 +9,7 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-providers-edit',
   templateUrl: './providers-edit.component.html',
-  styleUrls: ['./providers-edit.component.css']
+  styleUrls: ['./providers-edit.component.css'],
 })
 export class ProvidersEditComponent {
   providersData: Provider[] = [];
@@ -48,45 +48,33 @@ export class ProvidersEditComponent {
   ) {}
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
+    this.route.params.subscribe((params) => {
       const providerId = params['id'];
       this.provider = this.providersService.getProviderById(providerId);
-  })
+    });
     this.getProvidersData();
     this.getIVAData();
     this.georef.getCountries().subscribe((data) => {
       this.countries = data;
+      console.log(this.countries);
     });
   }
 
   changeSelectedCountry() {
-    const selectedCountry = this.countries.find(
+    const index = this.countries.findIndex(
       (country) => country.name === this.provider.country
     );
-    if (selectedCountry) {
-      this.georef.getStatesByCountry(selectedCountry.iso2).subscribe((data) => {
-        console.log(data);
-        this.states = data;
-        this.cities = [];
-      });
-    }
+    this.states = this.countries[index].states;
   }
 
   changeSelectedState() {
-    const selectedCountry = this.countries.find(
+    const countryIndex = this.countries.findIndex(
       (country) => country.name === this.provider.country
     );
-    const selectedState = this.states.find(
+    const stateIndex = this.states.findIndex(
       (state) => state.name === this.provider.state
     );
-    if (selectedCountry && selectedState) {
-      this.georef
-        .getCitiesByCountryAndState(selectedCountry.iso2, selectedState.iso2)
-        .subscribe((data) => {
-          console.log(data);
-          this.cities = data;
-        });
-    }
+    this.cities = this.countries[countryIndex].states[stateIndex].cities;
   }
 
   getProvidersData() {
@@ -98,11 +86,13 @@ export class ProvidersEditComponent {
     this.IVAData = this.providersService.getIVA();
   }
 
-  pushProvidersData(form: NgForm) {
+  editProvider(form: NgForm) {
     if (form.valid) {
-      if (this.isUniqueId(this.provider.id) && this.isUniqueAndNumericCUIT(this.provider.cuit) && this.isValidEmail(this.provider.email)) {
-        this.providersService.postData(form.value);
-        this.message = 'Proveedor agregado exitosamente';
+      if (
+        this.isValidEmail(this.provider.email)
+      ) {
+        this.providersService.updateProvider(form.value);
+        this.message = 'Proveedor editado exitosamente';
         this.showError = false;
         this.showSuccess = true;
         setTimeout(() => {
@@ -112,8 +102,9 @@ export class ProvidersEditComponent {
         form.reset();
         this.getProvidersData();
       } else {
-        this.message = 'Código de proveedor y Cuit deben ser únicos. Cuit debe ser numérico. El email debe ser válido'
-        this.showError = true
+        this.message =
+          'El email debe ser válido';
+        this.showError = true;
         setTimeout(() => {
           this.showError = false;
           this.message = '';
@@ -129,7 +120,8 @@ export class ProvidersEditComponent {
     return !found;
   }
   isValidEmail(email: string): boolean {
-    const emailRegex: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const emailRegex: RegExp =
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email);
   }
   isUniqueAndNumericCUIT(cuit: string): boolean {
@@ -137,7 +129,10 @@ export class ProvidersEditComponent {
     if (!isNumeric) {
       return false;
     }
-    const foundCUIT = this.providersData.some((provider) => provider.cuit === cuit);
+    const foundCUIT = this.providersData.some(
+      (provider) => provider.cuit === cuit
+    );
     return !foundCUIT;
   }
+  
 }

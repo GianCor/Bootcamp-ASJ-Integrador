@@ -18,6 +18,8 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ProvidersEditComponent } from './components/providers-view/providers-edit/providers-edit.component';
+import { ProductsEditComponent } from './components/products-view/products-edit/products-edit.component';
+import { SortByPipe } from './pipes/sort-by.pipe';
 
 @NgModule({
   declarations: [
@@ -32,6 +34,8 @@ import { ProvidersEditComponent } from './components/providers-view/providers-ed
     HomeComponent,
     NavbarComponent,
     ProvidersEditComponent,
+    ProductsEditComponent,
+    SortByPipe,
   ],
   imports: [
     BrowserModule,

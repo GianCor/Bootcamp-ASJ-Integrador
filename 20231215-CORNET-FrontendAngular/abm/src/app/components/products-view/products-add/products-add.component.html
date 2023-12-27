@@ -1,29 +1,33 @@
-<form #productForm="ngForm" (ngSubmit)="pushProducts()" class="row g-3">
-  <div class="col-md-6">
-    <label for="provider-id" class="form-label">Código de Proveedor</label>
-    <select id="provider-id" class="form-select" [(ngModel)]="product.provider" name="providerId">
+<form #productForm="ngForm" (ngSubmit)="pushProducts(productForm)" class="row g-3">
+  <input type="text" [(ngModel)]="product.providerName" name="providerName" hidden>
+  <div class="col-md-3">
+    <label for="provider-id" class="form-label">Código de Proveedor *</label>
+    <select id="provider-id" class="form-select" (change)="onProviderChange(provider.value)" #provider="ngModel"
+      [(ngModel)]="product.provider" name="provider" required>
       <option *ngFor="let provider of providers" [value]="provider.id">{{ provider.name }}</option>
     </select>
   </div>
-  <div class="col-md-6">
-    <label for="codigo-producto" class="form-label">Código de Producto / S.K.U.</label>
-    <input type="text" id="codigo-producto" class="form-control" [(ngModel)]="product.id" name="productId" required/>
-  </div>
-  <div class="col-12">
-    <label for="categoria" class="form-label">Categoría</label>
-    <input type="text" id="categoria" class="form-control" [(ngModel)]="product.category" name="category" required/>
-  </div>
-  <div class="col-12">
-    <label for="nombre-producto" class="form-label">Nombre del Producto</label>
-    <input type="text" id="nombre-producto" class="form-control" [(ngModel)]="product.name" name="productName" required/>
-  </div>
-  <div class="col-md-12">
-    <label for="descripcion" class="form-label">Descripción</label>
-    <input type="text" id="descripcion" class="form-control" [(ngModel)]="product.description" name="description"/>
+  <div class="col-md-9">
+    <label for="codigo-producto" class="form-label">Código de Producto / S.K.U. *</label>
+    <input type="text" id="codigo-producto" class="form-control" #id="ngModel" [(ngModel)]="product.id" name="id" required/>
   </div>
   <div class="col-md-4">
-    <label for="precio" class="form-label">Precio</label>
-    <input type="text" id="precio" class="form-control" [(ngModel)]="product.price" name="price" required/>
+    <label for="categoria" class="form-label">Categoría</label>
+    <select class="form-select" name="category" #category="ngModel" [(ngModel)]="product.category" id="category">
+      <option *ngFor="let category of categories">{{category.name}}</option>
+    </select>
+  </div>
+  <div class="col-md-8">
+    <label for="nombre-producto" class="form-label">Nombre del Producto *</label>
+    <input type="text" id="name" class="form-control" #name="ngModel" [(ngModel)]="product.name" name="name" required/>
+  </div>
+  <div class="col-md-7">
+    <label for="description" class="form-label">Descripción</label>
+    <input type="text" id="description" class="form-control" #description="ngModel" [(ngModel)]="product.description" name="description"/>
+  </div>
+  <div class="col-md-5">
+    <label for="price" class="form-label">Precio *</label>
+    <input type="text" id="price" class="form-control" #price="ngModel" [(ngModel)]="product.price" name="price" required/>
   </div>
   <div class="row d-flex justify-content-evenly align-items-center mt-3">
     <input
@@ -40,4 +44,12 @@
       class="btn w-25 btn-outline-success"
     />
   </div>
+  <div
+  *ngIf="id.errors?.['required'] || name.errors?.['required'] || price.errors?.['required'] || provider.errors?.['required']" 
+  class="col-auto"
+>
+  <span class="form-text text-danger">Todos los campos marcados con un * son obligatorios</span>
+</div>
+<ngb-alert *ngIf="showError" type="danger" [dismissible]="false" class="w-25 position-fixed top-0 end-0"><mat-icon>error</mat-icon>{{ message }}</ngb-alert>
+<ngb-alert *ngIf="showSuccess" type="success" [dismissible]="false" class="w-25 position-fixed top-0 end-0"><mat-icon>done</mat-icon> {{ message }}</ngb-alert>
 </form>

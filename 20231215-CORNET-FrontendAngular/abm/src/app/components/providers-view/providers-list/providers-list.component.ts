@@ -23,9 +23,7 @@ export class ProvidersListComponent implements OnInit {
   }
 
   deleteProvider(provider:any){
-     this.providerIndex = this.providersData.findIndex(p => p === provider)
-     this.providersData.splice(this.providerIndex, 1);
-     this.providersService.postData(this.providersData)
+    this.providersService.deleteProvider(provider)
   }
   editProvider(provider:any){
     this.router.navigate(['/providers/edit', provider.id]);
