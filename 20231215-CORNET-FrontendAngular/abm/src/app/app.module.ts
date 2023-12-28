@@ -20,6 +20,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { ProvidersEditComponent } from './components/providers-view/providers-edit/providers-edit.component';
 import { ProductsEditComponent } from './components/products-view/products-edit/products-edit.component';
 import { SortByPipe } from './pipes/sort-by.pipe';
+import { SearchPipe } from './pipes/search.pipe';
+import { SortByPricePipe } from './pipes/sort-by-price.pipe';
+import { SortByPriceDescPipe } from './pipes/sort-by-price-desc.pipe';
+import { SearchByIdPipe } from './pipes/search-by-id.pipe';
 
 @NgModule({
   declarations: [
@@ -36,6 +40,10 @@ import { SortByPipe } from './pipes/sort-by.pipe';
     ProvidersEditComponent,
     ProductsEditComponent,
     SortByPipe,
+    SearchPipe,
+    SortByPricePipe,
+    SortByPriceDescPipe,
+    SearchByIdPipe,
   ],
   imports: [
     BrowserModule,

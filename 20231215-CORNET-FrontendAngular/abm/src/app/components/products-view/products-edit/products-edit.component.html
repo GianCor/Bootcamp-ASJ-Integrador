@@ -1,14 +1,11 @@
+<div class="mb-5">
+  <h3>Editar Producto</h3>
+</div>
+
 <form #productForm="ngForm" (ngSubmit)="pushProducts(productForm)" class="row g-3">
-    <div class="col-md-3">
-      <label for="provider-id" class="form-label">Código de Proveedor *</label>
-      <select id="provider-id" class="form-select" #provider="ngModel" [(ngModel)]="product.provider" name="provider" required>
-        <option *ngFor="let provider of providers" [value]="provider.id">{{ provider.name }}</option>
-      </select>
-    </div>
-    <div class="col-md-9">
-      <label for="codigo-producto" class="form-label">Código de Producto / S.K.U. *</label>
-      <input type="text" id="codigo-producto" class="form-control" #id="ngModel" [(ngModel)]="product.id" name="id" required/>
-    </div>
+      <input hidden type="text" id="provider" class="form-control" #provider="ngModel" [(ngModel)]="product.provider" name="provider" required/>
+      <input hidden type="text" id="providerName" class="form-control" #providerName="ngModel" [(ngModel)]="product.providerName" name="providerName" required/>
+      <input hidden type="text" id="codigo-producto" class="form-control" #id="ngModel" [(ngModel)]="product.id" name="id" required/>
     <div class="col-md-4">
       <label for="categoria" class="form-label">Categoría</label>
       <select class="form-select" name="category" #category="ngModel" [(ngModel)]="product.category" id="category">

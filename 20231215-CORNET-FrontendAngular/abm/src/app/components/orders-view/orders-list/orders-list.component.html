@@ -1,35 +1,285 @@
-<div class="table-responsive">
-  <table class="table table-hover table-striped table-bordered d mb-5" id="ordenes-body">
-    <thead>
-      <tr>
-        <th scope="col">Nro. orden</th>
-        <th scope="col">Fecha emision</th>
-        <th scope="col">Fecha entrega</th>
-        <th scope="col">Direccion</th>
-        <th scope="col">Proveedor</th>
-        <th scope="col">Producto</th>
-        <th scope="col">Cantidad</th>
-        <th scope="col">Total</th>
-        <th scope="col">Editar/Eliminar</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let order of ordersData">
-        <td scope="col">{{order.id}}</td>
-        <td scope="col">{{order.emDate | date : 'short'}}</td>
-        <td scope="col">{{order.reDate | date : 'short'}}</td>
-        <td scope="col">{{order.address}}</td>
-        <td scope="col">{{order.provider}}</td>
-        <td scope="col">{{order.product}}</td>
-        <td scope="col">{{order.amount}}</td>
-        <td scope="col">{{order.total}}</td>
-        <td scope="col">
-          <div class="d-flex btn-group btn-group-sm ">
-            <button class="btn btn-outline-warning ">Editar</button>
-            <button class="btn btn-outline-danger">Eliminar</button>
+<div class="mb-5">
+  <h3>Listado de Proveedores</h3>
+</div>
+    <div class="d-flex mb-2 justify-content-between mb-3">
+      <div>
+        <input class="form-control form-control-sm" type="text" placeholder="Buscar" name="search" [(ngModel)]="search" />
+      </div>
+      <div class="btn-group ">
+        <button
+        class="btn btn-outline-primary btn-sm"
+        (click)="
+          showCanceled = !showCanceled;
+          showCompleted = false;
+          showCanceled ? (showMessage = 'pendientes') : (showMessage = 'canceladas')
+        "
+      >
+        Ver {{ showMessage }}
+      </button>
+      <button
+        class="btn btn-outline-primary btn-sm"
+        (click)="showCompleted = !showCompleted"
+      >
+        Ver completadas
+      </button>
+      </div>
+      <div>
+        <button class="btn btn-primary btn-sm mx-3" [routerLink]="['/orders/add']"><div class="d-flex justify-content-center align-items-center"><mat-icon>add</mat-icon> Agregar Orden</div></button>
+      </div>
+    </div>
+
+<div *ngIf="show">
+  <div class="table-responsive" *ngIf="!showCanceled && !showCompleted">
+    <h5>Ordenes Pendientes</h5>
+    <table
+      class="table table-hover table-striped table-bordered d mb-5"
+      id="ordenes-body"
+    >
+      <thead>
+        <tr>
+          <th scope="col">Nro. orden</th>
+          <th scope="col">Fecha emision</th>
+          <th scope="col">Fecha entrega</th>
+          <th scope="col">Direccion</th>
+          <th scope="col">Proveedor</th>
+          <th scope="col">Total</th>
+          <th scope="col">Editar/Eliminar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of ordersData | searchById: search ">
+          <ng-container *ngIf="order.pending == true && order.canceled == false">
+            <td scope="col">{{ order.id }}</td>
+            <td scope="col">{{ order.emDate | date : "short" }}</td>
+            <td scope="col">{{ order.reDate | date : "short" }}</td>
+            <td scope="col">{{ order.description }}</td>
+            <td scope="col">{{ order.provider }}</td>
+            <td scope="col">{{ order.total | currency }}</td>
+            <td scope="col">
+              <div class="d-flex justify-content-between">
+                <button
+                  type="button"
+                  class="btn btn-outline-primary btn-sm"
+                  data-bs-toggle="modal"
+                  data-bs-target="#detailsModal"
+                  (click)="setSelectedOrder(order)"
+                >
+                  Ver Detalles
+                </button>
+                <button
+                  *ngIf="order.pending"
+                  class="btn btn-outline-danger btn-sm"
+                  (click)="order.canceled = !order.canceled; updateOrder(order)"
+                >
+                  Cancelar
+                </button>
+                <button
+                  *ngIf="!order.completed"
+                  class="btn btn-outline-success btn-sm"
+                  (click)="order.completed = !order.completed; order.pending = false; order.canceled = false; updateOrder(order)"
+                >
+                  Completar
+                </button>
+              </div>
+            </td>
+          </ng-container>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="table-responsive" *ngIf="showCanceled && !showCompleted">
+    <h5>Ordenes Canceladas</h5>
+    <table
+      class="table table-hover table-striped table-bordered d mb-5"
+      id="ordenes-body"
+    >
+      <thead>
+        <tr>
+          <th scope="col">Nro. orden</th>
+          <th scope="col">Fecha emision</th>
+          <th scope="col">Fecha entrega</th>
+          <th scope="col">Direccion</th>
+          <th scope="col">Proveedor</th>
+          <th scope="col">Total</th>
+          <th scope="col">Editar/Eliminar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of ordersData | searchById: search ">
+          <ng-container *ngIf="order.canceled == true">
+            <td scope="col">{{ order.id }}</td>
+            <td scope="col">{{ order.emDate | date : "short" }}</td>
+            <td scope="col">{{ order.reDate | date : "short" }}</td>
+            <td scope="col">{{ order.description }}</td>
+            <td scope="col">{{ order.provider }}</td>
+            <td scope="col">{{ order.total | currency }}</td>
+            <td scope="col">
+              <div class="d-flex justify-content-between">
+                <button
+                  type="button"
+                  data-bs-toggle="modal"
+                  data-bs-target="#detailsModal"
+                  class="btn btn-sm btn-outline-primary"
+                  (click)="setSelectedOrder(order)"
+                >
+                  Detalles
+                </button>
+                <div class="">
+                  <button
+                    type="button"
+                    *ngIf="order.canceled"
+                    class="btn btn-outline-success btn-sm"
+                    (click)="order.canceled = !order.canceled; updateOrder(order)"
+                  >
+                    Habilitar
+                  </button>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  
+  <div class="table-responsive" *ngIf="showCompleted">
+    <h5>Ordenes Completadas</h5>
+    <table
+      class="table table-hover table-striped table-bordered d mb-5"
+      id="ordenes-body"
+    >
+      <thead>
+        <tr>
+          <th scope="col">Nro. orden</th>
+          <th scope="col">Fecha emision</th>
+          <th scope="col">Fecha entrega</th>
+          <th scope="col">Direccion</th>
+          <th scope="col">Proveedor</th>
+          <th scope="col">Total</th>
+          <th scope="col">Editar/Eliminar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of ordersData | searchById: search">
+          <ng-container *ngIf="order.completed == true">
+            <td scope="col">{{ order.id }}</td>
+            <td scope="col">{{ order.emDate | date : "short" }}</td>
+            <td scope="col">{{ order.reDate | date : "short" }}</td>
+            <td scope="col">{{ order.description }}</td>
+            <td scope="col">{{ order.provider }}</td>
+            <td scope="col">{{ order.total | currency  }}</td>
+            <td scope="col">
+              <div class="d-flex justify-content-between">
+                <button
+                  type="button"
+                  class="btn btn-outline-primary btn-sm"
+                  data-bs-toggle="modal"
+                  data-bs-target="#detailsModal"
+                  (click)="setSelectedOrder(order)"
+                >
+                  Ver Detalles
+                </button>
+                <button
+                  *ngIf="order.pending"
+                  class="btn btn-outline-danger btn-sm"
+                  (click)="order.canceled = !order.canceled; updateOrder(order)"
+                >
+                  Cancelar
+                </button>
+                <button
+                  *ngIf="!order.completed"
+                  class="btn btn-outline-success btn-sm"
+                  (click)="order.completed = !order.completed; order.pending = false; order.canceled = false; updateOrder(order)"
+                >
+                  Completar
+                </button>
+              </div>
+            </td>
+          </ng-container>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  
+  
+  <div
+    class="modal fade modal-xl"
+    id="detailsModal"
+    tabindex="-1"
+    aria-labelledby="detailsModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Detalles</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body row">
+          <div class="col-12 col-md-6 mb-4">
+            <h4>Detalles de orden</h4>
+            <table class="table table-hover table-striped">
+              <thead>
+                <tr>
+                  <th>Nro. Orden</th>
+                  <th>Proveedor</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{ selectedOrder.id }}</td>
+                  <td>{{ selectedOrder.provider }}</td>
+                  <td>{{ message }}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>  
+          <div class="col-12 col-md-6">
+            <h4>Productos</h4>
+            <table class="table table-hover table-striped">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Precio</th>
+                  <th>Cantidad</th>
+                  <th>SubTotal</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let product of selectedOrder.product">
+                  <td>{{ product.name }}</td>
+                  <td>{{ product.price | currency }}</td>
+                  <td>{{ product.amount }}</td>
+                  <td>{{ product.subtotal | currency }}</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td colspan="3">Total:</td>
+                  <td>{{ selectedOrder.total | currency }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>  
 </div>

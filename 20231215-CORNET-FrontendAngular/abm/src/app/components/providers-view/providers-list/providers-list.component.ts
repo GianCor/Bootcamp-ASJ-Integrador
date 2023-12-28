@@ -11,11 +11,19 @@ export class ProvidersListComponent implements OnInit {
   providersData: any[] = [];
   selectedProvider :any = {}
   providerIndex! : any
+  show:boolean = true;
+
+  sortByPrice:boolean = false;
+  sortByPriceDesc:boolean = false;
+  search:string = ""
 
   constructor(private providersService: ProvidersService, private router: Router) { }
 
   ngOnInit() {
     this.getProvidersData();
+    if(this.providersData.length === 0){
+      this.show = !this.show
+    }
   }
 
   getProvidersData() {

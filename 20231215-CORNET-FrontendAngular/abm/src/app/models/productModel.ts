@@ -7,5 +7,6 @@ export interface Product {
     description: string;
     price: string;
     amount?:number;
+    subtotal?: number;
     checked?:boolean;
   }

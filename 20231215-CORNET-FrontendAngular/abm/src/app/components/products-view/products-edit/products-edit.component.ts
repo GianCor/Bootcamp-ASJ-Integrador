@@ -5,6 +5,7 @@ import { NgForm } from '@angular/forms';
 import { Provider } from 'src/app/models/providerModel';
 import { Product } from 'src/app/models/productModel';
 import { category } from 'src/app/models/categoryModel';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-products-edit',
@@ -30,10 +31,16 @@ export class ProductsEditComponent {
 
   constructor(
     private providersService: ProvidersService,
-    private productsService: ProductsService
+    private productsService: ProductsService,
+    private route : ActivatedRoute
   ) {}
 
   ngOnInit() {
+    this.route.params.subscribe((params) => {
+      const productId = params['id'];
+      this.product = this.productsService.getProductById(productId);
+      console.log(this.product)
+    });
     this.getProviders();
     this.getProducts();
     this.getCategories();
@@ -41,7 +48,6 @@ export class ProductsEditComponent {
 
   getProviders() {
     this.providers = this.providersService.getData();
-    console.log(this.providers);
   }
 
   getProducts() {
@@ -51,11 +57,10 @@ export class ProductsEditComponent {
   pushProducts(form: NgForm) {
     if (form.valid) {
       if (
-        this.isUniqueId(this.product.id) &&
         this.isNumeric(this.product.price)
       ) {
-        this.pushProductsToProvider(this.product);
-        this.productsService.postData(form.value);
+        this.productsService.updateProductAndProvider(form.value)
+        this.productsService.updateProduct(form.value);
         this.message = 'Proveedor agregado exitosamente';
         this.showError = false;
         this.showSuccess = true;

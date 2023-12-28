@@ -4,26 +4,29 @@ import { categories } from '../data/categories';
 import { ProvidersService } from './providers.service';
 import { BridgeService } from './bridge.service';
 
-const categoriesList:category[] = categories
+const categoriesList: category[] = categories;
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductsService {
-  constructor(private providersService: ProvidersService, private bridgeService: BridgeService) {
+  constructor(
+    private providersService: ProvidersService,
+    private bridgeService: BridgeService
+  ) {
     this.bridgeService.providerDeleted$.subscribe((deletedProviderId) => {
       this.deleteProductsByProvider(deletedProviderId);
     });
   }
 
-  data:any = []
-  providers: any = []
-  categoriesList = categoriesList
+  data: any = [];
+  providers: any = [];
+  categoriesList = categoriesList;
 
   getData() {
     const storedData = localStorage.getItem('products');
     this.data = storedData ? JSON.parse(storedData) : [];
-    return this.data
+    return this.data;
   }
 
   postData(data: any) {
@@ -35,22 +38,27 @@ export class ProductsService {
     }
     localStorage.setItem('products', JSON.stringify(this.data));
   }
-  
-  getCategories(){
-    return this.categoriesList
+
+  getCategories() {
+    return this.categoriesList;
   }
 
-  deleteProducts(product: any){
-    const productIndex = this.data.findIndex((p:any)=>p === product)
-    if(productIndex!=-1){
+  deleteProducts(product: any) {
+    const productIndex = this.data.findIndex((p: any) => p === product);
+    if (productIndex != -1) {
       this.data.splice(productIndex, 1);
-      this.postData(this.data)
+      this.postData(this.data);
     }
-    this.providersService.deleteProductFromProvider(product.id, product.provider)
+    this.providersService.deleteProductFromProvider(
+      product.id,
+      product.provider
+    );
   }
 
   deleteProductsByProvider(providerId: string) {
-    const productsToDelete = this.data.filter((product: any) => product.provider === providerId);
+    const productsToDelete = this.data.filter(
+      (product: any) => product.provider === providerId
+    );
     productsToDelete.forEach((product: any) => {
       const productIndex = this.data.findIndex((p: any) => p.id === product.id);
       if (productIndex !== -1) {
@@ -60,23 +68,40 @@ export class ProductsService {
     this.postData(this.data);
   }
 
-  getProductById(id:string){
+  getProductById(id: string) {
     const storedData = localStorage.getItem('products');
     this.data = storedData ? JSON.parse(storedData) : [];
-    const foundProvider = this.data.find((product: any) => product.id === id);
-    return foundProvider;
+    const foundProduct = this.data.find((product: any) => product.id === id);
+    return foundProduct;
   }
 
   updateProduct(updatedProduct: any) {
-    const storedData = localStorage.getItem('product');
+    const storedData = localStorage.getItem('products');
     this.data = storedData ? JSON.parse(storedData) : [];
-
-    const index = this.data.findIndex((product: any) => product.id === updatedProduct.id);
+    console.log(this.data);
+    const index = this.data.findIndex(
+      (product: any) => product.id === updatedProduct.id
+    );
+    console.log(index);
     if (index !== -1) {
-      console.log(`index: ${index}`)
       this.data[index] = updatedProduct;
-      localStorage.setItem('providers', JSON.stringify(this.data));
+      console.log(this.data);
+      localStorage.setItem('products', JSON.stringify(this.data));
     }
   }
 
+  updateProductAndProvider(updatedProduct: any) {
+    this.updateProduct(updatedProduct);
+
+    const providers = this.providersService.getData();
+    providers.forEach((provider: any) => {
+      const productIndex = provider.products.findIndex(
+        (p: any) => p.id === updatedProduct.id
+      );
+      if (productIndex !== -1) {
+        provider.products[productIndex] = { ...updatedProduct };
+        this.providersService.updateProvider(provider);
+      }
+    });
+  }
 }

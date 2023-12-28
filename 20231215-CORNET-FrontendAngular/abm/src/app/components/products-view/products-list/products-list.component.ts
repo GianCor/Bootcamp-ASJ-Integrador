@@ -11,11 +11,19 @@ import { ProductsService } from 'src/app/services/products.service';
 export class ProductsListComponent implements OnInit {
   productsData: Product[] = [];
 
+  sortByPrice:boolean = false;
+  sortByPriceDesc:boolean = false;
+  search:string = ""
+
+  show:boolean = true
+
   constructor(private productsService: ProductsService, private router: Router) { }
 
   ngOnInit() {
     this.getProductsData();
-    console.log(this.productsData)
+    if(this.productsData.length === 0){
+      this.show = !this.show
+    }
   }
 
   getProductsData() {

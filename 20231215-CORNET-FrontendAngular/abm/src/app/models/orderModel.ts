@@ -4,9 +4,11 @@ export interface Order {
     id: string;
     provider: string;
     product: Product[];
-    amount: string;
     emDate: Date;
     reDate: Date;
-    address: string;
-    total: string;
+    description: string;
+    pending: boolean;
+    completed: boolean;
+    canceled: boolean;
+    total?: number;
   }

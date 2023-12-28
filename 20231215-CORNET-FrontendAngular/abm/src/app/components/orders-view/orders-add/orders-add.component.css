@@ -1,0 +1,5 @@
+.max-height-table{
+    max-height: 225px;
+    overflow-y: auto; 
+    display: block;
+}

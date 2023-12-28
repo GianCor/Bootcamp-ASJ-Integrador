@@ -36,7 +36,6 @@ export class ProvidersService {
 
     const index = this.data.findIndex((provider: any) => provider.id === updatedProvider.id);
     if (index !== -1) {
-      console.log(`index: ${index}`)
       this.data[index] = updatedProvider;
       localStorage.setItem('providers', JSON.stringify(this.data));
     }
@@ -48,7 +47,6 @@ export class ProvidersService {
     } else {
       this.data = this.getData();
       this.data.push(arr);
-      console.log(this.data);
     }
     localStorage.setItem('providers', JSON.stringify(this.data));
   }

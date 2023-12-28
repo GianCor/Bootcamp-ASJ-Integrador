@@ -1,23 +1,38 @@
 import { Injectable } from '@angular/core';
-import { orders } from '../data/orders';
 import { Order } from '../models/orderModel'
 
-const data:Order[] = orders;
+const data:Order[] = [];
 
 @Injectable({
   providedIn: 'root',
 })
 export class OrdersService {
   constructor() {}
-  lista = data || [];
+  list = data || [];
 
   getData() {
-    //ACORDATE DE HACER EL GET DEL LOCALSTORAGE AAAA
-    return this.lista;
+    const storedData = localStorage.getItem('orders');
+    this.list = storedData ? JSON.parse(storedData) : [];
+    return this.list;
   }
 
-  postData(object: Order) {
-    this.lista.push(object);
-    localStorage.setItem('orders', JSON.stringify(this.lista))
+  postData(order: Order) {
+    this.list.push(order);
+    localStorage.setItem('orders', JSON.stringify(this.list))
+  }
+
+  updateOrder(object: Order){
+    const found = this.list.find((order:Order)=>{
+      return order.id === object.id
+    })
+    if(found){
+      const index = this.list.findIndex((order:Order)=>{
+        return order === found
+      })
+      if(index != -1){
+        this.list[index] = found;
+        localStorage.setItem('orders', JSON.stringify(this.list))
+      }
+    }
   }
 }

@@ -1,74 +1,129 @@
-<form #orderForm="ngForm" (ngSubmit)="postOrders(); postAmountOfProducts()" class="row">
+<div class="mb-5">
+  <h3>Agregar Ordenes de Compra</h3>
+</div>
+
+<form #orderForm="ngForm" (ngSubmit)="postOrder(order, orderForm)" class="row">
   <div class="col-6 row">
     <div class="col-md-6">
-      <label for="codigo" class="form-label">Nro. de Orden</label>
+      <label for="codigo" class="form-label">Nro. de Orden *</label>
       <input
         type="text"
         id="codigo"
         class="form-control"
         [(ngModel)]="order.id"
+        #orderId="ngModel"
         name="orderId"
         required
       />
     </div>
     <div class="col-md-6">
-      <label for="provider-id" class="form-label">Código de Proveedor</label>
-      <select id="provider-id" class="form-select" [(ngModel)]="selectedProvider" name="provider" (change)="onProviderChange()" required>
-        <option *ngFor="let provider of providers" [value]="provider.id">{{ provider.name }}</option>
+      <label for="provider-id" class="form-label">Código de Proveedor *</label>
+      <select
+        id="provider-id"
+        class="form-select"
+        [(ngModel)]="selectedProvider"
+        name="provider"
+        #provider="ngModel"
+        (change)="onProviderChange()"
+        required
+      >
+        <option *ngFor="let provider of providers" [value]="provider.id">
+          {{ provider.name }}
+        </option>
       </select>
     </div>
-      <div class="col-md-6 my-3">
-        <label for="fecha-emision" class="form-label">Fecha de Emisión</label>
-        <input
-          type="date"
-          id="fecha-emision"
-          class="form-control"
-          [(ngModel)]="order.emDate"
-          name="emissionDate"
-          required
+    <div class="col-md-6 my-3">
+      <label for="fecha-emision" class="form-label">Fecha de Emisión *</label>
+      <input
+        type="date"
+        id="fecha-emision"
+        class="form-control"
+        [(ngModel)]="order.emDate"
+        #emissionDate="ngModel"
+        name="emissionDate"
+        required
         />
-      </div>
-      <div class="col-md-6 my-3">
-        <label for="fecha-entrega" class="form-label">Fecha de Entrega</label>
-        <input
-          type="date"
-          id="fecha-entrega"
-          class="form-control"
-          [(ngModel)]="order.reDate"
-          name="deliveryDate"
-          required
-        />
-      </div>
+    </div>
+    <div class="col-md-6 my-3">
+      <label for="fecha-entrega" class="form-label">Fecha de Entrega *</label>
+      <input
+        type="date"
+        id="fecha-entrega"
+        class="form-control"
+        [(ngModel)]="order.reDate"
+        #deliveryDate="ngModel"
+        name="deliveryDate"
+        required
+      />
+    </div>
     <div class="col-12">
-      <label for="direccion" class="form-label">Dirección</label>
+      <label for="description" class="form-label">Descripción *</label>
       <input
         type="text"
-        id="direccion"
+        id="description"
         class="form-control"
-        [(ngModel)]="order.address"
-        name="address"
+        [(ngModel)]="order.description"
+        #description="ngModel"
+        name="description"
         required
       />
     </div>
   </div>
   <div class="col-6" id="checkbox-products">
-    <table *ngIf="selectedProvider != null" class="table table-hover table-striped ">
+    <div class="row">
+      <div class="col-12 d-flex mb-2">
+        <input class="form-control" type="text" placeholder="Buscar" name="search" [(ngModel)]="search" />
+        <button type="button" class="btn btn-outline-primary" (click)="sortByPrice = !sortByPrice" [ngClass]="{'active': sortByPrice}">OrdenarPorPrecio</button>
+      </div>
+    </div>
+    <table id="order-form"
+      *ngIf="selectedProvider != null"
+      class="table table-hover table-striped overflow-auto max-height-table"
+    >
       <thead>
         <tr>
           <th>Check</th>
-          <th>Imagen</th>
           <th>Nombre de producto</th>
           <th>Precio</th>
           <th>Cantidad</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let product of selectedProviderProducts">
-          <td><input class="form-check-input" type="checkbox" name="checked" [(ngModel)]="product.checked"></td>
-          <td><img src="{{product.url}}" alt=""></td>
-          <td>{{product.name}}</td>
-          <td>{{product.price}}</td>
-          <td><input class="form-control" placeholder="cantidad" [(ngModel)]="product.amount" name="amount" type="number"></td>
+        <tr *ngFor="let product of selectedProviderProducts | search: search | sortByPrice : sortByPrice">
+          <td>
+            <input
+              class="form-check-input"
+              type="checkbox"
+              name="checked"
+              (change)="getCheckedProducts()"
+              #checked="ngModel"
+              required
+              [(ngModel)]="product.checked"
+            />
+          </td>
+          <td>{{ product.name }}</td>
+          <td>{{ product.price }}</td>
+          <td>
+            <input
+              class="form-control"
+              placeholder="cantidad"
+              [(ngModel)]="product.amount"
+              name="amount"
+              #amount="ngModel"
+              [required]="product.checked"
+              type="number"
+              min="1"
+            />
+            <div
+            *ngIf="
+            amount.errors?.['min']" 
+            class="col-auto"
+          >
+            <span class="form-text text-danger"
+              >Deben ser mayor a 0</span
+            >
+          </div>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -88,4 +143,19 @@
       class="btn w-25 btn-outline-success"
     />
   </div>
+  <div
+    *ngIf="
+    orderId.errors?.['required'] ||
+    emissionDate.errors?.['required'] ||
+    deliveryDate.errors?.['required'] ||
+    description.errors?.['required']" 
+    class="col-auto"
+  >
+    <span class="form-text text-danger"
+      >Todos los campos marcados con un * son obligatorios</span
+    >
+  </div>
+  
+  <ngb-alert *ngIf="showError" type="danger" [dismissible]="false" class="w-25 position-fixed top-0 end-0"><mat-icon>error</mat-icon>{{ message }}</ngb-alert>
+  <ngb-alert *ngIf="showSuccess" type="success" [dismissible]="false" class="w-25 position-fixed top-0 end-0"><mat-icon>done</mat-icon> {{ message }}</ngb-alert>
 </form>

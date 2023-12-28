@@ -1,3 +1,7 @@
+<div class="mb-5">
+  <h3>Agregar Productos</h3>
+</div>
+
 <form #productForm="ngForm" (ngSubmit)="pushProducts(productForm)" class="row g-3">
   <input type="text" [(ngModel)]="product.providerName" name="providerName" hidden>
   <div class="col-md-3">

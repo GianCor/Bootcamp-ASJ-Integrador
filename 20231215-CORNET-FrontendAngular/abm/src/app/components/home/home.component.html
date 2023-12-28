@@ -1,6 +1,27 @@
-<h2>Proveedores</h2>
-<app-providers-list></app-providers-list>
-<h2>Productos</h2>
-<app-products-list></app-products-list>
-<h2>Ordenes</h2>
-<app-orders-list></app-orders-list>
+<div class="row mb-5 mt-3">
+    <div class="col-4 d-flex justify-content-center align-items-center">
+        <div class="btn-group btn-group-sm">
+            <button class="btn btn-outline-primary" type="button" (click)="showComponents(1)">Mostrar Lista Proveedores</button>
+        </div>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center">
+        <div class="btn-group btn-group-sm">
+            <button class="btn btn-outline-primary" type="button" (click)="showComponents(2)">Mostrar Lista Productos</button>
+        </div>
+    </div>
+    <div class="col-4 d-flex justify-content-center align-items-center">
+        <div class="btn-group btn-group-sm">
+            <button class="btn btn-outline-primary" type="button" (click)="showComponents(3)">Mostrar Lista Ordenes</button>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="showProviders">
+    <app-providers-list></app-providers-list>
+</div>
+<div *ngIf="showProducts">
+    <app-products-list></app-products-list>
+</div>
+<div *ngIf="showOrders">
+    <app-orders-list></app-orders-list>
+</div>

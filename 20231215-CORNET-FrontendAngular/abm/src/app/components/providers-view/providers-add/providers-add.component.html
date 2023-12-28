@@ -1,3 +1,7 @@
+<div class="mb-5">
+  <h3>Agregar Proveedores</h3>
+</div>
+
 <form #providerForm="ngForm" (ngSubmit)="pushProvidersData(providerForm)" class="row g-3">
   <div class="col-md-6">
     <label for="codigo" class="form-label">Código *</label>
@@ -86,7 +90,6 @@
       name="state"
       (change)="changeSelectedState()"
       #state="ngModel"
-      required
     >
       <option *ngFor="let state of states">{{ state.name }}</option>
     </select>
@@ -99,8 +102,9 @@
       class="form-select"
       name="city"
       #city="ngModel"
+      selected
     >
-      <option *ngFor="let city of cities">{{ city.name }}</option>
+      <option *ngFor="let city of cities" [value]="city.name">{{ city.name }}</option>
     </select>
   </div>
   <div class="col-md-2">
@@ -179,15 +183,26 @@
       required
     />
   </div>
-  <div class="col-md-6">
-    <label for="sitio-web" class="form-label">Sitio Web</label>
+  <div class="col-md-3">
+    <label for="website" class="form-label">Sitio Web</label>
     <input
       type="text"
       [(ngModel)]="provider.website"
-      id="sitio-web"
+      id="website"
       class="form-control"
       name="website"
       #website="ngModel"
+    />
+  </div>
+  <div class="col-md 3">
+    <label for="sitio-web" class="form-label">Rol de contacto</label>
+    <input
+      type="text"
+      [(ngModel)]="provider.role"
+      id="role"
+      class="form-control"
+      name="role"
+      #role="ngModel"
     />
   </div>
   <div class="col-md-12">
