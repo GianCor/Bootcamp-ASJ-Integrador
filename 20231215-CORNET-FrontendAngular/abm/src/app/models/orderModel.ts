@@ -1,7 +1,8 @@
 import { Product } from "./productModel";
 
 export interface Order {
-    id: string;
+    id: number;
+    numOrder: string;
     provider: string;
     product: Product[];
     emDate: Date;
@@ -11,4 +12,6 @@ export interface Order {
     completed: boolean;
     canceled: boolean;
     total?: number;
+    created_at?: Date;
+    updated_at?: Date;
   }

@@ -20,8 +20,9 @@ export class ProductsEditComponent {
   showSuccess: boolean = false;
   message: string = '';
   product: Product = {
-    id: '',
-    provider: '',
+    id:0,
+    sku: '',
+    provider_id: 0,
     providerName: '',
     category: '',
     name: '',
@@ -47,7 +48,9 @@ export class ProductsEditComponent {
   }
 
   getProviders() {
-    this.providers = this.providersService.getData();
+    this.providersService.getData().subscribe(response=>{
+      this.providers = response;
+    });
   }
 
   getProducts() {
@@ -84,7 +87,7 @@ export class ProductsEditComponent {
 
   pushProductsToProvider(product: Product) {
     const index = this.providers.findIndex(
-      (provider) => product.provider == provider.id
+      (provider) => product.provider_id == provider.id
     );
     if (index != -1) {
       if (this.providers[index].products == undefined) {
@@ -102,7 +105,7 @@ export class ProductsEditComponent {
 
   isUniqueId(id: string): any {
     this.getProducts();
-    const found = this.products.some((product) => product.id == id);
+    const found = this.products.some((product) => product.sku == id);
     return !found;
   }
   isNumeric(price: string) {

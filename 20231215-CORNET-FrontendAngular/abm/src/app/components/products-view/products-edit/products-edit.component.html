@@ -3,7 +3,7 @@
 </div>
 
 <form #productForm="ngForm" (ngSubmit)="pushProducts(productForm)" class="row g-3">
-      <input hidden type="text" id="provider" class="form-control" #provider="ngModel" [(ngModel)]="product.provider" name="provider" required/>
+      <input hidden type="text" id="provider" class="form-control" #provider="ngModel" [(ngModel)]="product.provider_id" name="provider" required/>
       <input hidden type="text" id="providerName" class="form-control" #providerName="ngModel" [(ngModel)]="product.providerName" name="providerName" required/>
       <input hidden type="text" id="codigo-producto" class="form-control" #id="ngModel" [(ngModel)]="product.id" name="id" required/>
     <div class="col-md-4">

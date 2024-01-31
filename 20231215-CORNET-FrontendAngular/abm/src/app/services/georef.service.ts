@@ -8,7 +8,8 @@ import { Observable, of } from 'rxjs';
 export class GeorefService {
   constructor(private http: HttpClient) {}
 
+  url:string = "http://localhost:8080/geolocation";
   getCountries(): Observable<any> {
-    return this.http.get<any>('../../assets/countries+states+cities.json');
+    return this.http.get<any>(this.url);
   }
 }

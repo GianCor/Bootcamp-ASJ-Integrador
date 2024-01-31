@@ -21,17 +21,24 @@ export class ProvidersListComponent implements OnInit {
 
   ngOnInit() {
     this.getProvidersData();
-    if(this.providersData.length === 0){
-      this.show = !this.show
-    }
   }
 
   getProvidersData() {
-    this.providersData = this.providersService.getData();
+    this.providersService.getData().subscribe((response:any)=>{
+      this.providersData = response;
+      console.log(this.providersData)
+      if(this.providersData.length === 0){
+        this.show = !this.show
+      }
+      this.selectedProvider = this.providersData[0];
+    });
   }
 
   deleteProvider(provider:any){
-    this.providersService.deleteProvider(provider)
+    this.providersService.deleteProvider(provider).subscribe((response)=>{
+      console.log(response)
+      this.getProvidersData();
+    });
   }
   editProvider(provider:any){
     this.router.navigate(['/providers/edit', provider.id]);
@@ -39,5 +46,6 @@ export class ProvidersListComponent implements OnInit {
 
   setSelectedProvider(provider: any){
     this.selectedProvider = provider
+    console.log(this.selectedProvider)
   }
 }

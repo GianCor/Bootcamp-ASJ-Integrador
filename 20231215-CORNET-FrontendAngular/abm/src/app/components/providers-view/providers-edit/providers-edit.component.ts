@@ -5,6 +5,8 @@ import { Provider } from 'src/app/models/providerModel';
 import { GeorefService } from 'src/app/services/georef.service';
 import { ProvidersService } from 'src/app/services/providers.service';
 import { ActivatedRoute } from '@angular/router';
+import { FieldService } from 'src/app/services/field.service';
+import { TaxService } from 'src/app/services/tax.service';
 
 @Component({
   selector: 'app-providers-edit',
@@ -16,22 +18,56 @@ export class ProvidersEditComponent {
   IVAData: condicionFrenteAlIva[] = [];
   showError: boolean = false;
   showSuccess: boolean = false;
+
+  selectedCountry: any; 
+  selectedState: any;
+  selectedCity: any;
+  selectedField: any;
+  selectedTax: any;
+  fieldData: any[] = [];
+
   provider: Provider = {
-    id: '',
+    id:0,
+    supplierCode: '',
     name: '',
-    field: '',
+    field: {
+      id:0,
+      name:''
+    },
     phone: '',
-    country: '',
-    state: '',
-    city: '',
-    iva: '',
-    address: '',
+    tax: {
+      id:0,
+      name:''
+    },
+    address: {
+      id: 0,
+      street: '',
+      number: '',
+      cp:'',
+      city:{
+        id:0,
+        name:'',
+        state:{
+          id:0,
+          name: '',
+          country:{
+            id:0,
+            name:''
+          }
+        }
+      }
+    },
     cuit: '',
-    cp: '',
     email: '',
-    contactName: '',
-    contactLastName: '',
-    website: '',
+    contact:{
+      id:0,
+      contactName:'',
+      contactLastName:'',
+      contactEmail:'',
+      contactPhone:'',
+      contactRole:''
+    },
+    website: ''
   };
   aux: any;
 
@@ -44,46 +80,112 @@ export class ProvidersEditComponent {
   constructor(
     private providersService: ProvidersService,
     private georef: GeorefService,
+    private taxService: TaxService,
+    private fieldService: FieldService,
     private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
+    this.getProvidersData();
     this.route.params.subscribe((params) => {
       const providerId = params['id'];
-      this.provider = this.providersService.getProviderById(providerId);
-    });
-    this.getProvidersData();
-    this.getIVAData();
-    this.georef.getCountries().subscribe((data) => {
-      this.countries = data;
-      console.log(this.countries);
+      this.providersService.getProviderById(providerId).subscribe(response=>{
+        this.provider = response;
+        this.taxService.getTaxes().subscribe((data) =>{
+          this.IVAData = data;
+          this.selectedTax = this.provider.tax;
+          console.log(this.IVAData)
+        });
+        this.fieldService.getFields().subscribe((data)=>{
+          this.fieldData = data;
+          this.selectedField = this.provider.field;
+          console.log(this.fieldData)
+        })
+        this.georef.getCountries().subscribe((data) => {
+          this.countries = data;
+          this.selectedCountry = this.provider.address.city.state.country;
+          this.selectedState = this.provider.address.city.state;
+          this.selectedCity = this.provider.address.city;
+        });
+      });
     });
   }
 
-  changeSelectedCountry() {
-    const index = this.countries.findIndex(
-      (country) => country.name === this.provider.country
-    );
-    this.states = this.countries[index].states;
+  geoLocationModel = {
+    id:0,
+    name:'',
+    state:{
+      id:0,
+      name: '',
+      country:{
+        id:0,
+        name:''
+      }
+    }
   }
 
-  changeSelectedState() {
-    const countryIndex = this.countries.findIndex(
-      (country) => country.name === this.provider.country
-    );
-    const stateIndex = this.states.findIndex(
-      (state) => state.name === this.provider.state
-    );
-    this.cities = this.countries[countryIndex].states[stateIndex].cities;
+changeSelectedCountry() {
+  this.states = this.selectedCountry.states;
+}
+
+changeSelectedState(){
+  this.cities = this.selectedState.cities;
+}
+
+changeSelectedCity(){
+  if(!this.showOtherCityInput){
+    this.geoLocationModel = {
+      id: this.selectedCity.id,
+      name: this.selectedCity.name,
+      state:{
+        id: this.selectedState.id,
+        name: this.selectedState.name,
+        country:{
+          id:this.selectedCountry.id,
+          name:this.selectedCountry.name
+        }
+      }
+    }
+  }else{
+    this.geoLocationModel = {
+      id: 0,
+      name: this.selectedCity,
+      state:{
+        id: this.selectedState.id,
+        name: this.selectedState.name,
+        country:{
+          id:this.selectedCountry.id,
+          name:this.selectedCountry.name
+        }
+      }
+    }
   }
+  console.log(this.geoLocationModel)
+  this.provider.address.city = this.geoLocationModel;
+  console.log(this.provider)
+}
+
+showOtherCityInput: boolean = false;
+
+toggleOtherCityInput() {
+  if (this.showOtherCityInput) {
+      this.selectedCity = null;
+  }
+}
+
+changeSelectedField(){
+  this.provider.field = this.selectedField;
+}
+
+changeSelectedTax(){
+  this.provider.tax = this.selectedTax;
+}
 
   getProvidersData() {
-    this.providersData = this.providersService.getData();
+    this.providersService.getData().subscribe(response=>{
+      this.providersData = response;
+    });
     console.log(this.providersData);
-  }
-
-  getIVAData() {
-    this.IVAData = this.providersService.getIVA();
   }
 
   editProvider(form: NgForm) {
@@ -91,7 +193,9 @@ export class ProvidersEditComponent {
       if (
         this.isValidEmail(this.provider.email)
       ) {
-        this.providersService.updateProvider(form.value);
+        this.providersService.updateProvider(this.provider).subscribe(response=>{
+          console.log(response);
+        });
         this.message = 'Proveedor editado exitosamente';
         this.showError = false;
         this.showSuccess = true;
@@ -116,7 +220,7 @@ export class ProvidersEditComponent {
   }
 
   isUniqueId(id: string): any {
-    const found = this.providersData.some((provider) => provider.id == id);
+    const found = this.providersData.some((provider) => provider.supplierCode == id);
     return !found;
   }
   isValidEmail(email: string): boolean {

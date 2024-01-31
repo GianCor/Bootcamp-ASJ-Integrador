@@ -1,6 +1,7 @@
 export interface Product {
-    id: string;
-    provider: string;
+    id: number;
+    sku: string;
+    provider_id: number;
     providerName: string;
     category: string;
     name: string;
@@ -9,4 +10,7 @@ export interface Product {
     amount?:number;
     subtotal?: number;
     checked?:boolean;
+    created_at?: Date;
+    updated_at?: Date;
   }
+

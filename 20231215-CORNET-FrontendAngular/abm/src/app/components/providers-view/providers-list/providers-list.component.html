@@ -25,15 +25,15 @@
     <tbody>
       <tr *ngFor="let provider of providersData | search: search | sortByPrice : sortByPrice | sortByPriceDesc : sortByPriceDesc">
         <td scope="col"><img *ngIf="provider.providerUrl !=''" class="provider-logo" src="{{provider.url}}" alt="Logo no cargado o encontrado"></td>
-        <td scope="col">{{ provider.id }}</td>
+        <td scope="col">{{ provider.supplierCode }}</td>
         <td scope="col">{{ provider.name }}</td>
         <td scope="col">
-          {{ provider.email }} <br>
-          {{ provider.phone }} <br>
+          {{ provider.contact.contactEmail }} <br>
+          {{ provider.contact.contactPhone }} <br>
           {{ provider.website }}
         </td>
         <td scope="col">
-          {{ provider.contactName }} {{ provider.contactLastName }}
+          {{ provider.contact.contactName }} {{ provider.contact.contactLastName }}
         </td>
         <td scope="col">
           <div class="d-flex justify-content-between">
@@ -69,9 +69,9 @@
             </thead>
             <tbody>
               <tr>
-                <td>{{this.selectedProvider.iva}}</td>
+                <td>{{this.selectedProvider.tax.name}}</td>
                 <td>{{this.selectedProvider.cuit}}</td>
-                <td>{{this.selectedProvider.field}}</td>
+                <td>{{this.selectedProvider.field.name}}</td>
               </tr>
             </tbody>
           </table>
@@ -84,15 +84,29 @@
                 <th>País</th>
                 <th>Estado/Provincia</th>
                 <th>Ciudad</th>
-                <th>Código Postal</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>{{this.selectedProvider.country}}</td>
-                <td>{{this.selectedProvider.state}}</td>
-                <td>{{this.selectedProvider.city}}</td>
-                <td>{{this.selectedProvider.cp}}</td>
+                <td>{{this.selectedProvider.address.city.state.country.name}}</td>
+                <td>{{this.selectedProvider.address.city.state.name}}</td>
+                <td>{{this.selectedProvider.address.city.name}}</td>
+              </tr>
+            </tbody>
+          </table>
+          <table class="table table-hover table-striped">
+            <thead>
+              <tr>
+                <th>Código Postal</th>
+                <th>Calle</th>
+                <th>Número</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{this.selectedProvider.address.cp}}</td>
+                <td>{{this.selectedProvider.address.street}}</td>
+                <td>{{this.selectedProvider.address.number}}</td>
               </tr>
             </tbody>
           </table>

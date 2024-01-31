@@ -1,22 +1,63 @@
 import { Product } from "./productModel";
 
 export interface Provider {
-  id: string;
+  id: number;
+  supplierCode: string;
   name: string;
-  field: string;
+  field: Field;
   phone: string;
-  country: string;
-  state?: string;
-  city?: string;
-  iva: string;
-  address: string;
+  tax: Tax;
+  address: Address;
   cuit: string;
-  cp:string;
   email: string;
-  role?: string;
-  contactName: string;
-  contactLastName: string; 
+  contact: Contact;
+  created_at?: Date;
+  updated_at?: Date;
   website?: string;
   url?: string;
   products?: Product[];
+}
+
+export interface Contact {
+  id: number;
+  contactName: string;
+  contactLastName: string;
+  contactPhone: string;
+  contactEmail: string;
+  contactRole: string;
+}
+
+export interface Address {
+id: number;
+street: string;
+number: string;
+cp:'';
+city: City;
+}
+
+export interface City {
+id: number;
+name: string;
+state: State; 
+}
+
+export interface Country {
+id: number;
+name: string;
+}
+
+export interface Tax {
+  id: number;
+  name: string;
+  }
+
+export interface Field {
+id: number;
+name: string;
+}
+
+export interface State {
+id: number;
+name:string;
+country:Country;
 }

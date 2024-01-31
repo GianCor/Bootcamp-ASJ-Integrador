@@ -86,7 +86,7 @@ WHERE  s.address_id = a.id
                                   WHERE  s.address_id = a.id
                                          AND a.state_id = st.id
                                   GROUP  BY a.id
-                                  ORDER  BY Count(s.id) DESC) );
+                                  ORDER  BY Count(s.id) DESC));
 
 --Traer un listado de todos los proveedores que no hayan sido eliminados , y ordenados por razon social,
 --codigo proveedor y fecha en que se dió de alta ASC. De este listado mostrar los datos que correspondan con su tabla del front.

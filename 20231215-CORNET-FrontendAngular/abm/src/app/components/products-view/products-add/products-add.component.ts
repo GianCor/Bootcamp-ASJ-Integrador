@@ -19,8 +19,9 @@ export class ProductsAddComponent implements OnInit {
   showSuccess: boolean = false;
   message: string = '';
   product: Product = {
-    id: '',
-    provider: '',
+    id:0,
+    sku: '',
+    provider_id: 0,
     providerName: '',
     category: '',
     name: '',
@@ -39,19 +40,19 @@ export class ProductsAddComponent implements OnInit {
     this.getCategories();
   }
 
-  onProviderChange(providerId: string) {
+  onProviderChange(providerId: number) {
     const selectedProvider = this.providers.find(provider => provider.id === providerId);
-    console.log(providerId)
     if (selectedProvider) {
-      this.product.provider = selectedProvider.id;
+      this.product.provider_id = selectedProvider.id;
       this.product.providerName = selectedProvider.name;
     }
-    console.log(this.product.providerName)
   }
 
 
   getProviders() {
-    this.providers = this.providersService.getData();
+    this.providersService.getData().subscribe(response=>{
+      this.providers = response;
+    });
     console.log(this.providers);
   }
 
@@ -66,7 +67,7 @@ export class ProductsAddComponent implements OnInit {
   pushProducts(form: NgForm) {
     if (form.valid) {
       if (
-        this.isUniqueId(this.product.id) &&
+        this.isUniqueId(this.product.sku) &&
         this.isNumeric(this.product.price)
       ) {
         this.pushProductsToProvider(form.value);
@@ -94,7 +95,7 @@ export class ProductsAddComponent implements OnInit {
 
   pushProductsToProvider(product: Product) {
     const index = this.providers.findIndex(
-      (provider) => product.provider == provider.id
+      (provider) => product.provider_id == provider.id
     );
     if (index != -1) {
       if (this.providers[index].products == undefined) {
@@ -112,11 +113,15 @@ export class ProductsAddComponent implements OnInit {
 
   isUniqueId(id: string): any {
     this.getProducts();
-    const found = this.products.some((product) => product.id == id);
+    const found = this.products.some((product) => product.sku == id);
     return !found;
   }
   isNumeric(price: string) {
     const isNumeric: boolean = /^\d+$/.test(price);
     return isNumeric;
+  }
+
+  isProviderInvalid() {
+    return this.product.provider_id;
   }
 }

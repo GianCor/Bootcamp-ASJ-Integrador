@@ -10,10 +10,12 @@
         type="text"
         id="codigo"
         class="form-control"
-        [(ngModel)]="order.id"
-        #orderId="ngModel"
-        name="orderId"
+        [(ngModel)]="order.numOrder"
+        #numOrder="ngModel"
+        name="numOrder"
         required
+        [class.is-valid]="numOrder.valid && numOrder.touched"
+        [class.is-invalid]="numOrder.touched && numOrder.invalid"
       />
     </div>
     <div class="col-md-6">
@@ -26,6 +28,8 @@
         #provider="ngModel"
         (change)="onProviderChange()"
         required
+        [class.is-valid]="provider.valid && provider.touched"
+        [class.is-invalid]="provider.touched && provider.invalid"
       >
         <option *ngFor="let provider of providers" [value]="provider.id">
           {{ provider.name }}
@@ -40,8 +44,10 @@
         class="form-control"
         [(ngModel)]="order.emDate"
         #emissionDate="ngModel"
-        name="emissionDate"
+        name="emDate"
         required
+        [class.is-valid]="emissionDate.valid && emissionDate.touched"
+        [class.is-invalid]="emissionDate.touched && emissionDate.invalid"
         />
     </div>
     <div class="col-md-6 my-3">
@@ -52,8 +58,10 @@
         class="form-control"
         [(ngModel)]="order.reDate"
         #deliveryDate="ngModel"
-        name="deliveryDate"
+        name="reDate"
         required
+        [class.is-valid]="deliveryDate.valid && deliveryDate.touched"
+        [class.is-invalid]="deliveryDate.touched && deliveryDate.invalid"
       />
     </div>
     <div class="col-12">
@@ -66,6 +74,8 @@
         #description="ngModel"
         name="description"
         required
+        [class.is-valid]="description.valid && description.touched"
+        [class.is-invalid]="description.touched && description.invalid"
       />
     </div>
   </div>
@@ -145,7 +155,7 @@
   </div>
   <div
     *ngIf="
-    orderId.errors?.['required'] ||
+    numOrder.errors?.['required'] ||
     emissionDate.errors?.['required'] ||
     deliveryDate.errors?.['required'] ||
     description.errors?.['required']" 

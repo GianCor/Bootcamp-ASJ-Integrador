@@ -2,8 +2,10 @@ import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { condicionFrenteAlIva } from 'src/app/models/condicionFrenteIvaModel';
 import { Provider } from 'src/app/models/providerModel';
+import { FieldService } from 'src/app/services/field.service';
 import { GeorefService } from 'src/app/services/georef.service';
 import { ProvidersService } from 'src/app/services/providers.service';
+import { TaxService } from 'src/app/services/tax.service';
 
 @Component({
   selector: 'app-providers-add',
@@ -13,24 +15,57 @@ import { ProvidersService } from 'src/app/services/providers.service';
 export class ProvidersAddComponent {
   providersData: Provider[] = [];
   IVAData: condicionFrenteAlIva[] = [];
+  fieldData: any[] =[];
   showError: boolean = false;
   showSuccess: boolean = false;
+  selectedCountry: any; 
+  selectedState: any;
+  selectedCity: any;
+  selectedField: any;
+  selectedTax: any;
+
   provider: Provider = {
-    id: '',
+    id:0,
+    supplierCode: '',
     name: '',
-    field: '',
+    field: {
+      id:0,
+      name:''
+    },
     phone: '',
-    country: '',
-    state: '',
-    city: '',
-    iva: '',
-    address: '',
+    tax: {
+      id:0,
+      name:''
+    },
+    address: {
+      id: 0,
+      street: '',
+      number: '',
+      cp:'',
+      city:{
+        id:0,
+        name:'',
+        state:{
+          id:0,
+          name: '',
+          country:{
+            id:0,
+            name:''
+          }
+        }
+      }
+    },
     cuit: '',
-    cp: '',
     email: '',
-    contactName: '',
-    contactLastName: '',
-    website: '',
+    contact:{
+      id:0,
+      contactName:'',
+      contactLastName:'',
+      contactEmail:'',
+      contactPhone:'',
+      contactRole:''
+    },
+    website: ''
   };
   aux: any;
 
@@ -42,46 +77,108 @@ export class ProvidersAddComponent {
 
   constructor(
     private providersService: ProvidersService,
-    private georef: GeorefService
+    private georef: GeorefService,
+    private taxService: TaxService,
+    private fieldService: FieldService
   ) {}
 
   ngOnInit() {
     this.getProvidersData();
-    this.getIVAData();
+    this.taxService.getTaxes().subscribe((data) =>{
+      this.IVAData = data;
+      console.log(this.IVAData)
+    });
+    this.fieldService.getFields().subscribe((data)=>{
+      this.fieldData = data;
+      console.log(this.fieldData)
+    })
     this.georef.getCountries().subscribe((data) => {
       this.countries = data;
-      console.log(this.countries)
     });
   }
 
+  geoLocationModel = {
+      id:0,
+      name:'',
+      state:{
+        id:0,
+        name: '',
+        country:{
+          id:0,
+          name:''
+        }
+      }
+    }
+
   changeSelectedCountry() {
-    const index = this.countries.findIndex(
-      (country) => country.name === this.provider.country
-    )
-    this.states = this.countries[index].states
+    this.states = this.selectedCountry.states;
   }
 
-  changeSelectedState() {
-    const countryIndex = this.countries.findIndex(
-      (country) => country.name === this.provider.country
-    )
-    const stateIndex = this.states.findIndex(state => state.name === this.provider.state);
-    this.cities = this.countries[countryIndex].states[stateIndex].cities
+  changeSelectedState(){
+    this.cities = this.selectedState.cities;
+  }
+
+  changeSelectedCity(){
+    if(!this.showOtherCityInput){
+      this.geoLocationModel = {
+        id: this.selectedCity.id,
+        name: this.selectedCity.name,
+        state:{
+          id: this.selectedState.id,
+          name: this.selectedState.name,
+          country:{
+            id:this.selectedCountry.id,
+            name:this.selectedCountry.name
+          }
+        }
+      }
+    }else{
+      this.geoLocationModel = {
+        id: 0,
+        name: this.selectedCity,
+        state:{
+          id: this.selectedState.id,
+          name: this.selectedState.name,
+          country:{
+            id:this.selectedCountry.id,
+            name:this.selectedCountry.name
+          }
+        }
+      }
+    }
+    console.log(this.geoLocationModel)
+    this.provider.address.city = this.geoLocationModel;
+    console.log(this.provider)
+  }
+
+showOtherCityInput: boolean = false;
+
+  toggleOtherCityInput() {
+    if (this.showOtherCityInput) {
+        this.selectedCity = null;
+    }
+}
+
+  changeSelectedField(){
+    this.provider.field = this.selectedField;
+  }
+
+  changeSelectedTax(){
+    this.provider.tax = this.selectedTax;
   }
 
   getProvidersData() {
-    this.providersData = this.providersService.getData();
+    this.providersService.getData().subscribe(response =>{
+      this.providersData = response;  
+    })
     console.log(this.providersData);
-  }
-
-  getIVAData() {
-    this.IVAData = this.providersService.getIVA();
   }
 
   pushProvidersData(form: NgForm) {
     if (form.valid) {
-      if (this.isUniqueId(this.provider.id) && this.isUniqueAndNumericCUIT(this.provider.cuit) && this.isValidEmail(this.provider.email)) {
-        this.providersService.postData(form.value);
+      if (this.isUniqueId(this.provider.supplierCode) && this.isUniqueAndNumericCUIT(this.provider.cuit) && this.isValidEmail(this.provider.email)) {
+        console.log(this.provider);
+        this.providersService.postData(this.provider).subscribe(response => console.log(response));
         this.message = 'Proveedor agregado exitosamente';
         this.showError = false;
         this.showSuccess = true;
@@ -105,7 +202,7 @@ export class ProvidersAddComponent {
   }
 
   isUniqueId(id: string): any {
-    const found = this.providersData.some((provider) => provider.id == id);
+    const found = this.providersData.some((provider) => provider.supplierCode == id);
     return !found;
   }
   isValidEmail(email: string): boolean {

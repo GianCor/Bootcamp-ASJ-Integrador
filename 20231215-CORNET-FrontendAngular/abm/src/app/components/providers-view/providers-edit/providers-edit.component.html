@@ -5,212 +5,642 @@
 <form
   #providerForm="ngForm"
   (ngSubmit)="editProvider(providerForm)"
-  class="row g-3"
+  class="row g-3 needs-validation"
 >
-  <div class="col-md-6">
-    <input
-      type="text"
-      [(ngModel)]="provider.id"
-      id="codigo"
-      class="form-control disabled"
-      name="id"
-      #id="ngModel"
-      required
-      minlength="4"
-      hidden
-    />
+<div class="row">
+  <div class="col-12">
+    <h5>Datos del Proveedor</h5>
+    <hr />
+  </div>
+</div>
+<div class="row">
+  <div
+  *ngIf="supplierCode.errors?.['required'] || name.errors?.['required'] || field.errors?.['required'] || email.errors?.['required'] || phone.errors?.['required'] || country.errors?.['required'] || state.errors?.['required'] || cp.errors?.['required'] || address.errors?.['required'] || cuit.errors?.['required'] || iva.errors?.['required'] || contactName.errors?.['required'] || contactLastName.errors?.['required']"
+  class="col-12 my-2"
+>
+  <span class="form-text text-white"
+    >Todos los campos marcados con un * son obligatorios</span
+  >
+</div>
+</div>
+  <ngb-alert
+    *ngIf="showError"
+    type="danger"
+    [dismissible]="false"
+    class="w-25 position-fixed top-0 end-0"
+    ><mat-icon>error</mat-icon>{{ message }}</ngb-alert
+  >
+  <ngb-alert
+    *ngIf="showSuccess"
+    type="success"
+    [dismissible]="false"
+    class="w-25 position-fixed top-0 end-0"
+    ><mat-icon>done</mat-icon> {{ message }}</ngb-alert
+  >
+  <div class="row my-3">
+    <div class="col-md-3">
+      <label for="codigo" class="form-label">Código *</label>
+      <input
+        type="text"
+        [(ngModel)]="provider.supplierCode"
+        supplierCode="codigo"
+        class="form-control"
+        name="supplierCode"
+        #supplierCode="ngModel"
+        required
+        minlength="4"
+        [class.is-valid]="supplierCode.valid && supplierCode.touched"
+        [class.is-invalid]="supplierCode.touched && supplierCode.invalid"
+      />
+      <div class="position-absolute">
+        <span
+          *ngIf="supplierCode?.errors?.['required'] && supplierCode.touched"
+          class="font-weight-light form-text"
+        >
+          Código de Proveedor es obligatorio.
+        </span>
+        <span
+          *ngIf="supplierCode?.errors?.['minlength'] && supplierCode.touched"
+          class="font-weight-light form-text"
+        >
+          Necesita
+          {{ supplierCode?.errors?.['minlength']?.requiredLength }} caracteres.
+        </span>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <label for="razon-social" class="form-label">Razón Social *</label>
+      <input
+        type="text"
+        [(ngModel)]="provider.name"
+        id="razon-social"
+        class="form-control"
+        name="name"
+        #name="ngModel"
+        required
+        [class.is-valid]="name.valid && name.touched"
+        [class.is-invalid]="name.touched && name.invalid"
+      />
+      <div class="position-absolute">
+        <span
+          *ngIf="name?.errors?.['required'] && name.touched"
+          class="font-weight-light form-text"
+        >
+          Razón Social es obligatorio.
+        </span>
+      </div>
+    </div>
+
+    <div class="col-md-5">
+      <label for="field" class="form-label">Rubro *</label>
+      <select
+        id="field"
+        [(ngModel)]="selectedField"
+        class="form-select"
+        name="field"
+        #field="ngModel"
+        required
+        (change)="changeSelectedField()"
+        [class.is-valid]="field.valid && (field.touched || field.dirty)"
+        [class.is-invalid]="field.touched && field.invalid"
+      >
+        <option [ngValue]="null" disabled selected>
+          Seleccione un rubro...
+        </option>
+        <option *ngFor="let field of fieldData" [ngValue]="field">
+          {{ field.name }}
+        </option>
+      </select>
+      <div class="position-absolute">
+        <span
+          *ngIf="field?.errors?.['required'] && field.touched"
+          class="font-weight-light form-text"
+        >
+          Código de Proveedor es obligatorio.
+        </span>
+      </div>
+    </div>
   </div>
 
-  <div class="col-md-12">
-    <label for="razon-social" class="form-label">Razón Social *</label>
-    <input
-      #id="ngModel"
-      type="text"
-      [(ngModel)]="provider.name"
-      id="razon-social"
-      class="form-control"
-      name="name"
-      #name="ngModel"
-      required
-    />
+  <div class="row my-3">
+    <div class="col-md-6">
+      <label for="email" class="form-label">Email *</label>
+      <input
+        type="email"
+        [(ngModel)]="provider.email"
+        id="email"
+        class="form-control"
+        name="email"
+        #email="ngModel"
+        required
+        email
+        [class.is-valid]="email.valid && email.touched"
+        [class.is-invalid]="email.touched && email.invalid"
+      />
+      <div class="position-absolute">
+        <span
+          *ngIf="email?.errors?.['required'] && email.touched"
+          class="font-weight-light form-text"
+        >
+          Email es obligatorio.
+        </span>
+        <span
+          *ngIf="email?.errors?.['email'] && email.touched"
+          class="font-weight-light form-text"
+        >
+          Por favor, ingrese un email válido.
+        </span>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <label for="telefono" class="form-label">Teléfono *</label>
+      <input
+        type="text"
+        [(ngModel)]="provider.phone"
+        id="telefono"
+        class="form-control"
+        name="phone"
+        #phone="ngModel"
+        required
+        pattern="[0-9]+"
+        minlength="10"
+        [class.is-valid]="phone.valid && phone.touched"
+        [class.is-invalid]="phone.touched && phone.invalid"
+      />
+      <div class="position-absolute">
+        <span
+          *ngIf="phone?.errors?.['required'] && phone.touched"
+          class="font-weight-light form-text"
+        >
+          Teléfono es obligatorio.
+        </span>
+        <span
+          *ngIf="phone?.errors?.['pattern'] && phone.touched"
+          class="font-weight-light form-text"
+        >
+          Teléfono debe ser numérico, no ingrese simbolos ni espacios.
+        </span>
+        <span
+        *ngIf="phone?.errors?.['minlength'] && phone.touched"
+        class="font-weight-light form-text"
+      >
+        Teléfono debe tener como minimo 10 caracteres
+      </span>
+      </div>
+    </div>
   </div>
 
+<div class="row">
+  <div class="col-12 pt-5">
+    <h5>Datos Ubicación</h5>
+    <hr />
+  </div>
+</div>
+
+  <div class="row">
+    <div class="col-md-4">
+      <label for="country" class="form-label">Pais *</label>
+      <select
+        id="country"
+        [(ngModel)]="selectedCountry"
+        class="form-select"
+        name="country"
+        (change)="changeSelectedCountry()"
+        #country="ngModel"
+        required
+        [class.is-valid]="country.valid && country.touched"
+        [class.is-invalid]="country.touched && country.invalid"
+      >
+        <option [ngValue]="null" disabled selected>
+          Seleccione un país...
+        </option>
+        <option *ngFor="let country of countries" [ngValue]="country">
+          {{ country.name }}
+        </option>
+      </select>
+      <div class="position-absolute">
+        <span
+          *ngIf="country?.errors?.['required'] && country.touched"
+          class="font-weight-light form-text"
+        >
+          País es obligatorio.
+        </span>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <label for="state" class="form-label">Provincia *</label>
+      <select
+        id="state"
+        [(ngModel)]="selectedState"
+        class="form-select"
+        name="state"
+        (change)="changeSelectedState()"
+        #state="ngModel"
+        required
+        [class.is-valid]="state.valid && state.touched"
+        [class.is-invalid]="state.touched && state.invalid"
+      >
+        <option [ngValue]="null" disabled selected>
+          Seleccione una provincia...
+        </option>
+        <option *ngFor="let state of states" [ngValue]="state">
+          {{ state.name }}
+        </option>
+      </select>
+      <div class="position-absolute">
+        <span
+          *ngIf="state?.errors?.['required'] && state.touched"
+          class="font-weight-light form-text"
+        >
+          Provincia es obligatoria.
+        </span>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div *ngIf="!showOtherCityInput">
+        <label for="city" class="form-label">Ciudad</label>
+        <select
+          id="city"
+          [(ngModel)]="selectedCity"
+          class="form-select"
+          name="city"
+          #city="ngModel"
+          [class.is-valid]="city.valid && city.touched"
+          [class.is-invalid]="city.touched && city.invalid"
+          (change)="changeSelectedCity()"
+          required
+        >
+          <option [ngValue]="null" disabled selected>
+            Seleccione un rubro...
+          </option>
+          <option *ngFor="let city of cities" [ngValue]="city">
+            {{ city.name }}
+          </option>
+        </select>
+        <div class="position-absolute">
+          <span
+            *ngIf="!showOtherCityInput && city?.errors?.['required'] && city.touched"
+            class="font-weight-light form-text"
+          >
+            Ciudad es obligatoria.
+          </span>
+        </div>
+      </div>
+
+      <div *ngIf="showOtherCityInput">
+        <label for="otherCity" class="form-label">Ciudad</label>
+        <input
+          type="text"
+          [(ngModel)]="selectedCity"
+          id="otherCity"
+          class="form-control"
+          name="city"
+          #otherCity="ngModel"
+          required
+          placeholder="Escriba su ciudad..."
+          (blur)="changeSelectedCity()"
+          [class.is-valid]="otherCity.valid && otherCity.touched"
+          [class.is-invalid]="otherCity.touched && otherCity.invalid"
+        />
+        <div class="position-absolute">
+          <span
+            *ngIf="showOtherCityInput && otherCity?.errors?.['required'] && otherCity.touched"
+            class="font-weight-light form-text"
+          >
+            Por favor, ingrese una ciudad.
+          </span>
+        </div>
+      </div>
+
+      <div class="d-flex mt-4 align-items-center">
+        <input
+          type="checkbox"
+          [(ngModel)]="showOtherCityInput"
+          class="form-check me-2"
+          id="otherCityCheckbox"
+          name="otherCityCheckbox"
+          (change)="toggleOtherCityInput()"
+        />
+        <p class="form-text m-0">Quiero ingresar otra ciudad</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row my-3">
+    <div class="col-md-2">
+      <label for="cp" class="form-label">Código Postal *</label>
+      <input
+        type="text"
+        [(ngModel)]="provider.address.cp"
+        id="cp"
+        class="form-control"
+        name="cp"
+        #cp="ngModel"
+        required
+        [class.is-valid]="cp.valid && cp.touched"
+        [class.is-invalid]="cp.touched && cp.invalid"
+      />
+      <div class="position-absolute">
+        <span
+          *ngIf="cp?.errors?.['required'] && cp.touched"
+          class="font-weight-light form-text"
+        >
+          Código Postal es obligatorio.
+        </span>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <label for="direccion" class="form-label">Dirección *</label>
+      <input
+        type="text"
+        [(ngModel)]="provider.address.street"
+        id="direccion"
+        class="form-control"
+        name="address"
+        #address="ngModel"
+        required
+        [class.is-valid]="address.valid && address.touched"
+        [class.is-invalid]="address.touched && address.invalid"
+      />
+      <div class="position-absolute">
+        <span
+          *ngIf="address?.errors?.['required'] && address.touched"
+          class="font-weight-light form-text"
+        >
+          Dirección es obligatoria.
+        </span>
+      </div>
+    </div>
+
+    <div class="col-md-2">
+      <label for="direccion" class="form-label">Numero *</label>
+      <input
+        type="text"
+        [(ngModel)]="provider.address.number"
+        id="number"
+        class="form-control"
+        name="number"
+        #number="ngModel"
+        required
+        [class.is-valid]="number.valid && number.touched"
+        [class.is-invalid]="number.touched && number.invalid"
+      />
+      <div class="position-absolute">
+        <span
+          *ngIf="number?.errors?.['required'] && number.touched"
+          class="font-weight-light form-text"
+        >
+          Número es obligatorio.
+        </span>
+      </div>
+    </div>
+  </div>
+<div class="row">
+  <div class="col-12 pt-5">
+    <h5>Datos Fiscales</h5>
+    <hr />
+  </div>
+</div>
+
+<div class="row my-3">
   <div class="col-md-6">
-    <label for="rubro" class="form-label">Rubro *</label>
-    <input
-      type="text"
-      [(ngModel)]="provider.field"
-      id="rubro"
-      class="form-control"
-      name="field"
-      #field="ngModel"
-      required
-    />
-  </div>
-  <div class="col-md-6">
-    <label for="email" class="form-label">Email *</label>
-    <input
-      type="email"
-      [(ngModel)]="provider.email"
-      id="email"
-      class="form-control"
-      name="email"
-      #email="ngModel"
-      required
-    />
-  </div>
-  <div class="col-md-2">
-    <label for="telefono" class="form-label">Teléfono *</label>
-    <input
-      type="text"
-      [(ngModel)]="provider.phone"
-      id="telefono"
-      class="form-control"
-      name="phone"
-      #phone="ngModel"
-      required
-    />
-  </div>
-  <div class="col-md-3">
-    <label for="country" class="form-label">Pais *</label>
-    <select
-      id="country"
-      [(ngModel)]="provider.country"
-      class="form-select"
-      name="country"
-      (change)="changeSelectedCountry()"
-      #country="ngModel"
-      required
-    >
-      <option *ngFor="let country of countries">{{ country.name }}</option>
-    </select>
-  </div>
-  <div class="col-md-3">
-    <label for="state" class="form-label">Provincia</label>
-    <select
-      id="state"
-      [(ngModel)]="provider.state"
-      class="form-select"
-      name="state"
-      (change)="changeSelectedState()"
-      #state="ngModel"
-    >
-      <option *ngFor="let state of states">{{ state.name }}</option>
-    </select>
-  </div>
-  <div class="col-md-3">
-    <label for="city" class="form-label">Ciudad</label>
-    <select
-      id="city"
-      [(ngModel)]="provider.city"
-      class="form-select"
-      name="city"
-      #city="ngModel"
-    >
-      <option *ngFor="let city of cities" [value]="city.name">{{ city.name }}</option>
-    </select>
-  </div>
-  <div class="col-md-2">
-    <label for="cp" class="form-label">Código Postal *</label>
-    <input
-      type="text"
-      [(ngModel)]="provider.cp"
-      id="cp"
-      class="form-control"
-      name="cp"
-      #cp="ngModel"
-      required
-    />
-  </div>
-  <div class="col-md-4">
-    <label for="direccion" class="form-label">Dirección *</label>
-    <input
-      type="text"
-      [(ngModel)]="provider.address"
-      id="direccion"
-      class="form-control"
-      name="address"
-      #address="ngModel"
-      required
-    />
-  </div>
-  <div class="col-md-6">
-    <label for="iva" class="form-label">Condición I.V.A. *</label>
-    <select
-      name="iva"
-      [(ngModel)]="provider.iva"
-      id="iva"
-      class="form-select"
-      #iva="ngModel"
-    >
-      <option *ngFor="let condicion of IVAData">
-        {{ condicion.id }}: {{ condicion.condicion }}
-      </option>
-    </select>
-  </div>
-  <div class="col-md-6">
-    <label for="nombre-contacto" class="form-label"
-      >Nombre del Contacto *</label
-    >
-    <input
-      type="text"
-      [(ngModel)]="provider.contactName"
-      id="nombre-contacto"
-      class="form-control"
-      name="contactName"
-      #contactName="ngModel"
-      required
-    />
-  </div>
-  <div class="col-md-6">
-    <label for="apellido-contacto" class="form-label"
-      >Apellido del Contacto *</label
-    >
-    <input
-      type="text"
-      [(ngModel)]="provider.contactLastName"
-      id="apellido-contacto"
-      class="form-control"
-      name="contactLastName"
-      #contactLastName="ngModel"
-      required
-    />
-  </div>
-  <div class="col-md-6">
-    <label for="sitio-web" class="form-label">Sitio Web</label>
-    <input
-      type="text"
-      [(ngModel)]="provider.website"
-      id="sitio-web"
-      class="form-control"
-      name="website"
-      #website="ngModel"
-    />
-  </div>
-  <div class="col-md-6">
-    <label for="url" class="form-label">URL Logo</label>
-    <input
-      type="text"
-      [(ngModel)]="provider.url"
-      id="url"
-      class="form-control"
-      name="url"
-      #url="ngModel"
-    />
-  </div>
-  <div class="col">
+    <label for="cuit" class="form-label">CUIT *</label>
     <input
       type="text"
       [(ngModel)]="provider.cuit"
       id="cuit"
-      class="form-control disabled"
+      class="form-control"
       name="cuit"
       #cuit="ngModel"
       required
-      hidden
+      pattern="[0-9]+"
+      minlength="11"
+      maxlength="11"
+      [class.is-valid]="cuit.valid && cuit.touched"
+      [class.is-invalid]="cuit.touched && (cuit.invalid || cuit.errors?.['pattern'])"
     />
+    <div class="position-absolute">
+      <span
+        *ngIf="cuit?.errors?.['required'] && cuit.touched"
+        class="font-weight-light form-text"
+      >
+        CUIT es obligatorio.
+      </span>
+      <span
+        *ngIf="cuit?.errors?.['pattern'] && cuit.touched"
+        class="font-weight-light form-text"
+      >
+        CUIT debe ser numérico.
+      </span>
+      <span
+        *ngIf="cuit?.errors?.['minlength'] && cuit.touched"
+        class="font-weight-light form-text"
+      >
+        CUIT debe tener exactamente 11 caracteres.
+      </span>
+    </div>
   </div>
-  <div class="row d-flex justify-content-evenly align-items-center mt-3">
+</div>
+
+  <div class="col-md-6">
+    <label for="iva" class="form-label">Condición I.V.A. *</label>
+    <select
+      name="iva"
+      [(ngModel)]="selectedTax"
+      id="iva"
+      class="form-select"
+      #iva="ngModel"
+      required
+      (change)="changeSelectedTax()"
+      [class.is-valid]="iva.valid && iva.touched"
+      [class.is-invalid]="iva.touched && iva.invalid"
+    >
+      <option [ngValue]="null" disabled selected>
+        Seleccione una condición...
+      </option>
+      <option *ngFor="let condicion of IVAData" [ngValue]="condicion">
+        {{ condicion.id }}:{{ condicion.name }}
+      </option>
+    </select>
+    <div class="position-absolute">
+      <span
+        *ngIf="iva?.errors?.['required'] && iva.touched"
+        class="font-weight-light form-text"
+      >
+        Condición I.V.A. es obligatoria.
+      </span>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12 pt-5">
+      <h5>Datos de contacto</h5>
+      <hr />
+    </div>
+  </div>
+
+  <div class="row my-3">
+    <div class="col-md-6">
+      <label for="nombre-contacto" class="form-label"
+        >Nombre del Contacto *</label
+      >
+      <input
+        type="text"
+        [(ngModel)]="provider.contact.contactName"
+        id="nombre-contacto"
+        class="form-control"
+        name="contactName"
+        #contactName="ngModel"
+        required
+        [class.is-valid]="contactName.valid && contactName.touched"
+        [class.is-invalid]="contactName.touched && contactName.invalid"
+      />
+      <div class="position-absolute">
+        <span
+          *ngIf="contactName?.errors?.['required'] && contactName.touched"
+          class="font-weight-light form-text"
+        >
+          Nombre del Contacto es obligatorio.
+        </span>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <label for="apellido-contacto" class="form-label"
+        >Apellido del Contacto *</label
+      >
+      <input
+        type="text"
+        [(ngModel)]="provider.contact.contactLastName"
+        id="apellido-contacto"
+        class="form-control"
+        name="contactLastName"
+        #contactLastName="ngModel"
+        required
+        [class.is-valid]="contactLastName.valid && contactLastName.touched"
+        [class.is-invalid]="contactLastName.touched && contactLastName.invalid"
+      />
+      <div class="position-absolute">
+        <span
+          *ngIf="contactLastName?.errors?.['required'] && contactLastName.touched"
+          class="font-weight-light form-text"
+        >
+          Apellido del Contacto es obligatorio.
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row my-3">
+    <div class="col-md-3">
+      <label for="sitio-web" class="form-label">Email del contacto*</label>
+      <input
+        type="text"
+        [(ngModel)]="provider.contact.contactEmail"
+        id="contactEmail"
+        class="form-control"
+        name="contactEmail"
+        #contactEmail="ngModel"
+        required
+        [class.is-valid]="contactEmail.valid && contactEmail.touched"
+        [class.is-invalid]="contactEmail.touched && contactEmail.invalid"
+      />
+      <div class="position-absolute">
+        <span
+          *ngIf="contactEmail?.errors?.['required'] && contactEmail.touched"
+          class="font-weight-light form-text"
+        >
+          Email del Contacto es obligatorio.
+        </span>
+        <span
+          *ngIf="contactEmail?.errors?.['email'] && contactEmail.touched"
+          class="font-weight-light form-text"
+        >
+          Por favor, ingrese un email válido.
+        </span>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <label for="sitio-web" class="form-label">Telefono del contacto*</label>
+      <input
+        type="text"
+        [(ngModel)]="provider.contact.contactPhone"
+        id="contactPhone"
+        class="form-control"
+        name="contactPhone"
+        #contactPhone="ngModel"
+        required
+        [class.is-valid]="contactPhone.valid && contactPhone.touched"
+        [class.is-invalid]="contactPhone.touched && contactPhone.invalid"
+      />
+      <div class="position-absolute">
+        <span
+          *ngIf="contactPhone?.errors?.['required'] && contactPhone.touched"
+          class="font-weight-light form-text"
+        >
+          Teléfono del Contacto es obligatorio.
+        </span>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <label for="sitio-web" class="form-label">Rol del contacto*</label>
+      <input
+        type="text"
+        [(ngModel)]="provider.contact.contactRole"
+        id="role"
+        class="form-control"
+        name="contactRole"
+        #role="ngModel"
+        required
+        [class.is-valid]="role.valid && role.touched"
+        [class.is-invalid]="role.touched && role.invalid"
+      />
+      <div class="position-absolute">
+        <span
+          *ngIf="role?.errors?.['required'] && role.touched"
+          class="font-weight-light form-text"
+        >
+          Rol del Contacto es obligatorio.
+        </span>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <label for="website" class="form-label">Sitio Web</label>
+      <input
+        type="text"
+        [(ngModel)]="provider.website"
+        id="website"
+        class="form-control"
+        name="website"
+        #website="ngModel"
+        [class.is-valid]="website.valid && website.touched"
+        [class.is-invalid]="website.touched && website.invalid"
+      />
+    </div>
+  </div>
+
+  <div class="row my-3">
+    <div class="col-md-12">
+      <label for="url" class="form-label">URL Logo</label>
+      <input
+        type="text"
+        [(ngModel)]="provider.url"
+        id="url"
+        class="form-control"
+        name="url"
+        #url="ngModel"
+        [class.is-valid]="url.valid && url.touched"
+        [class.is-invalid]="url.touched && url.invalid"
+      />
+    </div>
+  </div>
+  <div class="row d-flex justify-content-evenly align-items-center my-5">
     <input
       type="button"
       value="Limpiar"
@@ -226,30 +656,10 @@
     />
   </div>
   <div class="col-auto">
-    <span *ngIf="id.errors?.['minlength']" class="form-text text-danger"
+    <span
+      *ngIf="supplierCode.errors?.['minlength']"
+      class="form-text text-danger"
       >Codigo debe tener al menos 4 caracteres</span
     >
   </div>
-  <div
-    *ngIf="id.errors?.['required'] || name.errors?.['required'] || field.errors?.['required'] || email.errors?.['required'] || phone.errors?.['required'] || country.errors?.['required'] || state.errors?.['required'] || cp.errors?.['required'] || address.errors?.['required'] || cuit.errors?.['required'] || iva.errors?.['required'] || contactName.errors?.['required'] || contactLastName.errors?.['required']"
-    class="col-auto"
-  >
-    <span class="form-text text-danger"
-      >Todos los campos marcados con un * son obligatorios</span
-    >
-  </div>
-  <ngb-alert
-    *ngIf="showError"
-    type="danger"
-    [dismissible]="false"
-    class="w-25 position-fixed top-0 end-0"
-    ><mat-icon>error</mat-icon>{{ message }}</ngb-alert
-  >
-  <ngb-alert
-    *ngIf="showSuccess"
-    type="success"
-    [dismissible]="false"
-    class="w-25 position-fixed top-0 end-0"
-    ><mat-icon>done</mat-icon> {{ message }}</ngb-alert
-  >
 </form>

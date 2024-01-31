@@ -17,7 +17,8 @@ export class OrdersAddComponent {
   selectedProducts: any[] = [];
   orders: Order[] = [];
   order: Order = {
-    id: '',
+    id: 0,
+    numOrder: '',
     provider: '',
     product: [],
     emDate: new Date(),
@@ -39,19 +40,23 @@ export class OrdersAddComponent {
     private ordersService: OrdersService
   ) {}
 
+  
   ngOnInit() {
     this.getProviders();
     this.getOrders();
   }
 
   getProviders() {
-    this.providers = this.providersService.getData();
+    this.providersService.getData().subscribe(response =>{
+      this.providers = response;
+    });
   }
 
   onProviderChange() {
     const selected = this.providers.find(
       (provider) => provider.id === this.selectedProvider
     );
+    console.log(selected)
     this.order.provider = selected.name;
     if (selected) {
       this.selectedProviderProducts = selected.products;
@@ -82,7 +87,7 @@ export class OrdersAddComponent {
         },2500)
 
       } else if (form.valid) {
-        if(!this.isUniqueId(order.id)){
+        if(!this.isUniqueId(order.numOrder)){
           this.message = 'El número de orden ya existe'
           this.showError = true;
           setTimeout(()=>{
@@ -130,7 +135,7 @@ export class OrdersAddComponent {
   }
 
   isUniqueId(id: string): any {
-    const found = this.orders.some((order) => order.id == id);
+    const found = this.orders.some((order) => order.numOrder == id);
     return !found;
   }
 }
