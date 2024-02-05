@@ -37,9 +37,9 @@ public class ProductService {
         newProduct.setName(productRequest.getName());
         newProduct.setDescription(productRequest.getDescription());
         newProduct.setPrice(productRequest.getPrice());
-        newProduct.setAmount(productRequest.getAmount());
-        newProduct.setSubtotal(productRequest.getSubtotal());
-        newProduct.setChecked(productRequest.getChecked());
+        newProduct.setSku(productRequest.getSku());
+        newProduct.setDeleted(false);
+        newProduct.setUrl(productRequest.getUrl());
 
         productRepository.save(newProduct);
         return newProduct;
@@ -63,10 +63,10 @@ public class ProductService {
             existingProduct.setName(updatedProduct.getName());
             existingProduct.setDescription(updatedProduct.getDescription());
             existingProduct.setPrice(updatedProduct.getPrice());
-            existingProduct.setAmount(updatedProduct.getAmount());
-            existingProduct.setSubtotal(updatedProduct.getSubtotal());
-            existingProduct.setChecked(updatedProduct.getChecked());
-
+            existingProduct.setDeleted(updatedProduct.getDeleted());
+            existingProduct.setSku(updatedProduct.getSku());
+            existingProduct.setUrl(updatedProduct.getUrl());
+            
             productRepository.save(existingProduct);
 
             return "Product with ID " + id + " updated successfully.";

@@ -66,6 +66,9 @@ public class Supplier {
     @Column
     private String url;
     
+    @Column
+    private Boolean deleted;
+    
     @Nullable
     @OneToMany(mappedBy = "supplier_id", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> products;
@@ -78,7 +81,7 @@ public class Supplier {
 			@NotNull(message = "[cuit] no puede ser nulo.") @Size(min = 11, max = 11, message = "[cuit] debe tener 11 caracteres.") String cuit,
 			@NotNull(message = "[email] no puede ser nulo.") String email, Contact contact, LocalDate updated_at,
 			LocalDate created_at, String website,
-			String url, List<Product> products) {
+			String url, List<Product> products, Boolean deleted) {
 		super();
 		this.id = id;
 		this.supplierCode = supplierCode;
@@ -95,10 +98,19 @@ public class Supplier {
 		this.website = website;
 		this.url = url;
 		this.products = products;
+		this.deleted = deleted;
 	}
 
 	public Supplier() {
 		super();
+	}
+
+	public Boolean getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
 	}
 
 	public Integer getId() {

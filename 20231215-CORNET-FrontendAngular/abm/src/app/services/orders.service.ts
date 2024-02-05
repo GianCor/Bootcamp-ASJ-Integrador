@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Order } from '../models/orderModel'
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 const data:Order[] = [];
 
@@ -7,32 +9,20 @@ const data:Order[] = [];
   providedIn: 'root',
 })
 export class OrdersService {
-  constructor() {}
+  constructor(private http: HttpClient) {}
   list = data || [];
 
-  getData() {
-    const storedData = localStorage.getItem('orders');
-    this.list = storedData ? JSON.parse(storedData) : [];
-    return this.list;
+  url: string = "http://localhost:8080/order"
+
+  getData():Observable<Order[]> {
+    return this.http.get<Order[]>(this.url);
   }
 
-  postData(order: Order) {
-    this.list.push(order);
-    localStorage.setItem('orders', JSON.stringify(this.list))
+  postData(order: Order):Observable<Order>{
+    return this.http.post<Order>(this.url, order);
   }
 
-  updateOrder(object: Order){
-    const found = this.list.find((order:Order)=>{
-      return order.id === object.id
-    })
-    if(found){
-      const index = this.list.findIndex((order:Order)=>{
-        return order === found
-      })
-      if(index != -1){
-        this.list[index] = found;
-        localStorage.setItem('orders', JSON.stringify(this.list))
-      }
-    }
+  updateOrder(order: Order){
+    return this.http.put<Order>(this.url + `/${order.id}`, order)
   }
 }

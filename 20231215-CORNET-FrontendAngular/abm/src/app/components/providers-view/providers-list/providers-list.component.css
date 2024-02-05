@@ -2,3 +2,10 @@
     width: 100px;
     aspect-ratio: 1/1;
 }
+
+/* En tu archivo de estilos CSS */
+.deleted {
+    text-decoration: line-through; /* Aplica tachado al texto */
+    color: #999; /* O cualquier color que desees para indicar que está deshabilitado */
+    pointer-events: none; /* Desactiva eventos del mouse en el botón */
+  }

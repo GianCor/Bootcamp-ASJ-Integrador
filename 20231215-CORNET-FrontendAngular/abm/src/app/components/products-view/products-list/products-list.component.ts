@@ -9,7 +9,7 @@ import { ProductsService } from 'src/app/services/products.service';
   styleUrls: ['./products-list.component.css']
 })
 export class ProductsListComponent implements OnInit {
-  productsData: Product[] = [];
+  productsData: any[] = [];
 
   sortByPrice:boolean = false;
   sortByPriceDesc:boolean = false;
@@ -21,18 +21,22 @@ export class ProductsListComponent implements OnInit {
 
   ngOnInit() {
     this.getProductsData();
-    if(this.productsData.length === 0){
-      this.show = !this.show
-    }
   }
 
   getProductsData() {
-    this.productsData = this.productsService.getData();
+    this.productsService.getData().subscribe(response => {
+      this.productsData = response
+      if(this.productsData.length === 0){
+        this.show = !this.show
+      }
+    });
   }
 
   deleteProduct(product:any){
-    this.productsService.deleteProducts(product)
-    this.getProductsData();
+    this.productsService.deleteProducts(product).subscribe(response =>{
+      console.log(response)
+      this.getProductsData();
+    })
   }
 
   editProduct(product:any){

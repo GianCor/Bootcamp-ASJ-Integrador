@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import com.abmApi.abmApi.entities.Order;
+import com.abmApi.abmApi.entities.OrderProduct;
 import com.abmApi.abmApi.services.OrderService;
 
 @RestController
@@ -32,6 +34,16 @@ public class OrderController {
     public ResponseEntity<Optional<Order>> getOrderById(@PathVariable Integer id) {
         return ResponseEntity.ok(orderService.getOrderById(id));
     }
+    
+    @GetMapping("/{id}/orderProducts")
+    public ResponseEntity<List<OrderProduct>> getOrderProductsByOrderId(@PathVariable Integer id) {
+        try {
+            List<OrderProduct> orderProducts = orderService.getOrderProductsByOrderId(id);
+            return new ResponseEntity<>(orderProducts, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @PostMapping
     public ResponseEntity<?> postOrder(@RequestBody @Valid Order order, BindingResult bindingResult) {
@@ -39,7 +51,7 @@ public class OrderController {
             return ResponseEntity.badRequest().body("Error de validación en los datos de entrada.");
         }
 
-        Order createdOrder = orderService.postOrder(order);
+        Order createdOrder = orderService.createOrder(order);
         return ResponseEntity.ok(createdOrder);
     }
 

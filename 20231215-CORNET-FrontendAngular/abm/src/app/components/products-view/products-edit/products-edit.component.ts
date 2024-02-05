@@ -6,6 +6,7 @@ import { Provider } from 'src/app/models/providerModel';
 import { Product } from 'src/app/models/productModel';
 import { category } from 'src/app/models/categoryModel';
 import { ActivatedRoute } from '@angular/router';
+import { CategoryService } from 'src/app/services/category.service';
 
 @Component({
   selector: 'app-products-edit',
@@ -17,14 +18,18 @@ export class ProductsEditComponent {
   products: Product[] = [];
   categories: category[] = [];
   showError: boolean = false;
+  selectedCategory = null;
   showSuccess: boolean = false;
   message: string = '';
   product: Product = {
     id:0,
     sku: '',
-    provider_id: 0,
-    providerName: '',
-    category: '',
+    supplier_id: 0,
+    supplierName: '',
+    category: {
+      id:0,
+      name: ''
+    },
     name: '',
     description: '',
     price: '',
@@ -33,14 +38,17 @@ export class ProductsEditComponent {
   constructor(
     private providersService: ProvidersService,
     private productsService: ProductsService,
+    private categoryService: CategoryService,
     private route : ActivatedRoute
   ) {}
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
       const productId = params['id'];
-      this.product = this.productsService.getProductById(productId);
-      console.log(this.product)
+      this.productsService.getProductById(productId).subscribe(response => {
+        this.product = response
+        console.log(this.product)
+      });
     });
     this.getProviders();
     this.getProducts();
@@ -53,17 +61,19 @@ export class ProductsEditComponent {
     });
   }
 
+
+  onCategoryChange(category: any){
+    this.product.category = category.value;
+  }
+
+
   getProducts() {
-    this.products = this.productsService.getData();
+    this.productsService.getData().subscribe(response => this.products = response);
   }
 
   pushProducts(form: NgForm) {
     if (form.valid) {
-      if (
-        this.isNumeric(this.product.price)
-      ) {
-        this.productsService.updateProductAndProvider(form.value)
-        this.productsService.updateProduct(form.value);
+        this.productsService.updateProduct(this.product).subscribe(response => console.log(response));
         this.message = 'Proveedor agregado exitosamente';
         this.showError = false;
         this.showSuccess = true;
@@ -83,11 +93,10 @@ export class ProductsEditComponent {
         }, 3000);
       }
     }
-  }
 
   pushProductsToProvider(product: Product) {
     const index = this.providers.findIndex(
-      (provider) => product.provider_id == provider.id
+      (provider) => product.supplier_id == provider.id
     );
     if (index != -1) {
       if (this.providers[index].products == undefined) {
@@ -100,7 +109,7 @@ export class ProductsEditComponent {
   }
 
   getCategories() {
-    this.categories = this.productsService.getCategories();
+    this.categoryService.getCategories().subscribe(response => this.categories = response);
   }
 
   isUniqueId(id: string): any {

@@ -3,27 +3,110 @@
 </div>
 
 <form #productForm="ngForm" (ngSubmit)="pushProducts(productForm)" class="row g-3">
-      <input hidden type="text" id="provider" class="form-control" #provider="ngModel" [(ngModel)]="product.provider_id" name="provider" required/>
-      <input hidden type="text" id="providerName" class="form-control" #providerName="ngModel" [(ngModel)]="product.providerName" name="providerName" required/>
+      <input hidden type="text" id="provider" class="form-control" #provider="ngModel" [(ngModel)]="product.supplier_id" name="provider" required/>
+      <input hidden type="text" id="providerName" class="form-control" #providerName="ngModel" [(ngModel)]="product.supplierName" name="providerName" required/>
       <input hidden type="text" id="codigo-producto" class="form-control" #id="ngModel" [(ngModel)]="product.id" name="id" required/>
-    <div class="col-md-4">
-      <label for="categoria" class="form-label">Categoría</label>
-      <select class="form-select" name="category" #category="ngModel" [(ngModel)]="product.category" id="category">
-        <option *ngFor="let category of categories">{{category.name}}</option>
-      </select>
-    </div>
-    <div class="col-md-8">
-      <label for="nombre-producto" class="form-label">Nombre del Producto *</label>
-      <input type="text" id="name" class="form-control" #name="ngModel" [(ngModel)]="product.name" name="name" required/>
-    </div>
-    <div class="col-md-7">
-      <label for="description" class="form-label">Descripción</label>
-      <input type="text" id="description" class="form-control" #description="ngModel" [(ngModel)]="product.description" name="description"/>
-    </div>
-    <div class="col-md-5">
-      <label for="price" class="form-label">Precio *</label>
-      <input type="text" id="price" class="form-control" #price="ngModel" [(ngModel)]="product.price" name="price" required/>
-    </div>
+      <div class="row my-3">
+        <div class="col-md-4">
+          <label for="categoria" class="form-label">Categoría*</label>
+          <select
+            class="form-select"
+            name="category"
+            #category="ngModel"
+            [(ngModel)]="selectedCategory"
+            id="category"
+            required
+            (change)="onCategoryChange(category)"
+            [class.is-valid]="category.valid && category.touched"
+            [class.is-invalid]="category.touched && category.invalid"
+          >
+            <option *ngFor="let category of categories" [ngValue]="category">{{ category.name }}</option>
+          </select>
+          <div class="position-absolute">
+            <span *ngIf="category?.errors?.['required'] && category.touched" class="font-weight-light form-text">
+              La Categoría es obligatoria.
+            </span>
+          </div>
+        </div>
+      
+        <div class="col-md-8">
+          <label for="nombre-producto" class="form-label"
+            >Nombre del Producto *</label
+          >
+          <input
+            type="text"
+            id="name"
+            class="form-control"
+            #name="ngModel"
+            [(ngModel)]="product.name"
+            name="name"
+            required
+            [class.is-valid]="name.valid && name.touched"
+            [class.is-invalid]="name.touched && name.invalid"
+          />
+          <div class="position-absolute">
+            <span *ngIf="name?.errors?.['required'] && name.touched" class="font-weight-light form-text">
+              El Nombre del Producto es obligatorio.
+            </span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row my-3">
+        <div class="col-md-7">
+          <label for="description" class="form-label">Descripción</label>
+          <input
+            type="text"
+            id="description"
+            class="form-control"
+            #description="ngModel"
+            [(ngModel)]="product.description"
+            name="description"
+            [class.is-valid]="description.valid && description.touched"
+            [class.is-invalid]="description.touched && description.invalid"
+          />
+        </div>
+      
+        <div class="col-md-5">
+          <label for="price" class="form-label">Precio *</label>
+          <input
+            type="text"
+            id="price"
+            class="form-control"
+            #price="ngModel"
+            [(ngModel)]="product.price"
+            name="price"
+            pattern="[0-9]+(\.[0-9]+)?"
+            required
+            [class.is-valid]="price.valid && price.touched"
+            [class.is-invalid]="price.touched && price.invalid"
+          />
+          <div class="position-absolute">
+            <span *ngIf="price?.errors?.['required'] && price.touched" class="font-weight-light form-text">
+              El Precio es obligatorio.
+            </span>
+            <span *ngIf="price?.errors?.['pattern'] && price.touched" class="font-weight-light form-text">
+              Debe ingresar un precio numérico.
+            </span>
+          </div>
+        </div>
+      </div>
+    
+<div class="row my-3">
+  <div class="col-md-12">
+    <label for="url" class="form-label">Url imagen</label>
+    <input
+      type="text"
+      id="url"
+      class="form-control"
+      #url="ngModel"
+      [(ngModel)]="product.url"
+      name="url"
+      [class.is-valid]="url.valid && url.touched"
+      [class.is-invalid]="url.touched && url.invalid"
+    />
+  </div>
+</div>
     <div class="row d-flex justify-content-evenly align-items-center mt-3">
       <input
         type="button"

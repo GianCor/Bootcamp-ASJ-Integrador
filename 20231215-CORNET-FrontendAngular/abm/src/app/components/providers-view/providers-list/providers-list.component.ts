@@ -44,6 +44,10 @@ export class ProvidersListComponent implements OnInit {
     this.router.navigate(['/providers/edit', provider.id]);
   }
 
+  updateProvider(provider:any){
+    this.providersService.updateProvider(provider).subscribe((response) => console.log(response))
+  }
+
   setSelectedProvider(provider: any){
     this.selectedProvider = provider
     console.log(this.selectedProvider)

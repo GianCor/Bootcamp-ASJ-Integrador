@@ -14,6 +14,7 @@ export interface Provider {
   created_at?: Date;
   updated_at?: Date;
   website?: string;
+  deleted?: boolean;
   url?: string;
   products?: Product[];
 }

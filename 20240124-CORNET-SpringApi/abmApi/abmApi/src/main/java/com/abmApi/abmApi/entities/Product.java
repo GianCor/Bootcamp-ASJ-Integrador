@@ -1,4 +1,8 @@
 package com.abmApi.abmApi.entities;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import io.micrometer.common.lang.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,6 +15,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Entity
 @Table(name = "Products")
 public class Product {
@@ -19,6 +24,10 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column
+    @NotNull(message = "[sku] no puede ser nulo.")
+    private String sku;
+    
     @Column
     @Nullable
     private Integer supplier_id;
@@ -42,35 +51,38 @@ public class Product {
 
     @Column(nullable = false)
     @NotNull(message = "[price] no puede ser nulo.")
-    @NotBlank(message = "[price] no puede estar vacio.")
-    private String price;
+    private Double price;
 
-    @Column(nullable = true)
-    private Integer amount;
-
-    @Column(nullable = true)
-    private Double subtotal;
-
-    @Column(nullable = true)
-    private Boolean checked;
-
+    @Column
+    private Boolean deleted;
     
+    @Column 
+    private String url;
     
 	public Product() {
 	}
+	
+    public Product(Integer id) {
+        this.id = id;
+    }
 
-	public Product(Integer id, Integer supplier_id, String supplierName, Category category, String name,
-			String description, String price, Integer amount, Double subtotal, Boolean checked) {
+	public Product(Integer id, @NotNull(message = "[sku] no puede ser nulo.") String sku, Integer supplier_id,
+			@NotNull(message = "[supplierName] no puede ser nulo.") @NotBlank(message = "[supplierName] no puede estar vacio.") String supplierName,
+			Category category,
+			@NotNull(message = "[name] no puede ser nulo.") @NotBlank(message = "[name] no puede estar vacio.") String name,
+			String description, @NotNull(message = "[price] no puede ser nulo.") Double price, Boolean deleted,
+			String url) {
+		super();
 		this.id = id;
+		this.sku = sku;
 		this.supplier_id = supplier_id;
 		this.supplierName = supplierName;
 		this.category = category;
 		this.name = name;
 		this.description = description;
 		this.price = price;
-		this.amount = amount;
-		this.subtotal = subtotal;
-		this.checked = checked;
+		this.deleted = deleted;
+		this.url = url;
 	}
 
 	public Integer getId() {
@@ -79,6 +91,14 @@ public class Product {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public String getSku() {
+		return sku;
+	}
+
+	public void setSku(String sku) {
+		this.sku = sku;
 	}
 
 	public Integer getSupplier_id() {
@@ -121,37 +141,27 @@ public class Product {
 		this.description = description;
 	}
 
-	public String getPrice() {
+	public Double getPrice() {
 		return price;
 	}
 
-	public void setPrice(String price) {
+	public void setPrice(Double price) {
 		this.price = price;
 	}
 
-	public Integer getAmount() {
-		return amount;
+	public Boolean getDeleted() {
+		return deleted;
 	}
 
-	public void setAmount(Integer amount) {
-		this.amount = amount;
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
 	}
 
-	public Double getSubtotal() {
-		return subtotal;
+	public String getUrl() {
+		return url;
 	}
 
-	public void setSubtotal(Double subtotal) {
-		this.subtotal = subtotal;
+	public void setUrl(String url) {
+		this.url = url;
 	}
-
-	public Boolean getChecked() {
-		return checked;
-	}
-
-	public void setChecked(Boolean checked) {
-		this.checked = checked;
-	}
-    
-    
 }

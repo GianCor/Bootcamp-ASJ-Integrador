@@ -7,12 +7,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.abmApi.abmApi.entities.Order;
+import com.abmApi.abmApi.entities.OrderProduct;
+import com.abmApi.abmApi.excpetion.OrderNotFoundException;
+import com.abmApi.abmApi.repositories.OrderProductRepository;
 import com.abmApi.abmApi.repositories.OrderRepository;
 
 @Service
 public class OrderService {
     @Autowired
     OrderRepository orderRepository;
+    @Autowired
+    OrderProductRepository orderProductRepository;
 
     public List<Order> getOrders() {
         return orderRepository.findAll();
@@ -22,10 +27,20 @@ public class OrderService {
         return orderRepository.findById(id);
     }
 
-    public Order postOrder(Order order) {
-        orderRepository.save(order);
-        return order;
+    public Order createOrder(Order order) {
+        if (order.getOrderProducts() != null && !order.getOrderProducts().isEmpty()) {
+            for (OrderProduct orderProduct : order.getOrderProducts()) {
+                orderProduct.setOrder(order);
+            }
+
+            order.calculateTotal();
+
+            return orderRepository.save(order);
+        }
+
+        return orderRepository.save(order);
     }
+
 
     public Optional<Order> deleteOrder(Integer id) {
         Optional<Order> order = orderRepository.findById(id);
@@ -55,4 +70,15 @@ public class OrderService {
             return "Order with ID " + id + " not found.";
         }
     }
+    
+    public List<OrderProduct> getOrderProductsByOrderId(Integer orderId) {
+        Optional<Order> optionalOrder = orderRepository.findById(orderId);
+        if (optionalOrder.isPresent()) {
+            Order order = optionalOrder.get();
+            return orderProductRepository.findByOrder(order);
+        } else {
+            throw new OrderNotFoundException("Orden no encontrada con ID: " + orderId);
+        }
+    }
+
 }

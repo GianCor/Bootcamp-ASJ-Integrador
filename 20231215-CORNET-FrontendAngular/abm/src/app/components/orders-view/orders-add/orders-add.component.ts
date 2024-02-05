@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { ProvidersService } from '../../../services/providers.service';
 import { OrdersService } from '../../../services/orders.service';
-import { Order } from 'src/app/models/orderModel';
+import { Order, OrderProduct } from 'src/app/models/orderModel';
 import { NgForm } from '@angular/forms';
+import { ProductsService } from 'src/app/services/products.service';
 
 @Component({
   selector: 'app-orders-add',
@@ -20,14 +21,38 @@ export class OrdersAddComponent {
     id: 0,
     numOrder: '',
     provider: '',
-    product: [],
     emDate: new Date(),
     reDate: new Date(),
     description: '',
     pending: true,
     canceled: false,
-    completed: false
-  };
+    completed: false,
+    total: undefined,
+    created_at: undefined,
+    updated_at: undefined,
+    orderProducts: []
+};
+
+orderProducts: OrderProduct = {
+  id:0,
+  product:{
+    id: 0,
+    sku: '',
+    supplier_id: 0,
+    supplierName: '',
+    category: {
+      id:0,
+      name: ''
+        },
+    name: '',
+    description: '',
+    price: ''
+  },
+  amount: 0,
+  price: 0,
+  subtotal: 0
+}
+
   message: string = '';
   showError: boolean = false;
   showSuccess: boolean = false;
@@ -53,23 +78,26 @@ export class OrdersAddComponent {
   }
 
   onProviderChange() {
-    const selected = this.providers.find(
-      (provider) => provider.id === this.selectedProvider
-    );
-    console.log(selected)
-    this.order.provider = selected.name;
-    if (selected) {
-      this.selectedProviderProducts = selected.products;
-    } else {
-      this.selectedProviderProducts = [];
-    }
+    this.providersService.getProviderById(this.selectedProvider).subscribe(response =>{
+      if (response.products !== undefined) {
+        this.selectedProviderProducts = response.products;
+        this.order.provider = response.name;
+      } else {
+        this.selectedProvider = []
+        this.order.provider = response.name;
+      }
+    })
   }
 
   getOrders() {
-    this.orders = this.ordersService.getData();
+    this.ordersService.getData().subscribe(response => {
+      this.orders = response;
+      console.log(this.orders)
+    });
   }
 
   postOrder(order: Order, form: NgForm) {
+    console.log(order);
     this.addProductToOrders();
     if(!this.validateDates()){
       this.showError = true;
@@ -79,7 +107,7 @@ export class OrdersAddComponent {
       },2500)
     } else {
 
-      if(this.order.product.length == 0){
+      if(this.order.orderProducts.length == 0){
         this.showError=true
         this.message = 'No hay productos seleccionados o estan vacíos'
         setTimeout(()=>{
@@ -94,7 +122,10 @@ export class OrdersAddComponent {
             this.showError=false
           },2500)
         }else{
-          this.ordersService.postData(order);
+          this.ordersService.postData(order).subscribe((response) => {
+            console.log(response);
+            this.resetProducts();
+          });
           form.reset()
           this.showSuccess= true
           this.message = 'Orden añadida exitosamente'
@@ -106,7 +137,12 @@ export class OrdersAddComponent {
     }
   }
 
-  
+  resetProducts() {
+    this.selectedProviderProducts.forEach((product) => {
+      product.checked = false;
+      product.amount = undefined;
+    });
+  }
 
   validateDates() {
     return (new Date(this.order.reDate) >= new Date(this.order.emDate));
@@ -114,7 +150,25 @@ export class OrdersAddComponent {
 
   addProductToOrders() {
     const productsOrder = this.getCheckedProducts();
-    this.order.product = productsOrder;
+    this.order.orderProducts = productsOrder.map((product) => ({
+      id: 0, // Assign the appropriate ID based on your logic
+      product: {
+        id: product.id,
+        sku: product.sku,
+        supplier_id: product.supplier_id,
+        supplierName: product.supplierName,
+        category: {
+          id: product.category.id,
+          name: product.category.name,
+        },
+        name: product.name,
+        description: product.description,
+        price: product.price,
+      },
+      amount: product.amount,
+      price: product.price,
+      subtotal: product.amount * +product.price,
+    }));
     this.order.total = this.calculateTotal(productsOrder);
   }
 

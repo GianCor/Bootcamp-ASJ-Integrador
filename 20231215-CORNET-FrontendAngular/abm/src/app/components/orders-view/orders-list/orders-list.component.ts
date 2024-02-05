@@ -26,13 +26,14 @@ export class OrdersListComponent {
 
   ngOnInit() {
     this.getOrders();
-    if(this.ordersData.length === 0){
-      this.show = !this.show
-    }
   }
-
   getOrders() {
-    this.ordersData = this.ordersService.getData();
+    this.ordersService.getData().subscribe(response => {
+      this.ordersData = response;
+      if(this.ordersData.length === 0){
+        this.show = false;
+      }
+    });
   }
 
   setSelectedOrder(order:any){
@@ -46,6 +47,27 @@ export class OrdersListComponent {
   }
 
   updateOrder(order: Order){
-    this.ordersService.updateOrder(order)
+    this.ordersService.updateOrder(order).subscribe(response => console.log(response));
+  }
+  showOrders(type: string) {
+    switch (type) {
+      case 'pendientes':
+        this.showCanceled = false;
+        this.showCompleted = false;
+        this.showMessage = 'pendientes';
+        break;
+      case 'completadas':
+        this.showCanceled = false;
+        this.showCompleted = true;
+        this.showMessage = 'completadas';
+        break;
+      case 'canceladas':
+        this.showCanceled = true;
+        this.showCompleted = false;
+        this.showMessage = 'canceladas';
+        break;
+      default:
+        // Default case, maybe handle it differently based on your requirements
+    }
   }
 }

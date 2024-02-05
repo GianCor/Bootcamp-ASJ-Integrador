@@ -1,42 +1,51 @@
 <div class="mb-5">
   <h3>Agregar Productos</h3>
 </div>
-
+<div
+*ngIf="sku.errors?.['required'] || name.errors?.['required'] || price.errors?.['required'] || provider.errors?.['required']"
+class="col-auto my-3"
+>
+<span class="form-text text-white"
+  >Todos los campos marcados con un * son obligatorios</span
+>
+</div>
 <form
   #productForm="ngForm"
   (ngSubmit)="pushProducts(productForm)"
   class="row g-3"
 >
-  <input
-    type="text"
-    [(ngModel)]="product.providerName"
-    name="providerName"
-    hidden
-  />
 
+
+<div class="row my-3">
   <div class="col-md-3">
     <label for="provider-id" class="form-label">Código de Proveedor *</label>
     <select
       id="provider-id"
       class="form-select"
-      (change)="onProviderChange(provider.value)"
+      (change)="onProviderChange(provider)"
       #provider="ngModel"
-      [(ngModel)]="product.provider_id"
-      name="provider_id"
+      [(ngModel)]="selectedSupplierCode"
+      name="supplier_id"
       required
       [class.is-valid]="provider.valid && provider.touched"
-      [class.is-invalid]="provider.touched && product.provider_id==0"
+      [class.is-invalid]="provider.touched && product.supplier_id==0"
     > 
-      <option *ngFor="let provider of providers" [value]="provider.id">
+      <option *ngFor="let provider of providers" [ngValue]="provider">
         {{ provider.name }}
       </option>
     </select>
+    <div class="position-absolute">
+      <span *ngIf="provider?.errors?.['required'] && provider.touched" class="font-weight-light form-text">
+        Código de Proveedor es obligatorio.
+      </span>
+      <span *ngIf="provider?.errors?.['minlength'] && provider.touched" class="font-weight-light form-text">
+        Necesita {{ provider?.errors?.['minlength']?.requiredLength }} caracteres como mínimo.
+      </span>
+    </div>
   </div>
 
-  <div class="col-md-9">
-    <label for="codigo-producto" class="form-label"
-      >Código de Producto / S.K.U. *</label
-    >
+  <div class="col-md-9 position-relative">
+    <label for="codigo-producto" class="form-label">S.K.U. *</label>
     <input
       type="text"
       id="codigo-producto"
@@ -48,19 +57,35 @@
       [class.is-valid]="sku.valid && sku.touched"
       [class.is-invalid]="sku.touched && sku.invalid"
     />
+    <div class="position-absolute">
+      <span *ngIf="sku?.errors?.['required'] && sku.touched" class="font-weight-light form-text">
+        S.K.U. es obligatorio.
+      </span>
+    </div>
   </div>
+</div>
 
+<div class="row my-3">
   <div class="col-md-4">
-    <label for="categoria" class="form-label">Categoría</label>
+    <label for="categoria" class="form-label">Categoría*</label>
     <select
       class="form-select"
       name="category"
       #category="ngModel"
-      [(ngModel)]="product.category"
+      [(ngModel)]="selectedCategory"
       id="category"
+      required
+      (change)="onCategoryChange(category)"
+      [class.is-valid]="category.valid && category.touched"
+      [class.is-invalid]="category.touched && category.invalid"
     >
-      <option *ngFor="let category of categories">{{ category.name }}</option>
+      <option *ngFor="let category of categories" [ngValue]="category">{{ category.name }}</option>
     </select>
+    <div class="position-absolute">
+      <span *ngIf="category?.errors?.['required'] && category.touched" class="font-weight-light form-text">
+        La Categoría es obligatoria.
+      </span>
+    </div>
   </div>
 
   <div class="col-md-8">
@@ -78,8 +103,15 @@
       [class.is-valid]="name.valid && name.touched"
       [class.is-invalid]="name.touched && name.invalid"
     />
+    <div class="position-absolute">
+      <span *ngIf="name?.errors?.['required'] && name.touched" class="font-weight-light form-text">
+        El Nombre del Producto es obligatorio.
+      </span>
+    </div>
   </div>
+</div>
 
+<div class="row my-3">
   <div class="col-md-7">
     <label for="description" class="form-label">Descripción</label>
     <input
@@ -103,11 +135,37 @@
       #price="ngModel"
       [(ngModel)]="product.price"
       name="price"
+      pattern="[0-9]+(\.[0-9]+)?"
       required
       [class.is-valid]="price.valid && price.touched"
       [class.is-invalid]="price.touched && price.invalid"
     />
+    <div class="position-absolute">
+      <span *ngIf="price?.errors?.['required'] && price.touched" class="font-weight-light form-text">
+        El Precio es obligatorio.
+      </span>
+      <span *ngIf="price?.errors?.['pattern'] && price.touched" class="font-weight-light form-text">
+        Debe ingresar un precio numérico.
+      </span>
+    </div>
   </div>
+</div>
+
+<div class="row my-3">
+  <div class="col-md-12">
+    <label for="url" class="form-label">Url imagen</label>
+    <input
+      type="text"
+      id="url"
+      class="form-control"
+      #url="ngModel"
+      [(ngModel)]="product.url"
+      name="url"
+      [class.is-valid]="url.valid && url.touched"
+      [class.is-invalid]="url.touched && url.invalid"
+    />
+  </div>
+</div>
 
   <div class="row d-flex justify-content-evenly align-items-center mt-3">
     <input
@@ -123,14 +181,6 @@
       id="add-provider"
       class="btn w-25 btn-outline-success"
     />
-  </div>
-  <div
-    *ngIf="sku.errors?.['required'] || name.errors?.['required'] || price.errors?.['required'] || provider.errors?.['required']"
-    class="col-auto"
-  >
-    <span class="form-text text-danger"
-      >Todos los campos marcados con un * son obligatorios</span
-    >
   </div>
   <ngb-alert
     *ngIf="showError"

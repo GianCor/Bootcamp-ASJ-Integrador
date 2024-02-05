@@ -1,17 +1,33 @@
 <div class="mb-5">
   <h3>Listado de Proveedores</h3>
 </div>
-  <div class="d-flex mb-2 justify-content-between mb-3">
-    <div>
-      <input class="form-control form-control-sm" type="text" placeholder="Buscar" name="search" [(ngModel)]="search" />
-    </div>
-    <div>
-      <button class="btn btn-primary btn-sm mx-3" [routerLink]="['/providers/add']"><div class="d-flex justify-content-center align-items-center"><mat-icon>add</mat-icon> Agregar Proveedor</div></button>
-    </div>
+<div class="d-flex mb-2 justify-content-between mb-3">
+  <div>
+    <input
+      class="form-control form-control-sm"
+      type="text"
+      placeholder="Buscar"
+      name="search"
+      [(ngModel)]="search"
+    />
   </div>
+  <div>
+    <button
+      class="btn btn-primary btn-sm mx-3"
+      [routerLink]="['/providers/add']"
+    >
+      <div class="d-flex justify-content-center align-items-center">
+        <mat-icon>add</mat-icon> Agregar Proveedor
+      </div>
+    </button>
+  </div>
+</div>
 
 <div class="table-responsive" *ngIf="show">
-  <table class="table table-hover table-striped table-bordered mb-5" id="proveedores-body">
+  <table
+    class="table table-hover table-striped table-bordered mb-5"
+    id="proveedores-body"
+  >
     <thead>
       <tr>
         <th scope="col">Logo</th>
@@ -23,24 +39,81 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let provider of providersData | search: search | sortByPrice : sortByPrice | sortByPriceDesc : sortByPriceDesc">
-        <td scope="col"><img *ngIf="provider.providerUrl !=''" class="provider-logo" src="{{provider.url}}" alt="Logo no cargado o encontrado"></td>
-        <td scope="col">{{ provider.supplierCode }}</td>
-        <td scope="col">{{ provider.name }}</td>
+      <tr
+        *ngFor="
+          let provider of providersData
+            | search : search
+            | sortByPrice : sortByPrice
+            | sortByPriceDesc : sortByPriceDesc
+        "
+      >
         <td scope="col">
-          {{ provider.contact.contactEmail }} <br>
-          {{ provider.contact.contactPhone }} <br>
+          <img
+            *ngIf="provider.providerUrl != ''"
+            class="provider-logo"
+            src="{{ provider.url }}"
+            alt="Logo no cargado o encontrado"
+          />
+        </td>
+        <td scope="col" [ngClass]="{'deleted': provider.deleted}">{{ provider.supplierCode }}</td>
+        <td scope="col" [ngClass]="{'deleted': provider.deleted}">{{ provider.name }}</td>
+        <td scope="col" [ngClass]="{'deleted': provider.deleted}">
+          {{ provider.contact.contactEmail }} <br />
+          {{ provider.contact.contactPhone }} <br />
           {{ provider.website }}
         </td>
-        <td scope="col">
-          {{ provider.contact.contactName }} {{ provider.contact.contactLastName }}
+        <td scope="col" [ngClass]="{'deleted': provider.deleted}">
+          {{ provider.contact.contactName }}
+          {{ provider.contact.contactLastName }}
         </td>
         <td scope="col">
           <div class="d-flex justify-content-between">
-            <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#detailsModal" (click)="setSelectedProvider(provider)">Detalles</button>
-            <div class="btn-group btn-group-sm ">
-              <button type="button" class="btn btn-outline-warning" (click)="editProvider(provider)"><mat-icon>mode_edit_icon</mat-icon></button>
-              <button type="button" class="btn btn-outline-danger" (click)="deleteProvider(provider)"><mat-icon>delete</mat-icon></button>
+            <button
+              type="button"
+              class="btn btn-sm btn-outline-primary"
+              data-bs-toggle="modal"
+              data-bs-target="#detailsModal"
+              (click)="setSelectedProvider(provider)"
+            >
+              Detalles
+            </button>
+            <div class="btn-group btn-group-sm">
+              <button
+                type="button"
+                class="btn btn-outline-warning"
+                (click)="editProvider(provider)"
+              >
+                <mat-icon>mode_edit_icon</mat-icon>
+              </button>
+              <ng-container *ngIf="!provider.deleted; else confirmationModal">
+                <button
+                  type="button"
+                  class="btn btn-outline-danger"
+                  (click)="provider.deleted = true; updateProvider(provider)"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </ng-container>
+              <ng-container *ngIf="provider.deleted">
+                <button
+                  type="button"
+                  class="btn btn-outline-success"
+                  (click)="provider.deleted = false; updateProvider(provider)"
+                >
+                  <mat-icon>done</mat-icon>
+                </button>
+              </ng-container>
+              <ng-template #confirmationModal>
+                <button
+                  type="button"
+                  class="btn btn-outline-danger"
+                  data-bs-toggle="modal"
+                  data-bs-target="#confirmationModal"
+                  (click)="setSelectedProvider(provider)"
+                >
+                  <mat-icon>delete_forever</mat-icon>
+                </button>
+              </ng-template>
             </div>
           </div>
         </td>
@@ -48,18 +121,72 @@
     </tbody>
   </table>
 </div>
-
-<div class="modal fade modal-xl" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  id="confirmationModal"
+  tabindex="-1"
+  aria-labelledby="confirmationModalLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Razón Social: {{this.selectedProvider.name}} / Id: {{this.selectedProvider.id}}</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h1 class="modal-title fs-5" id="exampleModalLabel">
+          Eliminar proveedor
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        Esta operación es irreversible, ¿Está seguro que desea borrar el
+        proveedor {{ selectedProvider.name }} y todos sus productos?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button
+          type="button"
+          class="btn btn-danger"
+          data-bs-dismiss="modal"
+          (click)="deleteProvider(selectedProvider)"
+        >
+          Eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade modal-xl"
+  id="detailsModal"
+  tabindex="-1"
+  aria-labelledby="detailsModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">
+          Razón Social: {{ this.selectedProvider.name }} / Id:
+          {{ this.selectedProvider.id }}
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
       <div class="modal-body row">
         <div class="col-12 col-md-6 mb-4">
           <h4>Datos Fiscales del proveedor</h4>
-          <table class="table table-hover table-striped ">
+          <table class="table table-hover table-striped">
             <thead>
               <tr>
                 <th>Condición frente al IVA</th>
@@ -69,9 +196,9 @@
             </thead>
             <tbody>
               <tr>
-                <td>{{this.selectedProvider.tax.name}}</td>
-                <td>{{this.selectedProvider.cuit}}</td>
-                <td>{{this.selectedProvider.field.name}}</td>
+                <td>{{ this.selectedProvider.tax.name }}</td>
+                <td>{{ this.selectedProvider.cuit }}</td>
+                <td>{{ this.selectedProvider.field.name }}</td>
               </tr>
             </tbody>
           </table>
@@ -88,9 +215,11 @@
             </thead>
             <tbody>
               <tr>
-                <td>{{this.selectedProvider.address.city.state.country.name}}</td>
-                <td>{{this.selectedProvider.address.city.state.name}}</td>
-                <td>{{this.selectedProvider.address.city.name}}</td>
+                <td>
+                  {{ this.selectedProvider.address.city.state.country.name }}
+                </td>
+                <td>{{ this.selectedProvider.address.city.state.name }}</td>
+                <td>{{ this.selectedProvider.address.city.name }}</td>
               </tr>
             </tbody>
           </table>
@@ -104,9 +233,9 @@
             </thead>
             <tbody>
               <tr>
-                <td>{{this.selectedProvider.address.cp}}</td>
-                <td>{{this.selectedProvider.address.street}}</td>
-                <td>{{this.selectedProvider.address.number}}</td>
+                <td>{{ this.selectedProvider.address.cp }}</td>
+                <td>{{ this.selectedProvider.address.street }}</td>
+                <td>{{ this.selectedProvider.address.number }}</td>
               </tr>
             </tbody>
           </table>
@@ -124,19 +253,26 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let product of this.selectedProvider.products | sortBy:'name'">
-                <td>{{product.id}}</td>
-                <td>{{product.name}}</td>
-                <td>{{product.description}}</td>
-                <td>{{product.category}}</td>
-                <td>{{product.price}}</td>
+              <tr
+                *ngFor="
+                  let product of this.selectedProvider.products
+                    | sortBy : 'name'
+                "
+              >
+                <td>{{ product.id }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.description }}</td>
+                <td>{{ product.category.name }}</td>
+                <td>{{ product.price }}</td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
       </div>
     </div>
   </div>

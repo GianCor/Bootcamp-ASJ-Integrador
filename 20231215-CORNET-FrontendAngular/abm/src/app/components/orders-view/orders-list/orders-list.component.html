@@ -1,32 +1,50 @@
 <div class="mb-5">
   <h3>Listado de Proveedores</h3>
 </div>
-    <div class="d-flex mb-2 justify-content-between mb-3">
-      <div>
-        <input class="form-control form-control-sm" type="text" placeholder="Buscar" name="search" [(ngModel)]="search" />
+<div class="d-flex mb-2 justify-content-between mb-3">
+  <div>
+    <input
+      class="form-control form-control-sm"
+      type="text"
+      placeholder="Buscar"
+      name="search"
+      [(ngModel)]="search"
+    />
+  </div>
+  <div class="btn-group">
+    <button
+      class="btn btn-outline-primary btn-sm"
+      (click)="showOrders('pendientes')"
+      [ngClass]="{
+        'btn-primary': showCanceled === false && showCompleted === false,
+        'btn-outline-primary': showCanceled === true || showCompleted === true
+      }"
+    >
+      Ver Pendientes
+    </button>
+    <button
+      class="btn btn-outline-primary btn-sm"
+      (click)="showOrders('canceladas')"
+      [ngClass]="{'btn-primary': showCanceled === true, 'btn-outline-primary': showCanceled === false}"
+    >
+      Ver Canceladas
+    </button>
+    <button
+      class="btn btn-outline-primary btn-sm"
+      (click)="showOrders('completadas')"
+      [ngClass]="{'btn-primary': showCompleted === true, 'btn-outline-primary': showCompleted === false}"
+    >
+      Ver Completadas
+    </button>
+  </div>
+  <div>
+    <button class="btn btn-primary btn-sm mx-3" [routerLink]="['/orders/add']">
+      <div class="d-flex justify-content-center align-items-center">
+        <mat-icon>add</mat-icon> Agregar Orden
       </div>
-      <div class="btn-group ">
-        <button
-        class="btn btn-outline-primary btn-sm"
-        (click)="
-          showCanceled = !showCanceled;
-          showCompleted = false;
-          showCanceled ? (showMessage = 'pendientes') : (showMessage = 'canceladas')
-        "
-      >
-        Ver {{ showMessage }}
-      </button>
-      <button
-        class="btn btn-outline-primary btn-sm"
-        (click)="showCompleted = !showCompleted"
-      >
-        Ver completadas
-      </button>
-      </div>
-      <div>
-        <button class="btn btn-primary btn-sm mx-3" [routerLink]="['/orders/add']"><div class="d-flex justify-content-center align-items-center"><mat-icon>add</mat-icon> Agregar Orden</div></button>
-      </div>
-    </div>
+    </button>
+  </div>
+</div>
 
 <div *ngIf="show">
   <div class="table-responsive" *ngIf="!showCanceled && !showCompleted">
@@ -47,8 +65,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let order of ordersData | searchById: search ">
-          <ng-container *ngIf="order.pending == true && order.canceled == false">
+        <tr *ngFor="let order of ordersData | searchById : search">
+          <ng-container
+            *ngIf="order.pending == true && order.canceled == false"
+          >
             <td scope="col">{{ order.id }}</td>
             <td scope="col">{{ order.emDate | date : "short" }}</td>
             <td scope="col">{{ order.reDate | date : "short" }}</td>
@@ -76,7 +96,12 @@
                 <button
                   *ngIf="!order.completed"
                   class="btn btn-outline-success btn-sm"
-                  (click)="order.completed = !order.completed; order.pending = false; order.canceled = false; updateOrder(order)"
+                  (click)="
+                    order.completed = !order.completed;
+                    order.pending = false;
+                    order.canceled = false;
+                    updateOrder(order)
+                  "
                 >
                   Completar
                 </button>
@@ -105,7 +130,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let order of ordersData | searchById: search ">
+        <tr *ngFor="let order of ordersData | searchById : search">
           <ng-container *ngIf="order.canceled == true">
             <td scope="col">{{ order.id }}</td>
             <td scope="col">{{ order.emDate | date : "short" }}</td>
@@ -129,7 +154,9 @@
                     type="button"
                     *ngIf="order.canceled"
                     class="btn btn-outline-success btn-sm"
-                    (click)="order.canceled = !order.canceled; updateOrder(order)"
+                    (click)="
+                      order.canceled = !order.canceled; updateOrder(order)
+                    "
                   >
                     Habilitar
                   </button>
@@ -141,8 +168,7 @@
       </tbody>
     </table>
   </div>
-  
-  
+
   <div class="table-responsive" *ngIf="showCompleted">
     <h5>Ordenes Completadas</h5>
     <table
@@ -161,14 +187,14 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let order of ordersData | searchById: search">
+        <tr *ngFor="let order of ordersData | searchById : search">
           <ng-container *ngIf="order.completed == true">
             <td scope="col">{{ order.id }}</td>
             <td scope="col">{{ order.emDate | date : "short" }}</td>
             <td scope="col">{{ order.reDate | date : "short" }}</td>
             <td scope="col">{{ order.description }}</td>
             <td scope="col">{{ order.provider }}</td>
-            <td scope="col">{{ order.total | currency  }}</td>
+            <td scope="col">{{ order.total | currency }}</td>
             <td scope="col">
               <div class="d-flex justify-content-between">
                 <button
@@ -190,7 +216,12 @@
                 <button
                   *ngIf="!order.completed"
                   class="btn btn-outline-success btn-sm"
-                  (click)="order.completed = !order.completed; order.pending = false; order.canceled = false; updateOrder(order)"
+                  (click)="
+                    order.completed = !order.completed;
+                    order.pending = false;
+                    order.canceled = false;
+                    updateOrder(order)
+                  "
                 >
                   Completar
                 </button>
@@ -201,9 +232,7 @@
       </tbody>
     </table>
   </div>
-  
-  
-  
+
   <div
     class="modal fade modal-xl"
     id="detailsModal"
@@ -254,8 +283,8 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let product of selectedOrder.product">
-                  <td>{{ product.name }}</td>
+                <tr *ngFor="let product of selectedOrder.orderProducts">
+                  <td>{{ product.productName }}</td>
                   <td>{{ product.price | currency }}</td>
                   <td>{{ product.amount }}</td>
                   <td>{{ product.subtotal | currency }}</td>
@@ -275,11 +304,15 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
             Close
           </button>
         </div>
       </div>
     </div>
-  </div>  
+  </div>
 </div>

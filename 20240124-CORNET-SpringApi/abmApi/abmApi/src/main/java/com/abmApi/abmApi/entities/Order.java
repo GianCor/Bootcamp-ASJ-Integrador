@@ -1,6 +1,9 @@
 package com.abmApi.abmApi.entities;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -13,6 +16,10 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column
+    @NotNull(message = "[orderNum] no puede ser nulo.")
+    private String numOrder;
+    
     @Column
     @NotNull(message = "[provider] no puede ser nulo.")
     @NotBlank(message = "[provider] no puede estar vacio.")
@@ -31,30 +38,47 @@ public class Order {
 
     @Column
     @NotNull(message = "[pending] no puede ser nulo.")
-    private String pending;
+    private Boolean pending;
 
     @Column
     @NotNull(message = "[completed] no puede ser nulo.")
-    private String completed;
+    private Boolean completed;
 
     @Column
-    private String canceled;
+    private Boolean canceled;
 
     @Column
-    private String total;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "product_id")
-    private List<Product> products;
+    private Double total;
 
     
+    @JsonManagedReference
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderProduct> orderProducts = new ArrayList<>();
+    
+    
+    public void calculateTotal() {
+        double orderTotal = 0.0;
+
+        for (OrderProduct orderProduct : orderProducts) {
+            orderTotal += orderProduct.getSubtotal();
+        }
+
+        this.total = orderTotal;
+    }
     
 	public Order() {
 	}
 
-	public Order(Integer id, String provider, Date emDate, Date reDate, String description, String pending,
-			String completed, String canceled, String total, List<Product> products) {
+	public Order(Integer id, @NotNull(message = "[orderNum] no puede ser nulo.") String numOrder,
+			@NotNull(message = "[provider] no puede ser nulo.") @NotBlank(message = "[provider] no puede estar vacio.") String provider,
+			@NotNull(message = "[emDate] no puede ser nulo.") Date emDate,
+			@NotNull(message = "[reDate] no puede ser nulo.") Date reDate, String description,
+			@NotNull(message = "[pending] no puede ser nulo.") Boolean pending,
+			@NotNull(message = "[completed] no puede ser nulo.") Boolean completed, Boolean canceled, Double total,
+			List<OrderProduct> orderProducts) {
+		super();
 		this.id = id;
+		this.numOrder = numOrder;
 		this.provider = provider;
 		this.emDate = emDate;
 		this.reDate = reDate;
@@ -62,89 +86,137 @@ public class Order {
 		this.pending = pending;
 		this.completed = completed;
 		this.canceled = canceled;
+		this.orderProducts = orderProducts;
 		this.total = total;
-		this.products = products;
 	}
 
 	public Integer getId() {
 		return id;
 	}
 
+
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
+
+
+
+	public String getNumOrder() {
+		return numOrder;
+	}
+
+
+
+	public void setNumOrder(String numOrder) {
+		this.numOrder = numOrder;
+	}
+
+
 
 	public String getProvider() {
 		return provider;
 	}
 
+
+
 	public void setProvider(String provider) {
 		this.provider = provider;
 	}
+
+
 
 	public Date getEmDate() {
 		return emDate;
 	}
 
+
+
 	public void setEmDate(Date emDate) {
 		this.emDate = emDate;
 	}
+
+
 
 	public Date getReDate() {
 		return reDate;
 	}
 
+
+
 	public void setReDate(Date reDate) {
 		this.reDate = reDate;
 	}
+
+
 
 	public String getDescription() {
 		return description;
 	}
 
+
+
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
-	public String getPending() {
+
+
+	public Boolean getPending() {
 		return pending;
 	}
 
-	public void setPending(String pending) {
+
+
+	public void setPending(Boolean pending) {
 		this.pending = pending;
 	}
 
-	public String getCompleted() {
+
+
+	public Boolean getCompleted() {
 		return completed;
 	}
 
-	public void setCompleted(String completed) {
+
+
+	public void setCompleted(Boolean completed) {
 		this.completed = completed;
 	}
 
-	public String getCanceled() {
+
+
+	public Boolean getCanceled() {
 		return canceled;
 	}
 
-	public void setCanceled(String canceled) {
+
+
+	public void setCanceled(Boolean canceled) {
 		this.canceled = canceled;
 	}
 
-	public String getTotal() {
+
+
+	public Double getTotal() {
 		return total;
 	}
 
-	public void setTotal(String total) {
+
+
+	public void setTotal(Double total) {
 		this.total = total;
 	}
 
-	public List<Product> getProducts() {
-		return products;
+
+
+	public List<OrderProduct> getOrderProducts() {
+		return orderProducts;
 	}
 
-	public void setProducts(List<Product> products) {
-		this.products = products;
-	}
-    
-    
+
+
+	public void setOrderProducts(List<OrderProduct> orderProducts) {
+		this.orderProducts = orderProducts;
+	}    
 }

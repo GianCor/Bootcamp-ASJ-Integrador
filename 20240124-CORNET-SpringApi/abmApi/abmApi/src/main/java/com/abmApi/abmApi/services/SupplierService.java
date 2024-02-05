@@ -70,6 +70,7 @@ public class SupplierService {
 		supplier.setCreated_at(LocalDate.now());
         supplier.setWebsite(supplierRequest.getWebsite());
         supplier.setUrl(supplierRequest.getUrl());
+        supplier.setDeleted(supplierRequest.getDeleted());
 		supplierRepository.save(supplier);
 		return supplier;
 	}
@@ -123,6 +124,7 @@ public class SupplierService {
             existingSupplier.setWebsite(supplier.getWebsite());
             existingSupplier.setUrl(supplier.getUrl());
             existingSupplier.setUpdated_at(LocalDate.now());
+            existingSupplier.setDeleted(supplier.getDeleted());
             
 
             supplierRepository.save(existingSupplier);
