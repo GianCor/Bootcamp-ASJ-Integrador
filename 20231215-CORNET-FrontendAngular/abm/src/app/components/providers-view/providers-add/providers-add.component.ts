@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { condicionFrenteAlIva } from 'src/app/models/condicionFrenteIvaModel';
-import { Provider } from 'src/app/models/providerModel';
+import { Field, Provider, Tax } from 'src/app/models/providerModel';
 import { FieldService } from 'src/app/services/field.service';
 import { GeorefService } from 'src/app/services/georef.service';
 import { ProvidersService } from 'src/app/services/providers.service';
@@ -14,7 +14,7 @@ import { TaxService } from 'src/app/services/tax.service';
 })
 export class ProvidersAddComponent {
   providersData: Provider[] = [];
-  IVAData: condicionFrenteAlIva[] = [];
+  IVAData: Tax[] = [];
   fieldData: any[] =[];
   showError: boolean = false;
   showSuccess: boolean = false;
@@ -23,6 +23,16 @@ export class ProvidersAddComponent {
   selectedCity: any;
   selectedField: any;
   selectedTax: any;
+
+  newField: Field = {
+    id:0,
+    name:''
+  }
+
+  newTax: Tax = {
+    id:0,
+    name:''
+  }
 
   provider: Provider = {
     id:0,
@@ -74,13 +84,79 @@ export class ProvidersAddComponent {
   countries: any[] = [];
   states: any[] = [];
   cities: any[] = [];
+  selectedFieldToEdit!: Field;
+  switchedField = false;
+
 
   constructor(
     private providersService: ProvidersService,
     private georef: GeorefService,
     private taxService: TaxService,
-    private fieldService: FieldService
+    private fieldService: FieldService,
   ) {}
+
+  postField(field: Field) {
+    field.deleted = false;
+    this.fieldService.postField(field).subscribe(response => {
+      console.log(response)
+      this.fieldService.getFields().subscribe((data)=>{
+        this.fieldData = data;
+        console.log(this.fieldData)
+        this.newField.name = '';
+      })
+    })
+  }
+
+  switchToInputField(field: Field){
+    field.editing == true ? field.editing = false : field.editing = true;
+  }
+
+  updateField(field: Field){
+    this.switchToInputField(field);
+    this.fieldService.updateField(field).subscribe((response) => console.log(response))
+  }
+
+  deleteField(field: Field){
+    field.deleted = true;
+    this.fieldService.updateField(field).subscribe((response)=>console.log(response))
+  }
+
+  editField(editedField: Field){
+    this.fieldService.updateField(editedField).subscribe()
+  }
+
+
+  postTax(tax: Tax) {
+    tax.deleted = false;
+    this.taxService.postTax(tax).subscribe(response => {
+      console.log(response)
+      this.taxService.getTaxes().subscribe((data)=>{
+        this.IVAData = data;
+        console.log(this.IVAData)
+        this.newTax.name = '';
+      })
+    })
+  }
+
+  switchToInputTax(tax: Tax){
+    tax.editing == true ? tax.editing = false : tax.editing = true;
+  }
+
+  updateTax(tax: Tax){
+    this.switchToInputTax(tax);
+    this.taxService.updateTax(tax).subscribe((response) => console.log(response))
+  }
+
+  deleteTax(tax: Tax){
+    tax.deleted = true;
+    this.taxService.updateTax(tax).subscribe((response)=>console.log(response))
+  }
+
+  editTax(editedTax: Tax){
+    this.taxService.updateTax(editedTax).subscribe()
+  }
+
+
 
   ngOnInit() {
     this.getProvidersData();

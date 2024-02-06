@@ -46,6 +46,7 @@ public class CategoryService {
             Category existingCategory = optionalExistingCategory.get();
 
             existingCategory.setName(category.getName());
+            existingCategory.setDeleted(category.getDeleted());
             categoryRepository.save(existingCategory);
 
             return "Category with ID " + id + " updated successfully.";

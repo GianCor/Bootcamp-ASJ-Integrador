@@ -68,7 +68,8 @@ class="col-auto my-3"
 <div class="row my-3">
   <div class="col-md-4">
     <label for="categoria" class="form-label">Categoría*</label>
-    <select
+    <div class="d-flex justify-content-center align-items-center ">
+      <select
       class="form-select"
       name="category"
       #category="ngModel"
@@ -81,6 +82,14 @@ class="col-auto my-3"
     >
       <option *ngFor="let category of categories" [ngValue]="category">{{ category.name }}</option>
     </select>
+    <button
+    class="btn btn-outline-primary mx-1"
+    data-bs-toggle="modal"
+    data-bs-target="#categoryModal"
+  >
+    <mat-icon>add</mat-icon>
+  </button>
+    </div>
     <div class="position-absolute">
       <span *ngIf="category?.errors?.['required'] && category.touched" class="font-weight-light form-text">
         La Categoría es obligatoria.
@@ -197,3 +206,139 @@ class="col-auto my-3"
     ><mat-icon>done</mat-icon> {{ message }}</ngb-alert
   >
 </form>
+
+<div
+  class="modal fade"
+  id="categoryModal"
+  tabindex="-1"
+  aria-labelledby="categoryModalLabel"
+  aria-hidden="true"
+>
+<div class="modal-dialog modal-xl">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h1 class="modal-title fs-5" id="exampleModalLabel">
+        Agregar categorías
+      </h1>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <div class="row justify-content-center align-items-center g-2">
+        <div class="col-12 col-md-8">
+          <div *ngIf="categories.length == 0" class="alert alert-primary m-5" role="alert">
+            Parece que no hay datos cargados
+          </div>
+          <div
+            class="table-responsive d-flex justify-content-center align-items-center"
+          >
+            <div style="max-height: 70vh; min-width: 45vw">
+              <table
+                class="table table-hover table-striped table-bordered"
+                style="height: 100px !important"
+                *ngIf="categories.length > 0"
+              >
+                <thead>
+                  <tr>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody *ngFor="let category of categories">
+                  <tr *ngIf="category.deleted == false">
+                    <td scope="col">
+                      <ng-container
+                        *ngIf="
+                          category.editing === false || category.editing === undefined
+                        "
+                      >
+                        {{ category.name }}
+                      </ng-container>
+                      <ng-container *ngIf="category.editing === true">
+                        <form action="">
+                          <input
+                            type="text"
+                            class="form-control"
+                            [(ngModel)]="category.name"
+                            [ngModelOptions]="{ standalone: true }"
+                          />
+                        </form>
+                      </ng-container>
+                    </td>
+                    <td scope="col" style="width: 100px">
+                      <div class="btn-group btn-group-sm">
+                        <ng-container
+                          *ngIf="
+                            category.editing === false || category.editing === undefined
+                          "
+                        >
+                          <button
+                            type="button"
+                            class="btn btn-outline-warning"
+                            (click)="switchToInputCategory(category)"
+                          >
+                            <mat-icon>mode_edit_icon</mat-icon>
+                          </button>
+                          <button
+                            type="button"
+                            class="btn btn-outline-danger"
+                            (click)="deleteCategory(category)"
+                          >
+                            <mat-icon>delete</mat-icon>
+                          </button>
+                        </ng-container>
+                        <ng-container *ngIf="category.editing === true">
+                          <button
+                            type="button"
+                            class="btn btn-outline-success"
+                            (click)="updateCategory(category)"
+                          >
+                            <mat-icon>done</mat-icon>
+                          </button>
+                          <button
+                            type="button"
+                            class="btn btn-outline-danger"
+                            (click)="switchToInputCategory(category)"
+                          >
+                            <mat-icon>cancel</mat-icon>
+                          </button>
+                        </ng-container>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-4">
+          <form action="" #categoryForm="ngForm">
+            <label for="tax-input">Categoría</label>
+            <div
+              class="d-flex justify-content-center align-items-center mt-2"
+            >
+              <input
+                type="text"
+                id="tax-input"
+                [(ngModel)]="newCategory.name"
+                name="tax-input"
+                class="form-control"
+              />
+              <button
+                (click)="postCategory(newCategory)"
+                class="btn btn-outline-primary mx-1"
+              >
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>

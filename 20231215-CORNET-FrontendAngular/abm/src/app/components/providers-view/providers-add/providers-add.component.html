@@ -7,22 +7,22 @@
   (ngSubmit)="pushProvidersData(providerForm)"
   class="row g-3 needs-validation"
 >
-<div class="row">
-  <div class="col-12">
-    <h5>Datos del Proveedor</h5>
-    <hr />
+  <div class="row">
+    <div class="col-12">
+      <h5>Datos del Proveedor</h5>
+      <hr />
+    </div>
   </div>
-</div>
-<div class="row">
-  <div
-  *ngIf="supplierCode.errors?.['required'] || name.errors?.['required'] || field.errors?.['required'] || email.errors?.['required'] || phone.errors?.['required'] || country.errors?.['required'] || state.errors?.['required'] || cp.errors?.['required'] || address.errors?.['required'] || cuit.errors?.['required'] || iva.errors?.['required'] || contactName.errors?.['required'] || contactLastName.errors?.['required']"
-  class="col-12 my-2"
->
-  <span class="form-text text-white"
-    >Todos los campos marcados con un * son obligatorios</span
-  >
-</div>
-</div>
+  <div class="row">
+    <div
+      *ngIf="supplierCode.errors?.['required'] || name.errors?.['required'] || field.errors?.['required'] || email.errors?.['required'] || phone.errors?.['required'] || country.errors?.['required'] || state.errors?.['required'] || cp.errors?.['required'] || address.errors?.['required'] || cuit.errors?.['required'] || iva.errors?.['required'] || contactName.errors?.['required'] || contactLastName.errors?.['required']"
+      class="col-12 my-2"
+    >
+      <span class="form-text text-white"
+        >Todos los campos marcados con un * son obligatorios</span
+      >
+    </div>
+  </div>
   <ngb-alert
     *ngIf="showError"
     type="danger"
@@ -94,24 +94,33 @@
 
     <div class="col-md-5">
       <label for="field" class="form-label">Rubro *</label>
-      <select
-        id="field"
-        [(ngModel)]="selectedField"
-        class="form-select"
-        name="field"
-        #field="ngModel"
-        required
-        (change)="changeSelectedField()"
-        [class.is-valid]="field.valid && (field.touched || field.dirty)"
-        [class.is-invalid]="field.touched && field.invalid"
-      >
-        <option [ngValue]="null" disabled selected>
-          Seleccione un rubro...
-        </option>
-        <option *ngFor="let field of fieldData" [ngValue]="field">
-          {{ field.name }}
-        </option>
-      </select>
+      <div class="d-flex">
+        <select
+          id="field"
+          [(ngModel)]="selectedField"
+          class="form-select"
+          name="field"
+          #field="ngModel"
+          required
+          (change)="changeSelectedField()"
+          [class.is-valid]="field.valid && (field.touched || field.dirty)"
+          [class.is-invalid]="field.touched && field.invalid"
+        >
+          <option [ngValue]="null" disabled selected>
+            Seleccione un rubro...
+          </option>
+          <option *ngFor="let field of fieldData" [ngValue]="field">
+            {{ field.name }}
+          </option>
+        </select>
+        <button
+          class="btn btn-outline-primary mx-1"
+          data-bs-toggle="modal"
+          data-bs-target="#fieldModal"
+        >
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
       <div class="position-absolute">
         <span
           *ngIf="field?.errors?.['required'] && field.touched"
@@ -183,21 +192,21 @@
           Teléfono debe ser numérico, no ingrese simbolos ni espacios.
         </span>
         <span
-        *ngIf="phone?.errors?.['minlength'] && phone.touched"
-        class="font-weight-light form-text"
-      >
-        Teléfono debe tener como minimo 10 caracteres
-      </span>
+          *ngIf="phone?.errors?.['minlength'] && phone.touched"
+          class="font-weight-light form-text"
+        >
+          Teléfono debe tener como minimo 10 caracteres
+        </span>
       </div>
     </div>
   </div>
 
-<div class="row">
-  <div class="col-12 pt-5">
-    <h5>Datos Ubicación</h5>
-    <hr />
+  <div class="row">
+    <div class="col-12 pt-5">
+      <h5>Datos Ubicación</h5>
+      <hr />
+    </div>
   </div>
-</div>
 
   <div class="row">
     <div class="col-md-4">
@@ -399,81 +408,90 @@
       </div>
     </div>
   </div>
-<div class="row">
-  <div class="col-12 pt-5">
-    <h5>Datos Fiscales</h5>
-    <hr />
+  <div class="row">
+    <div class="col-12 pt-5">
+      <h5>Datos Fiscales</h5>
+      <hr />
+    </div>
   </div>
-</div>
 
-<div class="row my-3">
-  <div class="col-md-6">
-    <label for="cuit" class="form-label">CUIT *</label>
-    <input
-      type="text"
-      [(ngModel)]="provider.cuit"
-      id="cuit"
-      class="form-control"
-      name="cuit"
-      #cuit="ngModel"
-      required
-      pattern="[0-9]+"
-      minlength="11"
-      maxlength="11"
-      [class.is-valid]="cuit.valid && cuit.touched"
-      [class.is-invalid]="cuit.touched && (cuit.invalid || cuit.errors?.['pattern'])"
-    />
-    <div class="position-absolute">
-      <span
-        *ngIf="cuit?.errors?.['required'] && cuit.touched"
-        class="font-weight-light form-text"
-      >
-        CUIT es obligatorio.
-      </span>
-      <span
-        *ngIf="cuit?.errors?.['pattern'] && cuit.touched"
-        class="font-weight-light form-text"
-      >
-        CUIT debe ser numérico.
-      </span>
-      <span
-        *ngIf="cuit?.errors?.['minlength'] && cuit.touched"
-        class="font-weight-light form-text"
-      >
-        CUIT debe tener exactamente 11 caracteres.
-      </span>
+  <div class="row my-3">
+    <div class="col-md-6">
+      <label for="cuit" class="form-label">CUIT *</label>
+      <input
+        type="text"
+        [(ngModel)]="provider.cuit"
+        id="cuit"
+        class="form-control"
+        name="cuit"
+        #cuit="ngModel"
+        required
+        pattern="[0-9]+"
+        minlength="11"
+        maxlength="11"
+        [class.is-valid]="cuit.valid && cuit.touched"
+        [class.is-invalid]="cuit.touched && (cuit.invalid || cuit.errors?.['pattern'])"
+      />
+      <div class="position-absolute">
+        <span
+          *ngIf="cuit?.errors?.['required'] && cuit.touched"
+          class="font-weight-light form-text"
+        >
+          CUIT es obligatorio.
+        </span>
+        <span
+          *ngIf="cuit?.errors?.['pattern'] && cuit.touched"
+          class="font-weight-light form-text"
+        >
+          CUIT debe ser numérico.
+        </span>
+        <span
+          *ngIf="cuit?.errors?.['minlength'] && cuit.touched"
+          class="font-weight-light form-text"
+        >
+          CUIT debe tener exactamente 11 caracteres.
+        </span>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <label for="iva" class="form-label">Condición I.V.A. *</label>
+      <div class="d-flex">
+        <select
+          name="iva"
+          [(ngModel)]="selectedTax"
+          id="iva"
+          class="form-select"
+          #iva="ngModel"
+          required
+          (change)="changeSelectedTax()"
+          [class.is-valid]="iva.valid && iva.touched"
+          [class.is-invalid]="iva.touched && iva.invalid"
+        >
+          <option [ngValue]="null" disabled selected>
+            Seleccione una condición...
+          </option>
+          <option *ngFor="let condicion of IVAData" [ngValue]="condicion">
+            {{ condicion.id }}:{{ condicion.name }}
+          </option>
+        </select>
+        <button
+          class="btn btn-outline-primary mx-1"
+          data-bs-toggle="modal"
+          data-bs-target="#taxModal"
+        >
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+      <div class="position-absolute">
+        <span
+          *ngIf="iva?.errors?.['required'] && iva.touched"
+          class="font-weight-light form-text"
+        >
+          Condición I.V.A. es obligatoria.
+        </span>
+      </div>
     </div>
   </div>
-  <div class="col-md-6">
-    <label for="iva" class="form-label">Condición I.V.A. *</label>
-    <select
-      name="iva"
-      [(ngModel)]="selectedTax"
-      id="iva"
-      class="form-select"
-      #iva="ngModel"
-      required
-      (change)="changeSelectedTax()"
-      [class.is-valid]="iva.valid && iva.touched"
-      [class.is-invalid]="iva.touched && iva.invalid"
-    >
-      <option [ngValue]="null" disabled selected>
-        Seleccione una condición...
-      </option>
-      <option *ngFor="let condicion of IVAData" [ngValue]="condicion">
-        {{ condicion.id }}:{{ condicion.name }}
-      </option>
-    </select>
-    <div class="position-absolute">
-      <span
-        *ngIf="iva?.errors?.['required'] && iva.touched"
-        class="font-weight-light form-text"
-      >
-        Condición I.V.A. es obligatoria.
-      </span>
-    </div>
-  </div>
-</div>
 
   <div class="row">
     <div class="col-12 pt-5">
@@ -573,6 +591,9 @@
         name="contactPhone"
         #contactPhone="ngModel"
         required
+        required
+        pattern="[0-9]+"
+        minlength="10"
         [class.is-valid]="contactPhone.valid && contactPhone.touched"
         [class.is-invalid]="contactPhone.touched && contactPhone.invalid"
       />
@@ -583,6 +604,18 @@
         >
           Teléfono del Contacto es obligatorio.
         </span>
+        <span
+        *ngIf="contactPhone?.errors?.['pattern'] && contactPhone.touched"
+        class="font-weight-light form-text"
+      >
+        Teléfono debe ser numérico, no ingrese simbolos ni espacios.
+      </span>
+      <span
+        *ngIf="contactPhone?.errors?.['minlength'] && contactPhone.touched"
+        class="font-weight-light form-text"
+      >
+        Teléfono debe tener como minimo 10 caracteres
+      </span>
       </div>
     </div>
 
@@ -662,3 +695,275 @@
     >
   </div>
 </form>
+
+<div
+  class="modal fade"
+  id="fieldModal"
+  tabindex="-1"
+  aria-labelledby="confirmationModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar rubros</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="row justify-content-center align-items-center g-2">
+          <div class="col-12 col-md-8">
+            <div *ngIf="fieldData.length == 0" class="alert alert-primary m-5" role="alert">
+              Parece que no hay datos cargados
+            </div>
+            <div
+              class="table-responsive d-flex justify-content-center align-items-center"
+            >
+              <div style="max-height: 70vh; min-width: 45vw">
+                <table
+                  class="table table-hover table-striped table-bordered"
+                  style="height: 100px !important"
+                  *ngIf="fieldData.length > 0"
+                >
+                  <thead>
+                    <tr>
+                      <th scope="col">Nombre</th>
+                      <th scope="col">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody *ngFor="let field of fieldData">
+                    <tr *ngIf="field.deleted == false">
+                      <td scope="col">
+                        <ng-container
+                          *ngIf="
+                            field.editing === false ||
+                            field.editing === undefined
+                          "
+                        >
+                          {{ field.name }}
+                        </ng-container>
+                        <ng-container *ngIf="field.editing === true">
+                          <form action="">
+                            <input
+                              type="text"
+                              class="form-control"
+                              [(ngModel)]="field.name"
+                              [ngModelOptions]="{ standalone: true }"
+                            />
+                          </form>
+                        </ng-container>
+                      </td>
+                      <td scope="col" style="width: 100px">
+                        <div class="btn-group btn-group-sm">
+                          <ng-container
+                            *ngIf="
+                              field.editing === false ||
+                              field.editing === undefined
+                            "
+                          >
+                            <button
+                              type="button"
+                              class="btn btn-outline-warning"
+                              (click)="switchToInputField(field)"
+                            >
+                              <mat-icon>mode_edit_icon</mat-icon>
+                            </button>
+                            <button
+                              type="button"
+                              class="btn btn-outline-danger"
+                              (click)="deleteField(field)"
+                            >
+                              <mat-icon>delete</mat-icon>
+                            </button>
+                          </ng-container>
+                          <ng-container *ngIf="field.editing === true">
+                            <button
+                              type="button"
+                              class="btn btn-outline-success"
+                              (click)="updateField(field)"
+                            >
+                              <mat-icon>done</mat-icon>
+                            </button>
+                            <button
+                              type="button"
+                              class="btn btn-outline-danger"
+                              (click)="switchToInputField(field)"
+                            >
+                              <mat-icon>cancel</mat-icon>
+                            </button>
+                          </ng-container>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <form action="" #fieldForm="ngForm">
+              <label for="field-input">Rubro</label>
+              <div
+                class="d-flex justify-content-center align-items-center mt-2"
+              >
+                <input
+                  type="text"
+                  id="field-input"
+                  [(ngModel)]="newField.name"
+                  name="field-input"
+                  class="form-control"
+                />
+                <button
+                  (click)="postField(newField)"
+                  class="btn btn-outline-primary mx-1"
+                >
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="taxModal"
+  tabindex="-1"
+  aria-labelledby="taxModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">
+          Agregar condición I.V.A.
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="row justify-content-center align-items-center g-2">
+          <div class="col-12 col-md-8">
+            <div *ngIf="IVAData.length == 0" class="alert alert-primary m-5" role="alert">
+              Parece que no hay datos cargados
+            </div>
+            <div
+              class="table-responsive d-flex justify-content-center align-items-center"
+            >
+              <div style="max-height: 70vh; min-width: 45vw">
+                <table
+                  class="table table-hover table-striped table-bordered"
+                  style="height: 100px !important"
+                  *ngIf="IVAData.length > 0"
+                >
+                  <thead>
+                    <tr>
+                      <th scope="col">Nombre</th>
+                      <th scope="col">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody *ngFor="let tax of IVAData">
+                    <tr *ngIf="tax.deleted == false">
+                      <td scope="col">
+                        <ng-container
+                          *ngIf="
+                            tax.editing === false || tax.editing === undefined
+                          "
+                        >
+                          {{ tax.name }}
+                        </ng-container>
+                        <ng-container *ngIf="tax.editing === true">
+                          <form action="">
+                            <input
+                              type="text"
+                              class="form-control"
+                              [(ngModel)]="tax.name"
+                              [ngModelOptions]="{ standalone: true }"
+                            />
+                          </form>
+                        </ng-container>
+                      </td>
+                      <td scope="col" style="width: 100px">
+                        <div class="btn-group btn-group-sm">
+                          <ng-container
+                            *ngIf="
+                              tax.editing === false || tax.editing === undefined
+                            "
+                          >
+                            <button
+                              type="button"
+                              class="btn btn-outline-warning"
+                              (click)="switchToInputTax(tax)"
+                            >
+                              <mat-icon>mode_edit_icon</mat-icon>
+                            </button>
+                            <button
+                              type="button"
+                              class="btn btn-outline-danger"
+                              (click)="deleteTax(tax)"
+                            >
+                              <mat-icon>delete</mat-icon>
+                            </button>
+                          </ng-container>
+                          <ng-container *ngIf="tax.editing === true">
+                            <button
+                              type="button"
+                              class="btn btn-outline-success"
+                              (click)="updateTax(tax)"
+                            >
+                              <mat-icon>done</mat-icon>
+                            </button>
+                            <button
+                              type="button"
+                              class="btn btn-outline-danger"
+                              (click)="switchToInputTax(tax)"
+                            >
+                              <mat-icon>cancel</mat-icon>
+                            </button>
+                          </ng-container>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <form action="" #taxForm="ngForm">
+              <label for="tax-input">Condición I.V.A.</label>
+              <div
+                class="d-flex justify-content-center align-items-center mt-2"
+              >
+                <input
+                  type="text"
+                  id="tax-input"
+                  [(ngModel)]="newTax.name"
+                  name="tax-input"
+                  class="form-control"
+                />
+                <button
+                  (click)="postTax(newTax)"
+                  class="btn btn-outline-primary mx-1"
+                >
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -14,15 +14,30 @@ public class Tax {
     private Integer id;
     
     private String name;
+    
+    private Boolean deleted;
 
-	public Tax(Integer id, String name) {
+	public Tax(Integer id, String name, Boolean deleted) {
 		super();
 		this.id = id;
 		this.name = name;
+		this.deleted = deleted;
 	}
 
 	public Tax() {
 		super();
+	}
+	
+	public Boolean getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Boolean deleted) {
+		if(deleted) {
+			this.deleted = deleted;
+		} else {
+			this.deleted = false;
+		}
 	}
 
 	public Integer getId() {

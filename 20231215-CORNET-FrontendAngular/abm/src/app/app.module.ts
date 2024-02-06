@@ -24,6 +24,7 @@ import { SearchPipe } from './pipes/search.pipe';
 import { SortByPricePipe } from './pipes/sort-by-price.pipe';
 import { SortByPriceDescPipe } from './pipes/sort-by-price-desc.pipe';
 import { SearchByIdPipe } from './pipes/search-by-id.pipe';
+import { ConfigurationComponent } from './components/configuration/configuration.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { SearchByIdPipe } from './pipes/search-by-id.pipe';
     SortByPricePipe,
     SortByPriceDescPipe,
     SearchByIdPipe,
+    ConfigurationComponent,
   ],
   imports: [
     BrowserModule,

@@ -16,15 +16,27 @@ public class Field {
 	
 	@Column
 	private String name;
+	
+	@Column
+	private Boolean deleted;
 
-	public Field(Integer id, String name) {
+	public Field(Integer id, String name, Boolean deleted) {
 		super();
 		this.id = id;
 		this.name = name;
+		this.deleted = deleted;
 	}
 
 	public Field() {
 		super();
+	}
+	
+	public Boolean getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
 	}
 
 	public Integer getId() {

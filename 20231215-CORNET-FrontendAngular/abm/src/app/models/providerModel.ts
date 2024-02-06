@@ -50,11 +50,15 @@ name: string;
 export interface Tax {
   id: number;
   name: string;
+  deleted?: boolean;
+  editing?: boolean;
   }
 
 export interface Field {
 id: number;
 name: string;
+deleted?: boolean;
+editing?: boolean;
 }
 
 export interface State {

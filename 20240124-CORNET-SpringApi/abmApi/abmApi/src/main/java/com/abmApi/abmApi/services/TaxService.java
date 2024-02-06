@@ -16,7 +16,7 @@ public class TaxService {
     TaxRepository taxRepository;
 
     public List<Tax> getTax() {
-        return taxRepository.findAll();
+        return taxRepository.findActiveTaxes();
     }
 
     public Optional<Tax> getTaxById(Integer id) {
@@ -47,6 +47,7 @@ public class TaxService {
             Tax existingTax = optionalExistingTax.get();
 
             existingTax.setName(tax.getName());
+            existingTax.setDeleted(tax.getDeleted());
 
             taxRepository.save(existingTax);
 

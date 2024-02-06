@@ -3,8 +3,7 @@ import { ProvidersService } from '../../../services/providers.service';
 import { ProductsService } from '../../../services/products.service';
 import { NgForm } from '@angular/forms';
 import { Provider } from 'src/app/models/providerModel';
-import { Product } from 'src/app/models/productModel';
-import { category } from 'src/app/models/categoryModel';
+import { Category, Product } from 'src/app/models/productModel';
 import { ActivatedRoute } from '@angular/router';
 import { CategoryService } from 'src/app/services/category.service';
 
@@ -16,7 +15,7 @@ import { CategoryService } from 'src/app/services/category.service';
 export class ProductsEditComponent {
   providers: Provider[] = [];
   products: Product[] = [];
-  categories: category[] = [];
+  categories: Category[] = [];
   showError: boolean = false;
   selectedCategory = null;
   showSuccess: boolean = false;

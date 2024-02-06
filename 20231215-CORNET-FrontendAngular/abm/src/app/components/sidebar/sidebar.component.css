@@ -1,0 +1,15 @@
+  .mat-icon-rotatable:hover mat-icon {
+    animation: rotate 2s infinite linear
+  }
+
+
+  
+  /* Define la animación */
+  @keyframes rotate {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }

@@ -16,7 +16,7 @@ public class FieldService {
     private FieldRepository fieldRepository;
 
     public List<Field> getAllFields() {
-        return fieldRepository.findAll();
+        return fieldRepository.findActiveFields();
     }
 
     public Optional<Field> getFieldById(Integer id) {
@@ -45,6 +45,7 @@ public class FieldService {
         if (optionalExistingField.isPresent()) {
             Field existingField = optionalExistingField.get();
             existingField.setName(field.getName());
+            existingField.setDeleted(field.getDeleted());
 
             fieldRepository.save(existingField);
 

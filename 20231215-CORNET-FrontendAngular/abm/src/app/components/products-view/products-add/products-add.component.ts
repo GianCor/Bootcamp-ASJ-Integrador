@@ -3,7 +3,7 @@ import { ProvidersService } from '../../../services/providers.service';
 import { ProductsService } from '../../../services/products.service';
 import { NgForm, NgModel } from '@angular/forms';
 import { Provider } from 'src/app/models/providerModel';
-import { Product } from 'src/app/models/productModel';
+import { Category, Product } from 'src/app/models/productModel';
 import { category } from 'src/app/models/categoryModel';
 import { CategoryService } from 'src/app/services/category.service';
 
@@ -15,7 +15,7 @@ import { CategoryService } from 'src/app/services/category.service';
 export class ProductsAddComponent implements OnInit {
   providers: Provider[] = [];
   products: Product[] = [];
-  categories: category[] = [];
+  categories: Category[] = [];
   showError: boolean = false;
   showSuccess: boolean = false;
   selectedCategory = null;
@@ -99,6 +99,11 @@ export class ProductsAddComponent implements OnInit {
     }
   }
 
+  newCategory: Category = {
+    id:0,
+    name:''
+  }
+
   getCategories() {
     this.categoryService.getCategories().subscribe(response =>{
       this.categories = response;
@@ -112,5 +117,35 @@ export class ProductsAddComponent implements OnInit {
 
   isProviderInvalid() {
     return this.product.supplier_id;
+  }
+
+  postCategory(category: Category) {
+    category.deleted = false;
+    this.categoryService.postCategory(category).subscribe(response => {
+      console.log(response)
+      this.categoryService.getCategories().subscribe((data)=>{
+        this.categories = data;
+        console.log(this.categories)
+        this.newCategory.name = '';
+      })
+    })
+  }
+  
+  switchToInputCategory(category: Category){
+    category.editing == true ? category.editing = false : category.editing = true;
+  }
+  
+  updateCategory(category: Category){
+    this.switchToInputCategory(category);
+    this.categoryService.updateCategory(category).subscribe((response) => console.log(response))
+  }
+  
+  deleteCategory(category: Category){
+    category.deleted = true;
+    this.categoryService.updateCategory(category).subscribe((response)=>console.log(response))
+  }
+  
+  editCategory(editedCategory: Category){
+    this.categoryService.updateCategory(editedCategory).subscribe()
   }
 }
