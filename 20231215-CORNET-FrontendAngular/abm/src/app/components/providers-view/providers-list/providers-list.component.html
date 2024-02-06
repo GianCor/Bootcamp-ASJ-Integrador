@@ -11,6 +11,7 @@
       [(ngModel)]="search"
     />
   </div>
+
   <div>
     <button
       class="btn btn-primary btn-sm mx-3"
@@ -22,7 +23,9 @@
     </button>
   </div>
 </div>
-
+<div *ngIf="providersData.length == 0" class="alert alert-primary m-5" role="alert">
+  Parece que no hay datos cargados
+</div>
 <div class="table-responsive" *ngIf="show">
   <table
     class="table table-hover table-striped table-bordered mb-5"

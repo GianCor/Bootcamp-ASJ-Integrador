@@ -45,7 +45,9 @@
     </button>
   </div>
 </div>
-
+<div *ngIf="ordersData.length == 0" class="alert alert-primary m-5" role="alert">
+  Parece que no hay datos cargados
+</div>
 <div *ngIf="show">
   <div class="table-responsive" *ngIf="!showCanceled && !showCompleted">
     <h5>Ordenes Pendientes</h5>
