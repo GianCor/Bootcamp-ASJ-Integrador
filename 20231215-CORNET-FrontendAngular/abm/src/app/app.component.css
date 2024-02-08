@@ -1,0 +1,7 @@
+.wrapper {
+    background-color: white; /* Fondo claro predeterminado */
+  }
+  
+  .dark-mode {
+    background-color: #121212; /* Fondo oscuro utilizando una variable CSS personalizable */
+  }

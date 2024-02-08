@@ -17,6 +17,8 @@ export class HomeComponent {
       case 2:  this.showProviders=false; this.showProducts = true; this.showOrders = false;
       break
       case 3:  this.showProviders=false; this.showProducts = false; this.showOrders = true;
+      break
+      default: this.showProviders=false; this.showProducts = false; this.showOrders = false;
     }
   }
 }

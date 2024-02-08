@@ -26,7 +26,7 @@
 <div *ngIf="providersData.length == 0" class="alert alert-primary m-5" role="alert">
   Parece que no hay datos cargados
 </div>
-<div class="table-responsive" *ngIf="show">
+<div class="table-responsive" *ngIf="providersData.length > 0">
   <table
     class="table table-hover table-striped table-bordered mb-5"
     id="proveedores-body"
@@ -36,8 +36,9 @@
         <th scope="col">Logo</th>
         <th scope="col">Código</th>
         <th scope="col">Razón Social</th>
-        <th scope="col">Sitio Web / Contacto</th>
         <th scope="col">Nombre del contacto</th>
+        <th scope="col">País</th>
+        <th scope="col">Provincia</th>
         <th scope="col">Acciones</th>
       </tr>
     </thead>
@@ -45,30 +46,36 @@
       <tr
         *ngFor="
           let provider of providersData
-            | search : search
+            | searchProviders : search
             | sortByPrice : sortByPrice
             | sortByPriceDesc : sortByPriceDesc
         "
       >
         <td scope="col">
-          <img
-            *ngIf="provider.providerUrl != ''"
+          <ng-container *ngIf="provider.url != null">
+            <img
             class="provider-logo"
             src="{{ provider.url }}"
             alt="Logo no cargado o encontrado"
           />
+          </ng-container>
         </td>
         <td scope="col" [ngClass]="{'deleted': provider.deleted}">{{ provider.supplierCode }}</td>
         <td scope="col" [ngClass]="{'deleted': provider.deleted}">{{ provider.name }}</td>
+        
         <td scope="col" [ngClass]="{'deleted': provider.deleted}">
-          {{ provider.contact.contactEmail }} <br />
-          {{ provider.contact.contactPhone }} <br />
-          {{ provider.website }}
+          <div class="d-flex align-items-center ">
+            <div>
+              {{ provider.contact.contactName }}
+              {{ provider.contact.contactLastName }}
+            </div>
+            <mat-icon class="mx-2" placement="top" ngbTooltip="{{ provider.contact.contactEmail }} {{ provider.contact.contactPhone}} {{ provider.website }}">
+              info
+            </mat-icon>
+          </div>
         </td>
-        <td scope="col" [ngClass]="{'deleted': provider.deleted}">
-          {{ provider.contact.contactName }}
-          {{ provider.contact.contactLastName }}
-        </td>
+        <td scope="col" [ngClass]="{'deleted': provider.deleted}">{{ provider.address.city.state.country.name }}</td>
+        <td scope="col" [ngClass]="{'deleted': provider.deleted}">{{ provider.address.city.state.name }}</td>
         <td scope="col">
           <div class="d-flex justify-content-between">
             <button
@@ -88,11 +95,14 @@
               >
                 <mat-icon>mode_edit_icon</mat-icon>
               </button>
-              <ng-container *ngIf="!provider.deleted; else confirmationModal">
+              <ng-container *ngIf="!provider.deleted">
                 <button
                   type="button"
                   class="btn btn-outline-danger"
-                  (click)="provider.deleted = true; updateProvider(provider)"
+                  data-bs-toggle="modal"
+                  data-bs-target="#confirmationModal"
+                  (click)="setSelectedProvider(provider)"
+                  
                 >
                   <mat-icon>delete</mat-icon>
                 </button>
@@ -101,22 +111,11 @@
                 <button
                   type="button"
                   class="btn btn-outline-success"
-                  (click)="provider.deleted = false; updateProvider(provider)"
+                  (click)="provider.deleted = false; logicallyRetrieveProvider(provider)"
                 >
                   <mat-icon>done</mat-icon>
                 </button>
               </ng-container>
-              <ng-template #confirmationModal>
-                <button
-                  type="button"
-                  class="btn btn-outline-danger"
-                  data-bs-toggle="modal"
-                  data-bs-target="#confirmationModal"
-                  (click)="setSelectedProvider(provider)"
-                >
-                  <mat-icon>delete_forever</mat-icon>
-                </button>
-              </ng-template>
             </div>
           </div>
         </td>
@@ -145,7 +144,7 @@
         ></button>
       </div>
       <div class="modal-body">
-        Esta operación es irreversible, ¿Está seguro que desea borrar el
+        Esta operación no es irreversible pero ten en cuenta que todos los productos asociados al proveedor se deshabilitarán ¿Está seguro que desea deshabilitar el
         proveedor {{ selectedProvider.name }} y todos sus productos?
       </div>
       <div class="modal-footer">
@@ -156,7 +155,7 @@
           type="button"
           class="btn btn-danger"
           data-bs-dismiss="modal"
-          (click)="deleteProvider(selectedProvider)"
+          (click)="selectedProvider.deleted = true; logicallyDeleteProvider(selectedProvider)"
         >
           Eliminar
         </button>

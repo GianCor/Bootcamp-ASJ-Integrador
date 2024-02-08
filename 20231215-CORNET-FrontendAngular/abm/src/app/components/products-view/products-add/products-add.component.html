@@ -302,7 +302,7 @@ class="col-auto my-3"
                           <button
                             type="button"
                             class="btn btn-outline-danger"
-                            (click)="switchToInputCategory(category)"
+                            (click)="switchToInputCategory(category); cancelEditingCategory(category)"
                           >
                             <mat-icon>cancel</mat-icon>
                           </button>

@@ -27,6 +27,11 @@ public class ProductController {
     public ResponseEntity<List<Product>> getProducts() {
         return ResponseEntity.ok(productService.getProducts());
     }
+    
+    @GetMapping("/active")
+    public ResponseEntity<List<Product>> getActiveProducts() {
+        return ResponseEntity.ok(productService.getActiveProducts());
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Optional<Product>> getProductById(@PathVariable Integer id) {

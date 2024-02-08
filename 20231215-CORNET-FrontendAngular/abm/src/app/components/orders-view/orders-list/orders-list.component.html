@@ -48,7 +48,7 @@
 <div *ngIf="ordersData.length == 0" class="alert alert-primary m-5" role="alert">
   Parece que no hay datos cargados
 </div>
-<div *ngIf="show">
+<div *ngIf="ordersData.length > 0">
   <div class="table-responsive" *ngIf="!showCanceled && !showCompleted">
     <h5>Ordenes Pendientes</h5>
     <table
@@ -71,7 +71,7 @@
           <ng-container
             *ngIf="order.pending == true && order.canceled == false"
           >
-            <td scope="col">{{ order.id }}</td>
+            <td scope="col">{{ order.numOrder }}</td>
             <td scope="col">{{ order.emDate | date : "short" }}</td>
             <td scope="col">{{ order.reDate | date : "short" }}</td>
             <td scope="col">{{ order.description }}</td>
@@ -266,7 +266,7 @@
               </thead>
               <tbody>
                 <tr>
-                  <td>{{ selectedOrder.id }}</td>
+                  <td>{{ selectedOrder.numOrder }}</td>
                   <td>{{ selectedOrder.provider }}</td>
                   <td>{{ message }}</td>
                 </tr>

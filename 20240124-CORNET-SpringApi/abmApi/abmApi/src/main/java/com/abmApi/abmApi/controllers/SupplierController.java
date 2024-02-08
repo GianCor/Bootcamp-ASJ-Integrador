@@ -41,6 +41,11 @@ public class SupplierController {
         return ResponseEntity.ok(supplierService.getSupplier());
     }
     
+    @GetMapping("/active")
+    public ResponseEntity<List<Supplier>> getActiveSupplier(){
+        return ResponseEntity.ok(supplierService.getActiveSuppliers());
+    }
+    
     @GetMapping("/{id}")
     public ResponseEntity<Optional<Supplier>> getSupplierById(@PathVariable Integer id){
     	return ResponseEntity.ok(supplierService.getSupplierById(id));

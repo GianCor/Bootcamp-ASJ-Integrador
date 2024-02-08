@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ProvidersService } from 'src/app/services/providers.service';
 import {Router} from '@angular/router'
+import { Provider } from 'src/app/models/providerModel';
 
 @Component({
   selector: 'app-providers-list',
@@ -44,8 +45,12 @@ export class ProvidersListComponent implements OnInit {
     this.router.navigate(['/providers/edit', provider.id]);
   }
 
-  updateProvider(provider:any){
-    this.providersService.updateProvider(provider).subscribe((response) => console.log(response))
+  logicallyDeleteProvider(provider:any){
+    this.providersService.logicallyDeleteProvider(provider).subscribe((response) => console.log(response))
+  }
+
+  logicallyRetrieveProvider(provider: Provider){ 
+    this.providersService.logicallyRetrieveProvider(provider).subscribe((response) => console.log(response))
   }
 
   setSelectedProvider(provider: any){

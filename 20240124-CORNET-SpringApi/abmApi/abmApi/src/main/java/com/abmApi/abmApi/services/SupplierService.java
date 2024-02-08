@@ -47,6 +47,10 @@ public class SupplierService {
 		return supplierRepository.findById(id);
 	}
 	
+	public List<Supplier> getActiveSuppliers(){
+		return supplierRepository.findActiveSuppliers();
+	}
+	
 	public Supplier postSupplier(Supplier supplierRequest) {
         Field field = createField(supplierRequest.getField());
         Address address = createAddress(supplierRequest.getAddress());
@@ -70,7 +74,7 @@ public class SupplierService {
 		supplier.setCreated_at(LocalDate.now());
         supplier.setWebsite(supplierRequest.getWebsite());
         supplier.setUrl(supplierRequest.getUrl());
-        supplier.setDeleted(supplierRequest.getDeleted());
+        supplier.setDeleted(false);
 		supplierRepository.save(supplier);
 		return supplier;
 	}

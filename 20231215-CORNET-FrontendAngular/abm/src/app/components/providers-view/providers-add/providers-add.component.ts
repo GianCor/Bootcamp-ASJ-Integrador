@@ -109,6 +109,13 @@ export class ProvidersAddComponent {
 
   switchToInputField(field: Field){
     field.editing == true ? field.editing = false : field.editing = true;
+    if(field.editing == true){
+      this.selectedField = field.name;
+    }
+  }
+
+  cancelEditingField(field: Field){
+    field.name = this.selectedField;
   }
 
   updateField(field: Field){
@@ -140,6 +147,13 @@ export class ProvidersAddComponent {
 
   switchToInputTax(tax: Tax){
     tax.editing == true ? tax.editing = false : tax.editing = true;
+    if(tax.editing == true){
+      this.selectedTax = tax.name;
+    }
+  }
+
+  cancelEditingTax(tax: Tax){
+    tax.name = this.selectedTax;
   }
 
   updateTax(tax: Tax){
@@ -155,7 +169,6 @@ export class ProvidersAddComponent {
   editTax(editedTax: Tax){
     this.taxService.updateTax(editedTax).subscribe()
   }
-
 
 
   ngOnInit() {

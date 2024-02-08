@@ -5,16 +5,20 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class SearchPipe implements PipeTransform {
 
-  transform(value: any[], args?: any): any {
-    if (args === '' || args === undefined) {
-      return value;
+  transform(items: any[], searchText: string): any[] {
+    if (!items || !searchText) {
+      return items;
     }
-
-    console.log(value)
-
-    return value.filter((item) =>
-        JSON.stringify(item.name).toLowerCase().includes(args)
-    );
+    searchText = searchText.toLowerCase();
+    return items.filter(item => {
+      if (!item || typeof item !== 'object') {
+        return false;
+      }
+      // Asegurarse de que las propiedades 'name' y 'supplierName' estén presentes en el objeto antes de acceder a ellas
+      return (
+        (item.name && typeof item.name === 'string' && item.name.toLowerCase().includes(searchText)) ||
+        (item.supplierName && typeof item.supplierName === 'string' && item.supplierName.toLowerCase().includes(searchText))
+      );
+    });
   }
-
 }

@@ -39,10 +39,12 @@ export class OrdersListComponent {
   setSelectedOrder(order:any){
     this.selectedOrder = order
     console.log(this.selectedOrder)
-    if(this.selectedOrder.pending){
+    if(this.selectedOrder.pending == true && this.selectedOrder.canceled == false){
       this.message = 'Pendiente'
-    } else {
+    } else if(this.selectedOrder.canceled) {
       this.message = 'Cancelada'
+    } else {
+      this.message = 'Completada'
     }
   }
 

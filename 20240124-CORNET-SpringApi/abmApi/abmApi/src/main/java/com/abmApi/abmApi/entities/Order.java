@@ -34,6 +34,7 @@ public class Order {
     private Date reDate;
 
     @Column
+    @NotNull(message = "[description] no puede ser nulo.")
     private String description;
 
     @Column

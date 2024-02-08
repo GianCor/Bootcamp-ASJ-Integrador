@@ -24,6 +24,10 @@ public class ProductService {
     public Optional<Product> getProductById(Integer id) {
         return productRepository.findById(id);
     }
+    
+	public List<Product> getActiveProducts(){
+		return productRepository.findActiveProducts();
+	}
 
     public Product postProduct(Product productRequest) {
 
@@ -89,4 +93,4 @@ public class ProductService {
 	        return newCategory;
 	    }
 	}
-}
+}	

@@ -605,17 +605,17 @@
           Teléfono del Contacto es obligatorio.
         </span>
         <span
-        *ngIf="contactPhone?.errors?.['pattern'] && contactPhone.touched"
-        class="font-weight-light form-text"
-      >
-        Teléfono debe ser numérico, no ingrese simbolos ni espacios.
-      </span>
-      <span
-        *ngIf="contactPhone?.errors?.['minlength'] && contactPhone.touched"
-        class="font-weight-light form-text"
-      >
-        Teléfono debe tener como minimo 10 caracteres
-      </span>
+          *ngIf="contactPhone?.errors?.['pattern'] && contactPhone.touched"
+          class="font-weight-light form-text"
+        >
+          Teléfono debe ser numérico, no ingrese simbolos ni espacios.
+        </span>
+        <span
+          *ngIf="contactPhone?.errors?.['minlength'] && contactPhone.touched"
+          class="font-weight-light form-text"
+        >
+          Teléfono debe tener como minimo 10 caracteres
+        </span>
       </div>
     </div>
 
@@ -717,7 +717,11 @@
       <div class="modal-body">
         <div class="row justify-content-center align-items-center g-2">
           <div class="col-12 col-md-8">
-            <div *ngIf="fieldData.length == 0" class="alert alert-primary m-5" role="alert">
+            <div
+              *ngIf="fieldData.length == 0"
+              class="alert alert-primary m-5"
+              role="alert"
+            >
               Parece que no hay datos cargados
             </div>
             <div
@@ -791,7 +795,9 @@
                             <button
                               type="button"
                               class="btn btn-outline-danger"
-                              (click)="switchToInputField(field)"
+                              (click)="
+                                switchToInputField(field); cancelEditingField(field)
+                              "
                             >
                               <mat-icon>cancel</mat-icon>
                             </button>
@@ -855,7 +861,11 @@
       <div class="modal-body">
         <div class="row justify-content-center align-items-center g-2">
           <div class="col-12 col-md-8">
-            <div *ngIf="IVAData.length == 0" class="alert alert-primary m-5" role="alert">
+            <div
+              *ngIf="IVAData.length == 0"
+              class="alert alert-primary m-5"
+              role="alert"
+            >
               Parece que no hay datos cargados
             </div>
             <div
@@ -927,7 +937,7 @@
                             <button
                               type="button"
                               class="btn btn-outline-danger"
-                              (click)="switchToInputTax(tax)"
+                              (click)="switchToInputTax(tax);cancelEditingTax(tax)"
                             >
                               <mat-icon>cancel</mat-icon>
                             </button>

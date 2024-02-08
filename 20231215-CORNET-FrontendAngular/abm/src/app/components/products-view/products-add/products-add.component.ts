@@ -19,6 +19,7 @@ export class ProductsAddComponent implements OnInit {
   showError: boolean = false;
   showSuccess: boolean = false;
   selectedCategory = null;
+  selectedCategoryToModify : any;
   selectedSupplierCode = null;
   message: string = '';
   product: Product = {
@@ -57,7 +58,8 @@ export class ProductsAddComponent implements OnInit {
   }
 
   getProviders() {
-    this.providersService.getData().subscribe(response=>{
+    this.providersService.getActiveProviders().subscribe(response=>{
+      console.log(response)
       this.providers = response;
     });
   }
@@ -133,7 +135,15 @@ export class ProductsAddComponent implements OnInit {
   
   switchToInputCategory(category: Category){
     category.editing == true ? category.editing = false : category.editing = true;
+    if(category.editing == true){
+      this.selectedCategoryToModify = category.name;
+    }
   }
+
+  cancelEditingCategory(category: Category){
+    category.name = this.selectedCategoryToModify;
+  }
+
   
   updateCategory(category: Category){
     this.switchToInputCategory(category);

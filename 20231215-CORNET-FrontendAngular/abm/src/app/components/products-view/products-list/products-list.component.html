@@ -1,35 +1,74 @@
 <div class="mb-5">
   <h3>Listado de productos</h3>
 </div>
-  <div class="d-flex mb-2 justify-content-between mb-3">
-    <div>
-      <input class="form-control form-control-sm" type="text" placeholder="Buscar" name="search" [(ngModel)]="search" />
-    </div>
-    <div class="btn-group btn-group-sm">
-      <button type="button" class="btn btn-outline-primary" (click)="sortByPriceAsc = !sortByPriceAsc; sortByPriceDesc = false;" [ngClass]="{'active': sortByPriceAsc}">Ordenar Por Mayor Precio</button>
-      <button type="button" class="btn btn-outline-primary" (click)="sortByPriceDesc = !sortByPriceDesc; sortByPriceAsc = false;" [ngClass]="{'active': sortByPriceDesc}">Ordenar Por Menor Precio</button>
-    </div>
-    <div>
-      <select name="selectedCategory" class="form-select" id="selectedCategory" [(ngModel)]="selectedCategory">
-        <option [ngValue]="''">Todas las categorías</option>
-        <option *ngFor="let category of categoryData" [ngValue]="category">{{category.name}}</option>
-      </select>
-    </div>
-    <button class="btn btn-primary btn-sm mx-3" [routerLink]="['/products/add']"><div class="d-flex justify-content-center align-items-center"><mat-icon>add</mat-icon> Agregar Producto</div></button>
+<div class="d-flex mb-2 justify-content-between mb-3">
+  <div>
+    <input
+      class="form-control form-control-sm"
+      type="text"
+      placeholder="Buscar"
+      name="search"
+      [(ngModel)]="search"
+    />
   </div>
-  <div *ngIf="productsData.length == 0" class="alert alert-primary m-5" role="alert">
-    Parece que no hay datos cargados
+  <div class="btn-group-sm">
+    <button
+      type="button"
+      class="btn btn-outline-primary"
+      (click)="sortByPriceAsc = !sortByPriceAsc; sortByPriceDesc = false"
+      [ngClass]="{ active: sortByPriceAsc }"
+    >
+      Ordenar Por Mayor Precio
+    </button>
+    <button
+      type="button"
+      class="btn btn-outline-primary"
+      (click)="sortByPriceDesc = !sortByPriceDesc; sortByPriceAsc = false"
+      [ngClass]="{ active: sortByPriceDesc }"
+    >
+      Ordenar Por Menor Precio
+    </button>
   </div>
-<div class="table-responsive" *ngIf="show" style="max-height: 500px;">
+  <div>
+    <select
+      name="selectedCategory"
+      class="form-select"
+      id="selectedCategory"
+      [(ngModel)]="selectedCategory"
+    >
+      <option [ngValue]="''">Todas las categorías</option>
+      <option *ngFor="let category of categoryData" [ngValue]="category">
+        {{ category.name }}
+      </option>
+    </select>
+  </div>
+  <button class="btn btn-primary btn-sm" [routerLink]="['/products/add']">
+    <div class="d-flex justify-content-center align-items-center">
+      <mat-icon>add</mat-icon> Agregar Producto
+    </div>
+  </button>
+</div>
+<div
+  *ngIf="productsData.length == 0"
+  class="alert alert-primary m-5"
+  role="alert"
+>
+  Parece que no hay datos cargados
+</div>
+<div
+  class="table-responsive"
+  *ngIf="productsData.length > 0"
+  style="max-height: 500px"
+>
   <table
     class="table table-hover table-striped table-bordered mb-5"
     id="productos-body"
   >
     <thead>
       <tr>
+        <th scope="col">Imagen</th>
         <th scope="col">Nombre Producto</th>
         <th scope="col">SKU</th>
-        <th scope="col">Código de Proveedor</th>
         <th scope="col">Razón social del Proveedor</th>
         <th scope="col">Categoria</th>
         <th scope="col">Descripcion</th>
@@ -38,24 +77,95 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let product of productsData | sortBy:'name' | search: search | sortByPrice : sortByPriceAsc | sortByPriceDesc : sortByPriceDesc | filterByCategory:selectedCategory">
-        <td scope="col">{{ product.name }}</td>
-        <td scope="col">{{ product.sku }}</td>
-        <td scope="col">{{ product.supplier_id }}</td>
-        <td scope="col">{{ product.supplierName }}</td>
-        <td scope="col">{{ product.category.name }}</td>
-        <td scope="col">{{ product.description }}</td>
-        <td scope="col">{{ product.price | currency }}</td>
+      <tr
+        *ngFor="
+          let product of productsData
+            | sortBy : 'name'
+            | search : search
+            | sortByPrice : sortByPriceAsc
+            | sortByPriceDesc : sortByPriceDesc
+            | filterByCategory : selectedCategory
+        "
+      >
+        <td scope="col">
+          <ng-container *ngIf="product.url != null">
+            <img
+              class="product-img"
+              src="{{ product.url }}"
+              alt="Logo no cargado o encontrado"
+          /></ng-container>
+        </td>
+        <td scope="col" [ngClass]="{ deleted: product.deleted }">
+          {{ product.name }}
+        </td>
+        <td scope="col" [ngClass]="{ deleted: product.deleted }">
+          {{ product.sku }}
+        </td>
+        <td scope="col" [ngClass]="{ deleted: product.deleted }">
+          {{ product.supplierName }}
+        </td>
+        <td scope="col" [ngClass]="{ deleted: product.deleted }">
+          {{ product.category.name }}
+        </td>
+        <td scope="col" [ngClass]="{ deleted: product.deleted }">
+          {{ product.description }}
+        </td>
+        <td scope="col" [ngClass]="{ deleted: product.deleted }">
+          {{ product.price | currency }}
+        </td>
         <td scope="col">
           <div class="d-flex justify-content-center align-items-center">
-            <div class="btn-group btn-group-sm ">
-              <button class="btn btn-outline-warning" (click)="editProduct(product)"><mat-icon>mode_edit_icon</mat-icon></button>
-              <button class="btn btn-outline-danger" (click)="deleteProduct(product)"><mat-icon>delete</mat-icon></button>
+            <div class="btn-group btn-group-sm">
+              <button
+                class="btn btn-outline-warning"
+                (click)="editProduct(product)"
+              >
+                <mat-icon>mode_edit_icon</mat-icon>
+              </button>
+              <button
+                *ngIf="product.deleted == false"
+                class="btn btn-outline-danger"
+                (click)="deleteProduct(product)"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+              <button
+                *ngIf="product.deleted == true"
+                class="btn btn-outline-success"
+                (click)="retrieveProduct(product, content)"
+              >
+                <mat-icon>done</mat-icon>
+              </button>
             </div>
           </div>
-
         </td>
       </tr>
     </tbody>
   </table>
 </div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Error</h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <div class="mb-3">
+      {{ message }}
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      class="btn btn-outline-success d-flex justify-content-center align-items-center"
+      (click)="modal.dismiss()"
+      [routerLink]="['/providers/list']"
+    >
+      <mat-icon class="mx-1">done</mat-icon>Habilitar el proveedor
+    </button>
+  </div>
+</ng-template>

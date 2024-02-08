@@ -67,12 +67,12 @@ orderProducts: OrderProduct = {
 
   
   ngOnInit() {
-    this.getProviders();
     this.getOrders();
+    this.getProviders();
   }
 
   getProviders() {
-    this.providersService.getData().subscribe(response =>{
+    this.providersService.getActiveProviders().subscribe(response =>{
       this.providers = response;
     });
   }
@@ -82,8 +82,9 @@ orderProducts: OrderProduct = {
       if (response.products !== undefined) {
         this.selectedProviderProducts = response.products;
         this.order.provider = response.name;
+        console.log(`ACA ESTARIA EL ERROR MIRAAAAAAAAAAAA: ${this.selectedProviderProducts} `)
       } else {
-        this.selectedProvider = []
+        this.selectedProviderProducts = []; 
         this.order.provider = response.name;
       }
     })
@@ -125,6 +126,7 @@ orderProducts: OrderProduct = {
           this.ordersService.postData(order).subscribe((response) => {
             console.log(response);
             this.resetProducts();
+            this.getProviders();
           });
           form.reset()
           this.showSuccess= true
@@ -151,7 +153,7 @@ orderProducts: OrderProduct = {
   addProductToOrders() {
     const productsOrder = this.getCheckedProducts();
     this.order.orderProducts = productsOrder.map((product) => ({
-      id: 0, // Assign the appropriate ID based on your logic
+      id: 0, 
       product: {
         id: product.id,
         sku: product.sku,
@@ -172,10 +174,13 @@ orderProducts: OrderProduct = {
     this.order.total = this.calculateTotal(productsOrder);
   }
 
+  showTotal:number = 0;
+
   getCheckedProducts() {
     const checkedProducts = this.selectedProviderProducts.filter(
       (product) => product.checked === true && product.amount !== undefined
     );
+    this.showTotal = this.calculateTotal(checkedProducts);
     return checkedProducts;
   }
 

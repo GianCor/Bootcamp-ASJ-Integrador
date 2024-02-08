@@ -13,7 +13,8 @@ export class SearchByIdPipe implements PipeTransform {
     console.log(value)
 
     return value.filter((item) =>
-        JSON.stringify(item.id).toLowerCase().includes(args)
+        JSON.stringify(item.numOrder).toLowerCase().includes(args.toLowerCase()) ||
+        (item.provider.toLowerCase().includes(args.toLowerCase()))
     );
   }
 }
