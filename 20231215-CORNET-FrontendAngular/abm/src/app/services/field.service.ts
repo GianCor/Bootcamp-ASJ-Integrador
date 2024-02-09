@@ -11,7 +11,7 @@ export class FieldService {
 
   url:string = "http://localhost:8080/field";
   getFields(): Observable<Field[]> {
-    return this.http.get<Field[]>(this.url);
+    return this.http.get<Field[]>(this.url + "/active");
   }
   postField(field :Field): Observable <Field>{
     return this.http.post<Field>(this.url, field);

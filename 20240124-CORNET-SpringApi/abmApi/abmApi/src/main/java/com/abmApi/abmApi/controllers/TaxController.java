@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import com.abmApi.abmApi.entities.Category;
 import com.abmApi.abmApi.entities.Tax;
 import com.abmApi.abmApi.services.TaxService;
 
@@ -24,6 +25,12 @@ public class TaxController {
     @GetMapping
     public ResponseEntity<List<Tax>> getTax() {
         return ResponseEntity.ok(taxService.getTax());
+    }
+    
+    @GetMapping("/active")
+    public ResponseEntity<List<Tax>> getActiveTaxes() {
+        List<Tax> activeTaxes = taxService.getActiveTax();
+        return ResponseEntity.ok(activeTaxes);
     }
 
     @GetMapping("/{id}")

@@ -10,24 +10,25 @@ import { CategoryService } from 'src/app/services/category.service';
 @Component({
   selector: 'app-products-edit',
   templateUrl: './products-edit.component.html',
-  styleUrls: ['./products-edit.component.css']
+  styleUrls: ['./products-edit.component.css'],
 })
 export class ProductsEditComponent {
   providers: Provider[] = [];
   products: Product[] = [];
   categories: Category[] = [];
   showError: boolean = false;
-  selectedCategory = null;
+  selectedCategoryId: any;
+  selectedSupplierCode: any;
   showSuccess: boolean = false;
   message: string = '';
   product: Product = {
-    id:0,
+    id: 0,
     sku: '',
     supplier_id: 0,
     supplierName: '',
     category: {
-      id:0,
-      name: ''
+      id: 0,
+      name: '',
     },
     name: '',
     description: '',
@@ -38,60 +39,68 @@ export class ProductsEditComponent {
     private providersService: ProvidersService,
     private productsService: ProductsService,
     private categoryService: CategoryService,
-    private route : ActivatedRoute
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
       const productId = params['id'];
-      this.productsService.getProductById(productId).subscribe(response => {
-        this.product = response
-        console.log(this.product)
+      this.productsService.getProductById(productId).subscribe((response) => {
+        this.product = response;
+        this.selectedCategoryId = this.product.category.id;
+        this.selectedSupplierCode = this.product.supplier_id;
+        this.providersService.getData().subscribe((response) => {
+          this.providers = response;
+        });
+        this.productsService.getData().subscribe((response) =>{
+          this.products = response;
+        })
+        this.getCategories();
+        console.log(this.product);
       });
     });
-    this.getProviders();
-    this.getProducts();
-    this.getCategories();
   }
 
-  getProviders() {
-    this.providersService.getData().subscribe(response=>{
-      this.providers = response;
-    });
+  onCategoryChange() {
+    this.product.category.id = this.selectedCategoryId;
   }
 
-
-  onCategoryChange(category: any){
-    this.product.category = category.value;
+  onProviderChange(){
+    console.log(this.providers)
+    const provider = this.providers.find(provider => provider.id == this.selectedSupplierCode)
+    console.log(provider)
+    if(provider){
+      this.product.supplierName = provider.name;
+      this.product.supplier_id = provider.id
+    }
   }
 
-
-  getProducts() {
-    this.productsService.getData().subscribe(response => this.products = response);
-  }
+  getProducts() {}
 
   pushProducts(form: NgForm) {
     if (form.valid) {
-        this.productsService.updateProduct(this.product).subscribe(response => console.log(response));
-        this.message = 'Proveedor agregado exitosamente';
-        this.showError = false;
-        this.showSuccess = true;
-        setTimeout(() => {
-          this.showSuccess = false;
-          this.message = '';
-        }, 3000);
-        form.reset();
-      } else {
-        this.message =
-          'Código de producto debe ser único, precio debe ser numérico';
+      this.productsService
+        .updateProduct(this.product)
+        .subscribe((response) => console.log(response));
+      this.message = 'Proveedor agregado exitosamente';
+      this.showError = false;
+      this.showSuccess = true;
+      setTimeout(() => {
         this.showSuccess = false;
-        this.showError = true;
-        setTimeout(() => {
-          this.showError = false;
-          this.message = '';
-        }, 3000);
-      }
+        this.message = '';
+      }, 3000);
+      form.reset();
+    } else {
+      this.message =
+        'Código de producto debe ser único, precio debe ser numérico';
+      this.showSuccess = false;
+      this.showError = true;
+      setTimeout(() => {
+        this.showError = false;
+        this.message = '';
+      }, 3000);
     }
+  }
 
   pushProductsToProvider(product: Product) {
     const index = this.providers.findIndex(
@@ -108,7 +117,9 @@ export class ProductsEditComponent {
   }
 
   getCategories() {
-    this.categoryService.getCategories().subscribe(response => this.categories = response);
+    this.categoryService
+      .getCategories()
+      .subscribe((response) => (this.categories = response));
   }
 
   isUniqueId(id: string): any {

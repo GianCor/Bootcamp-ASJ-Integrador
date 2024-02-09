@@ -1,26 +1,80 @@
 <div class="mb-5">
   <h3>Editar Producto</h3>
+  <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a [routerLink]="['/home']">Home</a></li>
+        <li class="breadcrumb-item"><a [routerLink]="['/products/list']">Listado productos</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Editar producto "{{product.name}}"</li>
+    </ol>
+</nav>
 </div>
 
 <form #productForm="ngForm" (ngSubmit)="pushProducts(productForm)" class="row g-3">
-      <input hidden type="text" id="provider" class="form-control" #provider="ngModel" [(ngModel)]="product.supplier_id" name="provider" required/>
-      <input hidden type="text" id="providerName" class="form-control" #providerName="ngModel" [(ngModel)]="product.supplierName" name="providerName" required/>
-      <input hidden type="text" id="codigo-producto" class="form-control" #id="ngModel" [(ngModel)]="product.id" name="id" required/>
+      <input hidden type="text" id="provider-code" class="form-control" #id="ngModel" [(ngModel)]="product.supplier_id" name="id" required/>
+      <input hidden type="text" id="product-id" class="form-control" #provider="ngModel" [(ngModel)]="product.id" name="id" required/>
+      <input hidden type="text" id="provider_name" class="form-control" #provider_name="ngModel" [(ngModel)]="product.supplierName" name="id" required/>
+<div class="row">
+  <div class="col-md-3">
+    <label for="provider-id" class="form-label">Código de Proveedor *</label>
+    <select
+      id="provider-id"
+      class="form-select"
+      #provider="ngModel"
+      [(ngModel)]="selectedSupplierCode"
+      (change)="onProviderChange()"
+      name="supplier_id"
+      required
+      [class.is-valid]="provider.valid && provider.touched"
+      [class.is-invalid]="provider.touched && product.supplier_id==0"
+    > 
+      <option *ngFor="let provider of providers" [ngValue]="provider.id">
+        {{ provider.name }}
+      </option>
+    </select>
+    <div class="position-absolute">
+      <span *ngIf="provider?.errors?.['required'] && provider.touched" class="font-weight-light form-text">
+        Código de Proveedor es obligatorio.
+      </span>
+      <span *ngIf="provider?.errors?.['minlength'] && provider.touched" class="font-weight-light form-text">
+        Necesita {{ provider?.errors?.['minlength']?.requiredLength }} caracteres como mínimo.
+      </span>
+    </div>
+  </div>
+  <div class="col-md-9 position-relative">
+    <label for="codigo-producto" class="form-label">S.K.U. *</label>
+    <input
+      type="text"
+      id="codigo-producto"
+      class="form-control"
+      #sku="ngModel"
+      [(ngModel)]="product.sku"
+      name="sku"
+      required
+      [class.is-valid]="sku.valid && sku.touched"
+      [class.is-invalid]="sku.touched && sku.invalid"
+    />
+    <div class="position-absolute">
+      <span *ngIf="sku?.errors?.['required'] && sku.touched" class="font-weight-light form-text">
+        S.K.U. es obligatorio.
+      </span>
+    </div>
+  </div>
+</div>
       <div class="row my-3">
         <div class="col-md-4">
-          <label for="categoria" class="form-label">Categoría*</label>
+          <label for="category" class="form-label">Categoría*</label>
           <select
             class="form-select"
             name="category"
             #category="ngModel"
-            [(ngModel)]="selectedCategory"
+            [(ngModel)]="selectedCategoryId"
             id="category"
             required
-            (change)="onCategoryChange(category)"
+            (change)="onCategoryChange()"
             [class.is-valid]="category.valid && category.touched"
             [class.is-invalid]="category.touched && category.invalid"
           >
-            <option *ngFor="let category of categories" [ngValue]="category">{{ category.name }}</option>
+            <option *ngFor="let category of categories" [ngValue]="category.id">{{ category.name }}</option>
           </select>
           <div class="position-absolute">
             <span *ngIf="category?.errors?.['required'] && category.touched" class="font-weight-light form-text">

@@ -1,0 +1,147 @@
+<div class="container mb-3 ">
+  <div class="row">
+    <!-- Card de Proveedores -->
+    <div class="col">
+      <div class="card text-start bg-gradient">
+        <div class="card-header bg-gradient">
+          <h4 class="card-title text-white">Proveedores</h4>
+        </div>
+        <div class="card-body">
+          <canvas id="doughnutChartSuppliers"></canvas>
+        </div>
+        <div class="card-footer bg-gradient d-flex justify-content-between">
+          <p class="form-text text-white">
+            Total:
+            <span class="badge bg-secondary">{{ stats.suppliers.total }}</span>
+          </p>
+          <p class="form-text text-white">
+            Activos:
+            <span class="badge bg-primary">{{ stats.suppliers.active }}</span>
+          </p>
+          <p class="form-text text-white">
+            Eliminados:
+            <span class="badge bg-danger">{{ stats.suppliers.deleted }}</span>
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- Card de Productos -->
+    <div class="col">
+      <div class="card text-start bg-gradient">
+        <div class="card-header bg-gradient">
+          <h4 class="card-title text-white">Productos</h4>
+        </div>
+        <div class="card-body">
+          <canvas id="doughnutChartProducts"></canvas>
+        </div>
+        <div class="card-footer bg-gradient d-flex justify-content-between">
+          <p class="form-text text-white">
+            Total:
+            <span class="badge bg-secondary">{{ stats.products.total }}</span>
+          </p>
+          <p class="form-text text-white">
+            Activos:
+            <span class="badge bg-primary">{{ stats.products.active }}</span>
+          </p>
+          <p class="form-text text-white">
+            Eliminados:
+            <span class="badge bg-danger">{{ stats.products.deleted }}</span>
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- Card de Ordenes -->
+    <div class="col">
+      <div class="card text-start bg-gradient">
+        <div class="card-header bg-gradient">
+          <h4 class="card-title text-white">Ordenes</h4>
+        </div>
+        <div class="card-body">
+          <canvas id="doughnutChartOrders"></canvas>
+        </div>
+        <div class="card-footer bg-gradient d-flex justify-content-between">
+              <p class="form-text text-white">
+                Total:
+                <span class="badge bg-secondary">{{ stats.orders.total }}</span>
+              </p>
+              <p class="form-text text-white">
+                Pendientes:
+                <span class="badge bg-warning">{{ stats.orders.pending }}</span>
+              </p>
+
+              <p class="form-text text-white">
+                Canceladas:
+                <span class="badge bg-danger">{{ stats.orders.canceled }}</span>
+              </p>
+              <p class="form-text text-white">
+                Completadas:
+                <span class="badge bg-primary">{{
+                  stats.orders.completed
+                }}</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+  <div class="row mt-3">
+    <!-- Card de Rubros -->
+    <div class="col">
+      <div class="card text-start bg-gradient">
+        <div class="card-header bg-gradient">
+          <h4 class="card-title text-white">Rubros</h4>
+        </div>
+        <div class="card-body">
+          <canvas id="doughnutChartFields"></canvas>
+        </div>
+        <div class="card-footer bg-gradient d-flex justify-content-between">
+          <p class="text-white">
+            Total:
+            <span class="badge bg-secondary">{{ stats.fields.total }}</span>
+          </p>
+          <p class="text-white">
+            Activos:
+            <span class="badge bg-primary">{{ stats.fields.active }}</span>
+          </p>
+          <p class="text-white">
+            Eliminados:
+            <span class="badge bg-danger">{{ stats.fields.deleted }}</span>
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- Card de Impuestos -->
+    <div class="col">
+        <div class="card text-start bg-gradient">
+            <div class="card-header bg-gradient">
+                <h4 class="card-title text-white">Impuestos</h4>
+            </div>
+            <div class="card-body">
+                <canvas id="doughnutChartTaxes"></canvas>
+            </div>
+            <div class="card-footer bg-gradient d-flex justify-content-between">
+                <p class="text-white">Total: <span class="badge bg-secondary">{{ stats.taxes.total }}</span></p>
+                <p class="text-white">Activos: <span class="badge bg-primary">{{ stats.taxes.active }}</span></p>
+                <p class="text-white">Eliminados: <span class="badge bg-danger">{{ stats.taxes.deleted }}</span></p>
+            </div>
+        </div>
+    </div>
+    <!-- Card de Categorías -->
+    <div class="col">
+        <div class="card text-start bg-gradient">
+            <div class="card-header bg-gradient">
+                <h4 class="card-title text-white">Categorías</h4>
+            </div>
+            <div class="card-body">
+                <canvas id="doughnutChartCategories"></canvas>
+            </div>
+            <div class="card-footer bg-gradient d-flex justify-content-between">
+                <p class="text-white">Total: <span class="badge bg-secondary">{{ stats.categories.total }}</span></p>
+                <p class="text-white">Activas: <span class="badge bg-primary">{{ stats.categories.active }}</span></p>
+                <p class="text-white">Eliminadas: <span class="badge bg-danger">{{ stats.categories.deleted }}</span></p>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

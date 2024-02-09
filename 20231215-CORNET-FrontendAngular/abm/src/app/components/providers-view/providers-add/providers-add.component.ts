@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { condicionFrenteAlIva } from 'src/app/models/condicionFrenteIvaModel';
 import { Field, Provider, Tax } from 'src/app/models/providerModel';
@@ -86,6 +86,7 @@ export class ProvidersAddComponent {
   cities: any[] = [];
   selectedFieldToEdit!: Field;
   switchedField = false;
+  @Input() showTitle: boolean = true;
 
 
   constructor(
@@ -96,6 +97,9 @@ export class ProvidersAddComponent {
   ) {}
 
   postField(field: Field) {
+    if(field.name == ''){
+      return;
+    }
     field.deleted = false;
     this.fieldService.postField(field).subscribe(response => {
       console.log(response)
@@ -134,6 +138,9 @@ export class ProvidersAddComponent {
 
 
   postTax(tax: Tax) {
+    if(tax.name == ''){
+      return;
+    }
     tax.deleted = false;
     this.taxService.postTax(tax).subscribe(response => {
       console.log(response)

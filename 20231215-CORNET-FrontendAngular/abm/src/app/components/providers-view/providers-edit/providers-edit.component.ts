@@ -18,10 +18,10 @@ export class ProvidersEditComponent {
   IVAData: condicionFrenteAlIva[] = [];
   showError: boolean = false;
   showSuccess: boolean = false;
-
-  selectedCountry: any; 
-  selectedState: any;
-  selectedCity: any;
+  selectedCuit: any;
+  selectedCountryId: any; 
+  selectedStateId: any;
+  selectedCityId: any;
   selectedField: any;
   selectedTax: any;
   fieldData: any[] = [];
@@ -77,40 +77,6 @@ export class ProvidersEditComponent {
   states: any[] = [];
   cities: any[] = [];
 
-  constructor(
-    private providersService: ProvidersService,
-    private georef: GeorefService,
-    private taxService: TaxService,
-    private fieldService: FieldService,
-    private route: ActivatedRoute
-  ) {}
-
-  ngOnInit() {
-    this.getProvidersData();
-    this.route.params.subscribe((params) => {
-      const providerId = params['id'];
-      this.providersService.getProviderById(providerId).subscribe(response=>{
-        this.provider = response;
-        this.taxService.getTaxes().subscribe((data) =>{
-          this.IVAData = data;
-          this.selectedTax = this.provider.tax;
-          console.log(this.IVAData)
-        });
-        this.fieldService.getFields().subscribe((data)=>{
-          this.fieldData = data;
-          this.selectedField = this.provider.field;
-          console.log(this.fieldData)
-        })
-        this.georef.getCountries().subscribe((data) => {
-          this.countries = data;
-          this.selectedCountry = this.provider.address.city.state.country;
-          this.selectedState = this.provider.address.city.state;
-          this.selectedCity = this.provider.address.city;
-        });
-      });
-    });
-  }
-
   geoLocationModel = {
     id:0,
     name:'',
@@ -123,62 +89,109 @@ export class ProvidersEditComponent {
       }
     }
   }
+  constructor(
+    private providersService: ProvidersService,
+    private georef: GeorefService,
+    private taxService: TaxService,
+    private fieldService: FieldService,
+    private route: ActivatedRoute
+  ) {}
 
-changeSelectedCountry() {
-  this.states = this.selectedCountry.states;
-}
-
-changeSelectedState(){
-  this.cities = this.selectedState.cities;
-}
-
-changeSelectedCity(){
-  if(!this.showOtherCityInput){
-    this.geoLocationModel = {
-      id: this.selectedCity.id,
-      name: this.selectedCity.name,
-      state:{
-        id: this.selectedState.id,
-        name: this.selectedState.name,
-        country:{
-          id:this.selectedCountry.id,
-          name:this.selectedCountry.name
-        }
-      }
-    }
-  }else{
-    this.geoLocationModel = {
-      id: 0,
-      name: this.selectedCity,
-      state:{
-        id: this.selectedState.id,
-        name: this.selectedState.name,
-        country:{
-          id:this.selectedCountry.id,
-          name:this.selectedCountry.name
-        }
-      }
-    }
+  ngOnInit() {
+    this.getProvidersData();
+    this.route.params.subscribe((params) => {
+      const providerId = params['id'];
+      this.providersService.getProviderById(providerId).subscribe(response => {
+        this.provider = response;
+        this.selectedCuit = this.provider.cuit;
+        this.fieldService.getFields().subscribe((data)=>{
+          this.fieldData = data;
+          this.selectedField = this.provider.field.id;
+          console.log(this.fieldData)
+        })
+        this.taxService.getTaxes().subscribe((data) =>{
+          this.IVAData = data;
+          this.selectedTax = this.provider.tax.id;
+          console.log("Data" , this.IVAData)
+          console.log("selectedTax" , this.selectedTax)
+          console.log("tax" , this.provider.tax)
+        });
+        this.georef.getCountries().subscribe((data) => {
+          this.countries = data;
+          this.selectedCountryId = this.provider.address.city.state.country.id;
+          this.states = this.buscarEstadosPorPais(this.selectedCountryId);
+          this.selectedStateId = this.provider.address.city.state.id;
+          this.cities = this.buscarCiudadesPorEstado(this.selectedStateId);
+          this.selectedCityId = this.provider.address.city.id;
+        });
+      });
+    });
   }
-  console.log(this.geoLocationModel)
-  this.provider.address.city = this.geoLocationModel;
-  console.log(this.provider)
-}
+  
+  changeSelectedCountry() {
+    this.states = this.buscarEstadosPorPais(this.selectedCountryId);
+  }
+  
+  changeSelectedState() {
+    this.cities = this.buscarCiudadesPorEstado(this.selectedStateId);
+  }
+  
+  changeSelectedCity() {
+    if (!this.showOtherCityInput) {
+      this.geoLocationModel.id = this.selectedCityId;
+      this.geoLocationModel.name = this.buscarNombreCiudadPorId(this.selectedCityId);
+    } else {
+      this.geoLocationModel.id = 0;
+      this.geoLocationModel.name = this.selectedCityId;
+    }
+    this.geoLocationModel.state.id = this.selectedStateId;
+    this.geoLocationModel.state.name = this.buscarNombreEstadoPorId(this.selectedStateId);
+    this.geoLocationModel.state.country.id = this.selectedCountryId;
+    this.geoLocationModel.state.country.name = this.buscarNombrePaisPorId(this.selectedCountryId);
+  
+    this.provider.address.city = this.geoLocationModel;
+  }
+  
+  buscarEstadosPorPais(countryId: number): any[] {
+    const country = this.countries.find(country => country.id === countryId);
+    return country ? country.states : [];
+  }
+  
+  buscarCiudadesPorEstado(stateId: number): any[] {
+    const state = this.states.find(state => state.id === stateId);
+    return state ? state.cities : [];
+  }
+  
+  buscarNombrePaisPorId(countryId: number): string {
+    const country = this.countries.find(country => country.id === countryId);
+    return country ? country.name : '';
+  }
+  
+  buscarNombreEstadoPorId(stateId: number): string {
+    const state = this.states.find(state => state.id === stateId);
+    return state ? state.name : '';
+  }
+  
+  buscarNombreCiudadPorId(cityId: number): string {
+    const city = this.cities.find(city => city.id === cityId);
+    return city ? city.name : '';
+  }
+  
 
 showOtherCityInput: boolean = false;
 
 toggleOtherCityInput() {
   if (this.showOtherCityInput) {
-      this.selectedCity = null;
+      this.selectedCityId = null;
   }
 }
 
 changeSelectedField(){
-  this.provider.field = this.selectedField;
+  this.provider.field.id = this.selectedField;
 }
 
 changeSelectedTax(){
-  this.provider.tax = this.selectedTax;
+  this.provider.tax.id = this.selectedTax;
 }
 
   getProvidersData() {
@@ -191,7 +204,7 @@ changeSelectedTax(){
   editProvider(form: NgForm) {
     if (form.valid) {
       if (
-        this.isValidEmail(this.provider.email)
+        this.isValidEmail(this.provider.email) && this.isUniqueAndNumericCUIT(this.provider.cuit)
       ) {
         this.providersService.updateProvider(this.provider).subscribe(response=>{
           console.log(response);
@@ -207,12 +220,12 @@ changeSelectedTax(){
         this.getProvidersData();
       } else {
         this.message =
-          'El email debe ser válido';
+          'Error: Puede que estes ingresando un cuit repetido, un email incorrecto o un código de proveedor repetido';
         this.showError = true;
         setTimeout(() => {
           this.showError = false;
           this.message = '';
-        }, 3000);
+        }, 5000);
       }
     } else {
       console.log('Formulario inválido');
@@ -233,10 +246,13 @@ changeSelectedTax(){
     if (!isNumeric) {
       return false;
     }
-    const foundCUIT = this.providersData.some(
-      (provider) => provider.cuit === cuit
-    );
-    return !foundCUIT;
+    if(this.provider.cuit != this.selectedCuit){
+      const foundCUIT = this.providersData.some(
+        (provider) => provider.cuit === cuit
+      );
+      return !foundCUIT;
+    }
+    return true;
   }
   
 }

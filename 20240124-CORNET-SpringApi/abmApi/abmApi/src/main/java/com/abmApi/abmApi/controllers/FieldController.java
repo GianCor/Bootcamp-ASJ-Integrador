@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import com.abmApi.abmApi.entities.Category;
 import com.abmApi.abmApi.entities.Field;
 import com.abmApi.abmApi.services.FieldService;
 
@@ -28,6 +30,12 @@ public class FieldController {
     @GetMapping
     public ResponseEntity<List<Field>> getAllFields() {
         return ResponseEntity.ok(fieldService.getAllFields());
+    }
+    
+    @GetMapping("/active")
+    public ResponseEntity<List<Field>> getActiveFields() {
+        List<Field> activeFields = fieldService.getActiveFields();
+        return ResponseEntity.ok(activeFields);
     }
 
     @GetMapping("/{id}")

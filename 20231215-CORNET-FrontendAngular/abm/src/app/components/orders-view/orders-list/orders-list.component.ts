@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, Input } from '@angular/core';
 import { OrdersService } from '../../../services/orders.service';
 import { Order } from 'src/app/models/orderModel';
 
@@ -12,6 +12,8 @@ export class OrdersListComponent {
   message: string = ''
   showMessage: string = 'canceladas'
   show:boolean = true
+  @Input() showTitle: boolean = true;
+
 
   search = ''
   showCanceled: boolean = false

@@ -27,6 +27,7 @@ import { SearchByIdPipe } from './pipes/search-by-id.pipe';
 import { ConfigurationComponent } from './components/configuration/configuration.component';
 import { FilterByCategoryPipe } from './pipes/filter-by-category.pipe';
 import { SearchProvidersPipe } from './pipes/search-providers.pipe';
+import { StatsComponent } from './components/stats/stats.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { SearchProvidersPipe } from './pipes/search-providers.pipe';
     ConfigurationComponent,
     FilterByCategoryPipe,
     SearchProvidersPipe,
+    StatsComponent,
   ],
   imports: [
     BrowserModule,

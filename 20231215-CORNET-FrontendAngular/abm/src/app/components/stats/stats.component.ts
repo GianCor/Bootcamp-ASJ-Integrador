@@ -1,19 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { Chart, ChartType } from 'chart.js/auto';
+import { Component } from '@angular/core';
+import { Chart } from 'chart.js';
 import { Stats } from 'src/app/models/statsModel';
 import { BridgeService } from 'src/app/services/bridge.service';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  selector: 'app-stats',
+  templateUrl: './stats.component.html',
+  styleUrls: ['./stats.component.css']
 })
-export class HomeComponent implements OnInit{
+export class StatsComponent {
+
   constructor(private bridgeService: BridgeService){}
-  showProviders:boolean=false
-  showProducts:boolean=false
-  showOrders:boolean=false
-  selectedComponent: number = 4;
 
   stats: Stats = {
     categories: {
@@ -115,15 +112,5 @@ initDoughnutChartOrders(canvasId: string, pending: number, canceled: number, com
   });
 }
 
-  showComponents(show:number){
-    switch(show){
-      case 1: this.showProviders=true; this.showProducts = false; this.showOrders = false; this.selectedComponent =1;
-      break
-      case 2:  this.showProviders=false; this.showProducts = true; this.showOrders = false; this.selectedComponent =2;
-      break
-      case 3:  this.showProviders=false; this.showProducts = false; this.showOrders = true; this.selectedComponent =3
-      break
-      default: this.showProviders=false; this.showProducts = false; this.showOrders = false; this.selectedComponent = 4
-    }
-  }
+
 }

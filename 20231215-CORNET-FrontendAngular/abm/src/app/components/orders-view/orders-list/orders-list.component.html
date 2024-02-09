@@ -1,5 +1,11 @@
-<div class="mb-5">
-  <h3>Listado de Proveedores</h3>
+<div class="mb-5" *ngIf="showTitle">
+  <h3>Listado de Ordenes</h3>
+  <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a [routerLink]="['/home']">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Listado ordenes</li>
+    </ol>
+</nav>
 </div>
 <div class="d-flex mb-2 justify-content-between mb-3">
   <div>
@@ -49,7 +55,7 @@
   Parece que no hay datos cargados
 </div>
 <div *ngIf="ordersData.length > 0">
-  <div class="table-responsive" *ngIf="!showCanceled && !showCompleted">
+  <div class="table-responsive" *ngIf="!showCanceled && !showCompleted" style="max-height: 500px">
     <h5>Ordenes Pendientes</h5>
     <table
       class="table table-hover table-striped table-bordered d mb-5"
@@ -114,7 +120,7 @@
       </tbody>
     </table>
   </div>
-  <div class="table-responsive" *ngIf="showCanceled && !showCompleted">
+  <div class="table-responsive" *ngIf="showCanceled && !showCompleted" style="max-height: 500px">
     <h5>Ordenes Canceladas</h5>
     <table
       class="table table-hover table-striped table-bordered d mb-5"
@@ -134,7 +140,7 @@
       <tbody>
         <tr *ngFor="let order of ordersData | searchById : search">
           <ng-container *ngIf="order.canceled == true">
-            <td scope="col">{{ order.id }}</td>
+            <td scope="col">{{ order.numOrder }}</td>
             <td scope="col">{{ order.emDate | date : "short" }}</td>
             <td scope="col">{{ order.reDate | date : "short" }}</td>
             <td scope="col">{{ order.description }}</td>
@@ -171,7 +177,7 @@
     </table>
   </div>
 
-  <div class="table-responsive" *ngIf="showCompleted">
+  <div class="table-responsive" *ngIf="showCompleted" style="max-height: 500px">
     <h5>Ordenes Completadas</h5>
     <table
       class="table table-hover table-striped table-bordered d mb-5"
@@ -191,7 +197,7 @@
       <tbody>
         <tr *ngFor="let order of ordersData | searchById : search">
           <ng-container *ngIf="order.completed == true">
-            <td scope="col">{{ order.id }}</td>
+            <td scope="col">{{ order.numOrder }}</td>
             <td scope="col">{{ order.emDate | date : "short" }}</td>
             <td scope="col">{{ order.reDate | date : "short" }}</td>
             <td scope="col">{{ order.description }}</td>

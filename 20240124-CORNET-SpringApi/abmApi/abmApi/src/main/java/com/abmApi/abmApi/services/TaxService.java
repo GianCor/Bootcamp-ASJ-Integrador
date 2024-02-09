@@ -16,6 +16,10 @@ public class TaxService {
     TaxRepository taxRepository;
 
     public List<Tax> getTax() {
+        return taxRepository.findAll();
+    }
+    
+    public List<Tax> getActiveTax() {
         return taxRepository.findActiveTaxes();
     }
 

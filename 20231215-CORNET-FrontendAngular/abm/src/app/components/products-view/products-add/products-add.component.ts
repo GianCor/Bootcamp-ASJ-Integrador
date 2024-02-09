@@ -122,6 +122,9 @@ export class ProductsAddComponent implements OnInit {
   }
 
   postCategory(category: Category) {
+    if(category.name.trim() == ''){
+      return
+    }
     category.deleted = false;
     this.categoryService.postCategory(category).subscribe(response => {
       console.log(response)

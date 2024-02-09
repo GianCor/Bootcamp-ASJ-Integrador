@@ -9,6 +9,7 @@ import { ProvidersListComponent } from './components/providers-view/providers-li
 import { HomeComponent } from './components/home/home.component';
 import { ProvidersEditComponent } from './components/providers-view/providers-edit/providers-edit.component';
 import { ProductsEditComponent } from './components/products-view/products-edit/products-edit.component';
+import { StatsComponent } from './components/stats/stats.component';
 
 const routes: Routes = [
   {
@@ -36,6 +37,9 @@ const routes: Routes = [
       { path: 'add', component: OrdersAddComponent },
       { path: '**', component: HomeComponent },
     ],
+  },
+  {
+    path: 'stats', component: StatsComponent
   },
   { path: '**', component: HomeComponent },
   { path: 'home', component: HomeComponent },

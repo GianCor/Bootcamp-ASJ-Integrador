@@ -1,88 +1,54 @@
 <div class="row mb-5 mt-3">
     <div class="col-3 d-flex justify-content-center align-items-center">
         <div class="btn-group btn-group-sm">
-            <button class="btn btn-outline-primary" type="button" (click)="showComponents(4)"><mat-icon>home</mat-icon></button>
+            <button class="btn"
+                    [ngClass]="{'btn-outline-primary': selectedComponent !== 4, 'btn-primary': selectedComponent === 4 }"
+                    type="button" 
+                    (click)="showComponents(4)">
+                <mat-icon>home</mat-icon>
+            </button>
         </div>
     </div>
     <div class="col-3 d-flex justify-content-center align-items-center">
         <div class="btn-group btn-group-sm">
-            <button class="btn btn-outline-primary" type="button" (click)="showComponents(1)">Mostrar Lista Proveedores</button>
+            <button class="btn"
+                    [ngClass]="{'btn-outline-primary': selectedComponent !== 1, 'btn-primary': selectedComponent === 1 }"
+                    type="button" 
+                    (click)="showComponents(1)">
+                Mostrar Lista Proveedores
+            </button>
         </div>
     </div>
     <div class="col-3 d-flex justify-content-center align-items-center">
         <div class="btn-group btn-group-sm">
-            <button class="btn btn-outline-primary" type="button" (click)="showComponents(2)">Mostrar Lista Productos</button>
+            <button class="btn"
+                    [ngClass]="{'btn-outline-primary': selectedComponent !== 2, 'btn-primary': selectedComponent === 2 }"
+                    type="button" 
+                    (click)="showComponents(2)">
+                Mostrar Lista Productos
+            </button>
         </div>
     </div>
     <div class="col-3 d-flex justify-content-center align-items-center">
         <div class="btn-group btn-group-sm">
-            <button class="btn btn-outline-primary" type="button" (click)="showComponents(3)">Mostrar Lista Ordenes</button>
+            <button class="btn"
+                    [ngClass]="{'btn-outline-primary': selectedComponent !== 3, 'btn-primary': selectedComponent === 3 }"
+                    type="button" 
+                    (click)="showComponents(3)">
+                Mostrar Lista Ordenes
+            </button>
         </div>
     </div>
 </div>
-
 <div *ngIf="showProviders">
-    <app-providers-list></app-providers-list>
+    <app-providers-list [showTitle]="false"></app-providers-list>
 </div>
 <div *ngIf="showProducts">
-    <app-products-list></app-products-list>
+    <app-products-list [showTitle]="false"></app-products-list>
 </div>
 <div *ngIf="showOrders">
-    <app-orders-list></app-orders-list>
+    <app-orders-list [showTitle]="false"></app-orders-list>
 </div>
 <div *ngIf="!showOrders && !showProducts && !showProviders">
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <div class="card text-start">
-                    <div class="card-body bg-gradient">
-                        <h4 class="card-title">Proveedores</h4>
-                        <p class="card-text">Body</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card text-start">
-                    <div class="card-body bg-gradient">
-                        <h4 class="card-title">Productos</h4>
-                        <p class="card-text">Body</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card text-start">
-                    <div class="card-body bg-gradient">
-                        <h4 class="card-title">Ordenes</h4>
-                        <p class="card-text">Body</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row mt-3">
-            <div class="col">
-                <div class="card text-start">
-                    <div class="card-body bg-gradient">
-                        <h4 class="card-title">Rubros</h4>
-                        <p class="card-text">Body</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card text-start">
-                    <div class="card-body bg-gradient">
-                        <h4 class="card-title">Impuestos</h4>
-                        <p class="card-text">Body</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card text-start">
-                    <div class="card-body bg-gradient">
-                        <h4 class="card-title">Categorías</h4>
-                        <p class="card-text">Body</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <app-stats></app-stats>
 </div>

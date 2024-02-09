@@ -1,5 +1,11 @@
 <div class="mb-5">
   <h3>Agregar Productos</h3>
+  <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a [routerLink]="['/home']">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Agregar productos</li>
+    </ol>
+</nav>
 </div>
 <div
 *ngIf="sku.errors?.['required'] || name.errors?.['required'] || price.errors?.['required'] || provider.errors?.['required']"
@@ -321,13 +327,13 @@ class="col-auto my-3"
             <div
               class="d-flex justify-content-center align-items-center mt-2"
             >
-              <input
-                type="text"
-                id="tax-input"
-                [(ngModel)]="newCategory.name"
-                name="tax-input"
-                class="form-control"
-              />
+            <input
+            type="text"
+            class="form-control"
+            name="category"
+            #newCategoryModel="ngModel"
+            [(ngModel)]="newCategory.name"
+          />
               <button
                 (click)="postCategory(newCategory)"
                 class="btn btn-outline-primary mx-1"

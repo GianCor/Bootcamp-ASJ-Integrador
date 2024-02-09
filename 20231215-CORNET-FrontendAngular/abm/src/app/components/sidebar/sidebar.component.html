@@ -37,6 +37,7 @@
                   class="nav-link d-flex align-items-center"
                   id="home"
                   aria-current="page"
+                  [ngClass]="laRuta('providers/list')?'link-primary': 'active'" 
                 >
                   <mat-icon>visibility</mat-icon>Ver
                 </a>
@@ -47,6 +48,7 @@
                   class="nav-link d-flex align-items-center"
                   id="home"
                   aria-current="page"
+                  [ngClass]="laRuta('providers/add')?'link-primary': 'active'" 
                 >
                   <mat-icon>add</mat-icon> Agregar
                 </a>
@@ -81,16 +83,19 @@
                   class="nav-link d-flex align-items-center"
                   id="home"
                   aria-current="page"
+                  aria-expanded="true"
+                  [ngClass]="laRuta('products/list')?'link-primary': 'active'"
                 >
                   <mat-icon>visibility</mat-icon>Ver
                 </a>
               </li>
-              <li class="list-group-item">
+              <li class="list-group-item show">
                 <a
                   routerLink="products/add"
                   class="nav-link d-flex align-items-center"
                   id="home"
                   aria-current="page"
+                  [ngClass]="laRuta('products/add')?'link-primary': 'active'" 
                 >
                   <mat-icon>add</mat-icon> Agregar
                 </a>
@@ -102,7 +107,7 @@
       <div class="accordion-item">
         <h2 class="accordion-header">
           <button
-            class="accordion-button collapsed"
+            class="accordion-button show"
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#flush-collapseThree"
@@ -125,6 +130,7 @@
                   class="nav-link d-flex align-items-center"
                   id="home"
                   aria-current="page"
+                  [ngClass]="laRuta('orders/list')?'link-primary': 'active'"
                 >
                   <mat-icon>visibility</mat-icon>Ver
                 </a>
@@ -135,6 +141,7 @@
                   class="nav-link d-flex align-items-center"
                   id="home"
                   aria-current="page"
+                  [ngClass]="laRuta('orders/add')?'link-primary': 'active'"
                 >
                   <mat-icon>add</mat-icon> Agregar
                 </a>

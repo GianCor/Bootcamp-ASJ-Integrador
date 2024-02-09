@@ -22,6 +22,10 @@ public class CategoryService {
     public Optional<Category> getCategoryById(Integer id) {
         return categoryRepository.findById(id);
     }
+    
+    public List<Category> getActiveCategories() {
+        return categoryRepository.findActiveCategories();
+    }
 
     public Category postCategory(Category category) {
         return categoryRepository.save(category);

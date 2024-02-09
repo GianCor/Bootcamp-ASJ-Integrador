@@ -1,4 +1,4 @@
-import { Component, OnInit, Provider, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, Provider, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Category, Product } from 'src/app/models/productModel';
 import { CategoryService } from 'src/app/services/category.service';
@@ -24,6 +24,8 @@ export class ProductsListComponent implements OnInit {
   show:boolean = true
   sortByPriceAsc: boolean = false;
   sortByPriceDesc: boolean = false;
+  @Input() showTitle: boolean = true;
+
 
   constructor(private productsService: ProductsService, private router: Router, private categoryService: CategoryService, private providerService: ProvidersService) { }
 
@@ -40,6 +42,24 @@ export class ProductsListComponent implements OnInit {
       this.categoryService.getCategories().subscribe(response => this.categoryData = response)
       console.log(this.productsData)
     });
+  }
+
+  selectedProduct:Product = {
+    id:0,
+    sku: '',
+    supplier_id: 0,
+    supplierName: '',
+    category: {
+      id:0,
+      name:''
+    },
+    name: '',
+    description: '',
+    price: '',
+  };
+
+  setSelectedProduct(product: Product){
+    this.selectedProduct = product;
   }
 
   deleteProduct(product:any){

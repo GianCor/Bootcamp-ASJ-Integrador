@@ -1,5 +1,11 @@
 <div class="mb-5">
   <h3>Agregar Ordenes de Compra</h3>
+  <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a [routerLink]="['/home']">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Agregar ordenes</li>
+    </ol>
+</nav>
 </div>
 
 <div
@@ -27,9 +33,24 @@ class="col-auto my-3"
         #numOrder="ngModel"
         name="numOrder"
         required
+        pattern="[0-9]+"
         [class.is-valid]="numOrder.valid && numOrder.touched"
         [class.is-invalid]="numOrder.touched && numOrder.invalid"
       />
+      <div class="position-absolute">
+        <span
+          *ngIf="numOrder?.errors?.['required'] && numOrder.touched"
+          class="font-weight-light form-text"
+        >
+          Número de orden es obligatorio.
+        </span>
+        <span
+          *ngIf="numOrder?.errors?.['pattern'] && numOrder.touched"
+          class="font-weight-light form-text"
+        >
+          Número de orden debe ser numérico.
+        </span>
+      </div>
     </div>
     <div class="col-md-6">
       <label for="provider-id" class="form-label">Código de Proveedor *</label>
@@ -48,6 +69,14 @@ class="col-auto my-3"
           {{ provider.name }}
         </option>
       </select>
+      <div class="position-absolute">
+        <span
+          *ngIf="provider?.errors?.['required'] && provider.touched"
+          class="font-weight-light form-text"
+        >
+          Código de proveedor es obligatorio.
+        </span>
+      </div>
     </div>
     <div class="col-md-6 my-3">
       <label for="fecha-emision" class="form-label">Fecha de Emisión *</label>
@@ -62,6 +91,14 @@ class="col-auto my-3"
         [class.is-valid]="emissionDate.valid && emissionDate.touched"
         [class.is-invalid]="emissionDate.touched && emissionDate.invalid"
         />
+        <div class="position-absolute">
+          <span
+            *ngIf="emissionDate?.errors?.['required'] && emissionDate.touched"
+            class="font-weight-light form-text"
+          >
+            Fecha de emisión es obligatorio.
+          </span>
+        </div>
     </div>
     <div class="col-md-6 my-3">
       <label for="fecha-entrega" class="form-label">Fecha de Entrega *</label>
@@ -76,6 +113,14 @@ class="col-auto my-3"
         [class.is-valid]="deliveryDate.valid && deliveryDate.touched"
         [class.is-invalid]="deliveryDate.touched && deliveryDate.invalid"
       />
+      <div class="position-absolute">
+        <span
+          *ngIf="deliveryDate?.errors?.['required'] && deliveryDate.touched"
+          class="font-weight-light form-text"
+        >
+          Fecha de entrega es obligatorio.
+        </span>
+      </div>
     </div>
     <div class="col-12">
       <label for="description" class="form-label">Descripción *</label>
@@ -90,6 +135,14 @@ class="col-auto my-3"
         [class.is-valid]="description.valid && description.touched"
         [class.is-invalid]="description.touched && description.invalid"
       />
+      <div class="position-absolute">
+        <span
+          *ngIf="description?.errors?.['required'] && description.touched"
+          class="font-weight-light form-text"
+        >
+          Descripcion es obligatorio.
+        </span>
+      </div>
     </div>
   </div>
   <div class="col-6" id="checkbox-products">
@@ -139,15 +192,6 @@ class="col-auto my-3"
                 (keyup)="calculateTotal(getCheckedProducts())"
                 min="1"
               />
-              <div
-              *ngIf="
-              amount.errors?.['min']" 
-              class="col-auto"
-            >
-              <span class="form-text text-danger"
-                >Deben ser mayor a 0</span
-              >
-            </div>
             </td>
           </ng-container>
         </tr>

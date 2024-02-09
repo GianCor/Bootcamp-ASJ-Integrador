@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ProvidersService } from 'src/app/services/providers.service';
 import {Router} from '@angular/router'
 import { Provider } from 'src/app/models/providerModel';
@@ -13,6 +13,7 @@ export class ProvidersListComponent implements OnInit {
   selectedProvider :any = {}
   providerIndex! : any
   show:boolean = true;
+  @Input() showTitle: boolean = true;
 
   sortByPrice:boolean = false;
   sortByPriceDesc:boolean = false;

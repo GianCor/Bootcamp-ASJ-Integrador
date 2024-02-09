@@ -42,7 +42,6 @@ export class ProvidersService {
         this.productService.updateProduct(product).subscribe();
       })
     }
-    console.log(updatedProvider.products);
     return this.http.put<Provider>(`${this.apiUrl}/${updatedProvider.id}`, updatedProvider);
   }
 
@@ -50,6 +49,7 @@ export class ProvidersService {
     if(updatedProvider.products){
       updatedProvider.products.forEach(product =>{
         product.deleted = false;
+        this.productService.updateProduct(product).subscribe();
       })
     }
     return this.http.put<Provider>(`${this.apiUrl}/${updatedProvider.id}`, updatedProvider);

@@ -1,17 +1,21 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs'
+import { ProvidersService } from './providers.service';
+import { ProductsService } from './products.service';
+import { Observable } from 'rxjs';
+import { Stats } from '../models/statsModel';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BridgeService {
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
-  private providerDeletedSubject = new Subject<string>();
-  providerDeleted$ = this.providerDeletedSubject.asObservable();
+  url='http://localhost:8080/bridge'
 
-  emitProviderDeleted(providerId: string) {
-    this.providerDeletedSubject.next(providerId);
+  getStats():Observable<Stats>{
+    return this.http.get<Stats>(this.url)
   }
+
 }

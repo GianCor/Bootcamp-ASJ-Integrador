@@ -16,6 +16,10 @@ public class FieldService {
     private FieldRepository fieldRepository;
 
     public List<Field> getAllFields() {
+        return fieldRepository.findAll();
+    }
+    
+    public List<Field> getActiveFields() {
         return fieldRepository.findActiveFields();
     }
 

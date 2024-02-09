@@ -1,7 +1,12 @@
 <div class="mb-5">
   <h3>Agregar Proveedores</h3>
+  <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a [routerLink]="['/home']">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Agregar proveedores</li>
+    </ol>
+</nav>
 </div>
-
 <form
   #providerForm="ngForm"
   (ngSubmit)="pushProvidersData(providerForm)"
@@ -49,8 +54,8 @@
         #supplierCode="ngModel"
         required
         minlength="4"
-        [class.is-valid]="supplierCode.valid && supplierCode.touched"
-        [class.is-invalid]="supplierCode.touched && supplierCode.invalid"
+        [class.is-valid]="supplierCode.valid && supplierCode.touched && isUniqueId(provider.supplierCode)"
+        [class.is-invalid]="supplierCode.touched && (supplierCode.invalid || !isUniqueId(provider.supplierCode))"
       />
       <div class="position-absolute">
         <span
@@ -66,6 +71,12 @@
           Necesita
           {{ supplierCode?.errors?.['minlength']?.requiredLength }} caracteres.
         </span>
+        <span
+        *ngIf="!isUniqueId(provider.supplierCode) && supplierCode.touched"
+        class="font-weight-light form-text"
+      >
+        Ya existe un proveedor con ese código
+      </span>
       </div>
     </div>
 
@@ -429,8 +440,8 @@
         pattern="[0-9]+"
         minlength="11"
         maxlength="11"
-        [class.is-valid]="cuit.valid && cuit.touched"
-        [class.is-invalid]="cuit.touched && (cuit.invalid || cuit.errors?.['pattern'])"
+        [class.is-valid]="cuit.valid && cuit.touched && isUniqueAndNumericCUIT(provider.cuit)"
+        [class.is-invalid]="cuit.touched && (cuit.invalid || cuit.errors?.['pattern'] || !isUniqueAndNumericCUIT(provider.cuit))"
       />
       <div class="position-absolute">
         <span
@@ -451,6 +462,12 @@
         >
           CUIT debe tener exactamente 11 caracteres.
         </span>
+        <span
+        *ngIf="!isUniqueAndNumericCUIT(provider.cuit) && cuit.touched"
+        class="font-weight-light form-text"
+      >
+        CUIT debe ser único
+      </span>
       </div>
     </div>
     <div class="col-md-6">

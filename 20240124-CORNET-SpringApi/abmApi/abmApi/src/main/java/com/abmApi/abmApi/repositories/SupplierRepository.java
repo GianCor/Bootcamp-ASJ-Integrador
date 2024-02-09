@@ -10,4 +10,6 @@ import com.abmApi.abmApi.entities.Supplier;
 public interface SupplierRepository extends JpaRepository<Supplier, Integer>{
     @Query("SELECT s FROM Supplier s WHERE s.deleted = false")
     List<Supplier> findActiveSuppliers();
+    long countByDeletedFalse();
+    long countByDeletedTrue();
 }

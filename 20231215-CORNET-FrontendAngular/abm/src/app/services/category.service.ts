@@ -12,7 +12,7 @@ export class CategoryService {
 
   url:string = "http://localhost:8080/category";
   getCategories(): Observable<Category[]> {
-    return this.http.get<Category[]>(this.url);
+    return this.http.get<Category[]>(this.url + "/active");
   }
 
   postCategory(category :Category): Observable <Category>{

@@ -12,7 +12,7 @@ export class TaxService {
 
   url:string = "http://localhost:8080/tax";
   getTaxes(): Observable<Tax[]> {
-    return this.http.get<Tax[]>(this.url);
+    return this.http.get<Tax[]>(this.url + "/active");
   }
 
   postTax(tax :Tax): Observable <Tax>{

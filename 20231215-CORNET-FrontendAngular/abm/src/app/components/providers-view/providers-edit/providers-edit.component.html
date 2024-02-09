@@ -1,5 +1,12 @@
 <div class="mb-5">
   <h3>Editar Proveedor</h3>
+  <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a [routerLink]="['/home']">Home</a></li>
+        <li class="breadcrumb-item"><a [routerLink]="['/providers/list']">Listado proveedores</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Editar proveedor "{{provider.name}}"</li>
+    </ol>
+</nav>
 </div>
 
 <form
@@ -108,7 +115,7 @@
         <option [ngValue]="null" disabled selected>
           Seleccione un rubro...
         </option>
-        <option *ngFor="let field of fieldData" [ngValue]="field">
+        <option *ngFor="let field of fieldData" [ngValue]="field.id">
           {{ field.name }}
         </option>
       </select>
@@ -204,7 +211,7 @@
       <label for="country" class="form-label">Pais *</label>
       <select
         id="country"
-        [(ngModel)]="selectedCountry"
+        [(ngModel)]="selectedCountryId"
         class="form-select"
         name="country"
         (change)="changeSelectedCountry()"
@@ -216,7 +223,7 @@
         <option [ngValue]="null" disabled selected>
           Seleccione un país...
         </option>
-        <option *ngFor="let country of countries" [ngValue]="country">
+        <option *ngFor="let country of countries" [ngValue]="country.id">
           {{ country.name }}
         </option>
       </select>
@@ -234,7 +241,7 @@
       <label for="state" class="form-label">Provincia *</label>
       <select
         id="state"
-        [(ngModel)]="selectedState"
+        [(ngModel)]="selectedStateId"
         class="form-select"
         name="state"
         (change)="changeSelectedState()"
@@ -246,7 +253,7 @@
         <option [ngValue]="null" disabled selected>
           Seleccione una provincia...
         </option>
-        <option *ngFor="let state of states" [ngValue]="state">
+        <option *ngFor="let state of states" [ngValue]="state.id">
           {{ state.name }}
         </option>
       </select>
@@ -265,7 +272,7 @@
         <label for="city" class="form-label">Ciudad</label>
         <select
           id="city"
-          [(ngModel)]="selectedCity"
+          [(ngModel)]="selectedCityId"
           class="form-select"
           name="city"
           #city="ngModel"
@@ -277,7 +284,7 @@
           <option [ngValue]="null" disabled selected>
             Seleccione un rubro...
           </option>
-          <option *ngFor="let city of cities" [ngValue]="city">
+          <option *ngFor="let city of cities" [ngValue]="city.id">
             {{ city.name }}
           </option>
         </select>
@@ -295,7 +302,7 @@
         <label for="otherCity" class="form-label">Ciudad</label>
         <input
           type="text"
-          [(ngModel)]="selectedCity"
+          [(ngModel)]="selectedCityId"
           id="otherCity"
           class="form-control"
           name="city"
@@ -460,8 +467,8 @@
       <option [ngValue]="null" disabled selected>
         Seleccione una condición...
       </option>
-      <option *ngFor="let condicion of IVAData" [ngValue]="condicion">
-        {{ condicion.id }}:{{ condicion.name }}
+      <option *ngFor="let condicion of IVAData" [ngValue]="condicion.id">
+          {{ condicion.id }}:{{ condicion.name }}
       </option>
     </select>
     <div class="position-absolute">
@@ -660,5 +667,5 @@
       class="form-text text-danger"
       >Codigo debe tener al menos 4 caracteres</span
     >
-  </div>
+  </div> 
 </form>

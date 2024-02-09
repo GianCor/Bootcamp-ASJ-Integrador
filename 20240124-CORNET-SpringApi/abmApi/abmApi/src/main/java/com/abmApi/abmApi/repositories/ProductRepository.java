@@ -10,4 +10,6 @@ import com.abmApi.abmApi.entities.Product;
 public interface ProductRepository extends JpaRepository<Product, Integer>{
 	@Query("SELECT p FROM Product p WHERE p.deleted = false")
 	List<Product> findActiveProducts();
+    long countByDeletedFalse();
+    long countByDeletedTrue();
 }

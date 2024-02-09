@@ -12,4 +12,6 @@ import com.abmApi.abmApi.entities.Tax;
 public interface TaxRepository extends JpaRepository<Tax, Integer> {
     @Query("SELECT t FROM Tax t WHERE t.deleted = false")
     List<Tax> findActiveTaxes();
+    long countByDeletedFalse();
+    long countByDeletedTrue();
 }
