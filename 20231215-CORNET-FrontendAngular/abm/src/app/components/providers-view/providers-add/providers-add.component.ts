@@ -124,12 +124,26 @@ export class ProvidersAddComponent {
 
   updateField(field: Field){
     this.switchToInputField(field);
-    this.fieldService.updateField(field).subscribe((response) => console.log(response))
+    this.fieldService.updateField(field).subscribe((response) =>{
+      console.log(response)
+      this.fieldService.getFields().subscribe((data)=>{
+        this.fieldData = data;
+        console.log(this.fieldData)
+        this.newField.name = '';
+      })
+    })
   }
 
   deleteField(field: Field){
     field.deleted = true;
-    this.fieldService.updateField(field).subscribe((response)=>console.log(response))
+    this.fieldService.updateField(field).subscribe((response)=>{
+      console.log(response)
+      this.fieldService.getFields().subscribe((data)=>{
+        this.fieldData = data;
+        console.log(this.fieldData)
+        this.newField.name = '';
+      })
+    })
   }
 
   editField(editedField: Field){
@@ -146,7 +160,6 @@ export class ProvidersAddComponent {
       console.log(response)
       this.taxService.getTaxes().subscribe((data)=>{
         this.IVAData = data;
-        console.log(this.IVAData)
         this.newTax.name = '';
       })
     })
@@ -165,12 +178,23 @@ export class ProvidersAddComponent {
 
   updateTax(tax: Tax){
     this.switchToInputTax(tax);
-    this.taxService.updateTax(tax).subscribe((response) => console.log(response))
+    this.taxService.updateTax(tax).subscribe((response) => {
+      console.log(response)
+      this.taxService.getTaxes().subscribe((data)=>{
+        this.IVAData = data;
+        this.newTax.name = '';
+      })
+    } )
   }
 
   deleteTax(tax: Tax){
     tax.deleted = true;
-    this.taxService.updateTax(tax).subscribe((response)=>console.log(response))
+    this.taxService.updateTax(tax).subscribe((response)=>{
+      this.taxService.getTaxes().subscribe((data)=>{
+        this.IVAData = data;
+        this.newTax.name = '';
+      })
+    })
   }
 
   editTax(editedTax: Tax){
@@ -274,7 +298,10 @@ showOtherCityInput: boolean = false;
     if (form.valid) {
       if (this.isUniqueId(this.provider.supplierCode) && this.isUniqueAndNumericCUIT(this.provider.cuit) && this.isValidEmail(this.provider.email)) {
         console.log(this.provider);
-        this.providersService.postData(this.provider).subscribe(response => console.log(response));
+        this.providersService.postData(this.provider).subscribe(response => {
+          console.log(response)
+          this.getProvidersData();
+        });
         this.message = 'Proveedor agregado exitosamente';
         this.showError = false;
         this.showSuccess = true;

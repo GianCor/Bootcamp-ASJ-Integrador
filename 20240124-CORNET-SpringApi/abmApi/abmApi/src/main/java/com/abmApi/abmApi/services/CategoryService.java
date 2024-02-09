@@ -43,7 +43,7 @@ public class CategoryService {
         }
     }
 
-    public String putCategory(Integer id, Category category) {
+    public Category putCategory(Integer id, Category category) {
         Optional<Category> optionalExistingCategory = categoryRepository.findById(id);
 
         if (optionalExistingCategory.isPresent()) {
@@ -53,9 +53,9 @@ public class CategoryService {
             existingCategory.setDeleted(category.getDeleted());
             categoryRepository.save(existingCategory);
 
-            return "Category with ID " + id + " updated successfully.";
+            return existingCategory;
         } else {
-            return "Category with ID " + id + " not found.";
+            return category;
         }
     }
 }

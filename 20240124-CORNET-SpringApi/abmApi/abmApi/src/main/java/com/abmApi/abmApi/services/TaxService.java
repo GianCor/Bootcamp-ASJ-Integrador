@@ -44,7 +44,7 @@ public class TaxService {
         }
     }
 
-    public String putTax(Integer id, Tax tax) {
+    public Tax putTax(Integer id, Tax tax) {
         Optional<Tax> optionalExistingTax = taxRepository.findById(id);
 
         if (optionalExistingTax.isPresent()) {
@@ -55,9 +55,9 @@ public class TaxService {
 
             taxRepository.save(existingTax);
 
-            return "Tax with ID " + id + " updated successfully.";
+            return existingTax;
         } else {
-            return "Tax with ID " + id + " not found.";
+        	return tax;
         }
     }
 }

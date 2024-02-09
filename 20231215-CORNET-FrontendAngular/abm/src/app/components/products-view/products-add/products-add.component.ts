@@ -79,7 +79,10 @@ export class ProductsAddComponent implements OnInit {
       if (
         this.isUniqueId(this.product.sku)
       ) {
-        this.productsService.postData(this.product).subscribe(response => console.log(response));
+        this.productsService.postData(this.product).subscribe(response =>{
+          console.log(response)
+          this.getProducts();
+        });
         this.message = 'Proveedor agregado exitosamente';
         this.showError = false;
         this.showSuccess = true;
@@ -151,11 +154,13 @@ export class ProductsAddComponent implements OnInit {
   updateCategory(category: Category){
     this.switchToInputCategory(category);
     this.categoryService.updateCategory(category).subscribe((response) => console.log(response))
+    this.getCategories()
   }
   
   deleteCategory(category: Category){
     category.deleted = true;
     this.categoryService.updateCategory(category).subscribe((response)=>console.log(response))
+    this.getCategories()
   }
   
   editCategory(editedCategory: Category){

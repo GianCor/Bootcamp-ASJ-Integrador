@@ -43,7 +43,7 @@ public class FieldService {
         }
     }
 
-    public String putField(Integer id, Field field) {
+    public Field putField(Integer id, Field field) {
         Optional<Field> optionalExistingField = fieldRepository.findById(id);
 
         if (optionalExistingField.isPresent()) {
@@ -53,9 +53,9 @@ public class FieldService {
 
             fieldRepository.save(existingField);
 
-            return "Field with ID " + id + " updated successfully.";
+            return existingField;
         } else {
-            return "Field with ID " + id + " not found.";
+            return field;
         }
     }
 }

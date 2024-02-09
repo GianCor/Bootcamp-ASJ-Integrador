@@ -39,38 +39,38 @@ public class BridgeService {
 
         long totalCategories = categoryRepository.count();
         long categoriesDeleted = categoryRepository.countByDeletedTrue();
-        long categoriesActive = totalCategories - categoriesDeleted;
+        long categoriesActive = categoryRepository.countByDeletedFalse();
 
         stats.setCategories(new EntityStats(totalCategories, categoriesDeleted, categoriesActive));
 
         long totalOrders = orderRepository.count();
         long ordersCanceled = orderRepository.countByCanceledTrue();
         long ordersPending = orderRepository.countByPendingTrue();
-        long ordersCompleted = totalOrders - ordersCanceled - ordersPending;
+        long ordersCompleted = orderRepository.countByCompletedTrue();
 
         stats.setOrders(new OrderStats(totalOrders, ordersCanceled, ordersPending, ordersCompleted));
 
         long totalProducts = productRepository.count();
         long productsDeleted = productRepository.countByDeletedTrue();
-        long productsActive = totalProducts - productsDeleted;
+        long productsActive = productRepository.countByDeletedFalse();
 
         stats.setProducts(new EntityStats(totalProducts, productsDeleted, productsActive));
 
         long totalSuppliers = supplierRepository.count();
         long suppliersDeleted = supplierRepository.countByDeletedTrue();
-        long suppliersActive = totalSuppliers - suppliersDeleted;
+        long suppliersActive = supplierRepository.countByDeletedFalse();
 
         stats.setSuppliers(new EntityStats(totalSuppliers, suppliersDeleted, suppliersActive));
 
         long totalTaxes = taxRepository.count();
         long taxesDeleted = taxRepository.countByDeletedTrue();
-        long taxesActive = totalTaxes - taxesDeleted;
+        long taxesActive = taxRepository.countByDeletedFalse();
 
         stats.setTaxes(new EntityStats(totalTaxes, taxesDeleted, taxesActive));
 
         long totalFields = fieldRepository.count();
         long fieldsDeleted = fieldRepository.countByDeletedTrue();
-        long fieldsActive = totalFields - fieldsDeleted;
+        long fieldsActive = fieldRepository.countByDeletedFalse();
 
         stats.setFields(new EntityStats(totalFields, fieldsDeleted, fieldsActive));
 

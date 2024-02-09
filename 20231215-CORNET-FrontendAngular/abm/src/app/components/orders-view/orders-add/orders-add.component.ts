@@ -33,6 +33,28 @@ export class OrdersAddComponent {
     orderProducts: []
 };
 
+formatDate(date: Date): string {
+  const year = date.getFullYear();
+  const month = ('0' + (date.getMonth() + 1)).slice(-2);
+  const day = ('0' + date.getDate()).slice(-2);
+  return `${year}-${month}-${day}`;
+}
+
+parseDateString(dateStr: string): Date {
+  const parts = dateStr.split('-');
+
+  const year = parseInt(parts[0], 10);
+  const month = parseInt(parts[1], 10) - 1; // Los meses en JavaScript van de 0 a 11
+  const day = parseInt(parts[2], 10);
+
+  const date = new Date(year, month, day);
+
+  return date;
+}
+
+newEmDate = this.formatDate(this.order.emDate);
+newReDate = this.formatDate(this.order.reDate);
+
 orderProducts: OrderProduct = {
   id:0,
   product:{
@@ -98,7 +120,8 @@ orderProducts: OrderProduct = {
   }
 
   postOrder(order: Order, form: NgForm) {
-    console.log(order);
+    this.order.emDate = this.parseDateString(this.newEmDate);
+    this.order.reDate = this.parseDateString(this.newReDate);
     this.addProductToOrders();
     if(!this.validateDates()){
       this.showError = true;
@@ -127,8 +150,9 @@ orderProducts: OrderProduct = {
             console.log(response);
             this.resetProducts();
             this.getProviders();
+            this.getOrders();
           });
-          form.reset()
+          form.reset();
           this.showSuccess= true
           this.message = 'Orden añadida exitosamente'
           setTimeout(()=>{
